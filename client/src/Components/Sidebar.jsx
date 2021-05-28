@@ -14,7 +14,7 @@ import {
   VStack,
   Box,
 } from "@chakra-ui/react";
-const Sidebar = ({ isOpen, onClose, sideBarRef }) => {
+const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
   return (
     <>
       <Drawer
@@ -33,9 +33,11 @@ const Sidebar = ({ isOpen, onClose, sideBarRef }) => {
               spacing={4}
               alignItems="flex-start"
             >
-              <Box cursor="pointer" w="100%" h="8">
-                <Text color="mainColor.fontColor">Home</Text>
-              </Box>
+              <Link to="/">
+                <Box cursor="pointer" w="100%" h="8">
+                  <Text color="mainColor.fontColor">Home</Text>
+                </Box>
+              </Link>
               <Box cursor="pointer" w="100%" h="8">
                 <Text color="mainColor.fontColor">Browse Product</Text>
               </Box>
