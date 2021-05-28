@@ -7,7 +7,7 @@ const Navbar = ({ Link }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
-      <Flex h="16" alignItems="center">
+      <Flex h="16" alignItems="center" bg="mainColor.bg">
         <HamburgerIcon
           fontSize="xl"
           fontWeight="thin"
@@ -21,9 +21,10 @@ const Navbar = ({ Link }) => {
           color="mainColor.fontColor"
           fontWeight="bold"
           ml="8"
-          fontSize="lg"
+          fontSize="xl"
+          letterSpacing="widest"
         >
-          Clothicious.
+          TRY CLOTHES.
         </Text>
         <Spacer />
         <Link to="/login">

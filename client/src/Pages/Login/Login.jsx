@@ -56,7 +56,7 @@ const Login = () => {
                 borderRadius={null}
                 borderColor="mainColor.fontColor"
                 placeholder="Email"
-                type="text"
+                type="email"
               />
             </InputGroup>
             <InputGroup justifyContent="center" mt="4">

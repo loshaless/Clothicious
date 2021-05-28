@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Clothicous Menu</DrawerHeader>
+          <DrawerHeader>Menu.</DrawerHeader>
           <DrawerBody>
             <VStack
               divider={<StackDivider />}
@@ -39,14 +39,13 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
                 </Box>
               </Link>
               <Box cursor="pointer" w="100%" h="8">
-                <Text color="mainColor.fontColor">Browse Product</Text>
+                <Text color="mainColor.fontColor">Browse Products</Text>
               </Box>
               <Box cursor="pointer" w="100%" h="8">
                 <Text color="mainColor.fontColor">Dashboard</Text>
               </Box>
             </VStack>
           </DrawerBody>
-
           <DrawerFooter></DrawerFooter>
         </DrawerContent>
       </Drawer>
