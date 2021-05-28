@@ -60,7 +60,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      strechability: {
+      stretchability: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
