@@ -3,26 +3,25 @@ const { Product, Transaction } = require('../models')
 class TransactionController {
   static async getAllTransaction(req, res, next) {
     try {
-      await Transaction.findAll({
-        where: { id }, order: [
-          ['id', 'ASC'],
-        ], include: [Product],
-      })
+      let UserId = req.loggedUser.id
+      const transaction = await Transaction.findAll({ where: { UserId }, include: [Product] })
+      res.status(200).json(transaction)
     }
     catch (error) {
       next(error)
     }
   }
 
-  static create(req, res, next) {
-    let BuyerId = req.loggedUser.id
-    let { SellerId, ProductId, period } = req.body
-    console.log(SellerId, ProductId, period, "disini");
-    Transaction.create({ BuyerId, SellerId, ProductId, period })
-      .then(data => {
-        res.status(201).json(data)
-      })
-      .catch(next)
+  static async create(req, res, next) {
+    try {
+      let UserId = req.loggedUser.id
+      let { SellerId, ProductId, period } = req.body
+      const transaction = await Transaction.create({ UserId, SellerId, ProductId, period })
+      res.status(201).json(transaction)
+    }
+    catch (error) {
+      next(error)
+    }
   }
 }
 

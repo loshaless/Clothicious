@@ -22,5 +22,6 @@ router.patch('/products/:id', authorization, ProductController.patch)
 router.delete('/products/:id', authorization, ProductController.delete)
 
 router.post('/transactions', TransactionController.create)
+router.get('/transactions', TransactionController.getAllTransaction)
 
 module.exports = router
