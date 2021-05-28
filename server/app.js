@@ -1,4 +1,6 @@
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'test') {
+  require('dotenv').config()
+}
 
 var cors = require('cors')
 const express = require('express')
@@ -14,6 +16,8 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use('/', router)
 app.use('/', errorHandler)
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+// app.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`)
+// })
+
+module.exports = app
