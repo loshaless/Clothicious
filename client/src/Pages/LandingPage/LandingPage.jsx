@@ -1,5 +1,14 @@
 import React from "react";
-import { Box, Text, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Button,
+  Flex,
+  Image,
+  SimpleGrid,
+  Icon,
+} from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 const LandingPage = () => {
@@ -138,13 +147,13 @@ const LandingPage = () => {
               d="flex"
               flexDirection="column"
               bg="mainColor.bg"
-              w="75%"
-              h="60vh"
+              w="80%"
+              h="100%"
               pb="5"
               ml="8"
             >
               <Image
-                src="https://images.unsplash.com/photo-1605905337183-23443139dc06?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80"
+                src="https://images.unsplash.com/photo-1593075979461-e0116242e814?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
                 h="90%"
               />
               <Text
@@ -163,10 +172,48 @@ const LandingPage = () => {
           ))}
         </Carousel>
       </Flex>
-      <Flex h="50vh" justifyContent="center">
+      <Flex
+        minH="50vh"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        pb="16"
+      >
         <Text fontSize="2xl" fontWeight="bold" color="black" my="8">
           What Are They Said ?
         </Text>
+        <Flex justifyContent="space-around" w="100%" alignItems="center">
+          <Box w="20%" bg="mainColor.lightGreen" h="55vh">
+            <Image
+              src="https://images.unsplash.com/photo-1578100584776-fdf3ff0b367f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80"
+              h="55vh"
+              ml="10"
+              mt="8"
+            />
+          </Box>
+          <Flex flexDirection="column" alignItems="center">
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              color="mainColor.fontColor"
+              textAlign="center"
+            >
+              Stephanie Sarah
+            </Text>
+            <Text fontSize="lg" color="gray.500" textAlign="center">
+              Fashion Designer
+            </Text>
+            <ChatIcon mt="4" color="mainColor.fontColor" />
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              color="mainColor.fontColor"
+              textAlign="center"
+            >
+              Testimonial Advices Here, for Marketing Purposes
+            </Text>
+          </Flex>
+        </Flex>
       </Flex>
     </Box>
   );
