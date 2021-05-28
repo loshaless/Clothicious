@@ -32,21 +32,41 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      material: {
+      fit: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      strechability: {
+      lining: {
         allowNull: false,
         type: Sequelize.BOOLEAN
+      },
+      sheerLevel: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
+      },
+      bustSize: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      waistSize: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      hipsSize: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      length: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      strechability: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       thickness: {
         allowNull: false,
         type: Sequelize.INTEGER
-      },
-      size: {
-        allowNull: false,
-        type: Sequelize.STRING
       },
       availability: {
         allowNull: false,

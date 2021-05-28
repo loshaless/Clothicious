@@ -10,13 +10,15 @@ class ProductController {
   }
   static create(req, res, next) {
     let UserId = req.params.id
-    let { name, price, frontImg, backImg, sideImg, material, strechability, thickness, size, availability } = req.body
-    Product.create({ name, UserId, price, frontImg, backImg, sideImg, material, strechability, thickness, size, availability })
+    let availability = true
+    let { name, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, strechability, thickness, availability } = req.body
+    Product.create({ name, UserId, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, strechability, thickness, availability })
       .then(data => {
         res.status(201).json(data)
       })
       .catch(next)
   }
+
 }
 
 module.exports = ProductController
