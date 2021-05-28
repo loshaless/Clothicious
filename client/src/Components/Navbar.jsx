@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import { Flex, Spacer, Button, Text, useDisclosure } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-const Navbar = () => {
+const Navbar = ({ Link }) => {
   const sideBarRef = React.useRef();
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
@@ -16,27 +16,34 @@ const Navbar = () => {
           cursor="pointer"
           ml="8"
         />
+
         <Text
           color="mainColor.fontColor"
           fontWeight="bold"
           ml="8"
           fontSize="lg"
-          cursor="pointer"
         >
           Clothicious.
         </Text>
         <Spacer />
-        <Button
-          variant="ghost"
-          colorScheme="blackAlpha"
-          color="mainColor.fontColor"
-          borderRadius={null}
-          mr="8"
-        >
-          Sign In
-        </Button>
+        <Link to="/login">
+          <Button
+            variant="ghost"
+            colorScheme="blackAlpha"
+            color="mainColor.fontColor"
+            borderRadius={null}
+            mr="8"
+          >
+            Sign In
+          </Button>
+        </Link>
       </Flex>
-      <Sidebar isOpen={isOpen} onClose={onClose} sideBarRef={sideBarRef} />
+      <Sidebar
+        isOpen={isOpen}
+        onClose={onClose}
+        sideBarRef={sideBarRef}
+        Link={Link}
+      />
     </>
   );
 };
