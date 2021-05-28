@@ -4,9 +4,9 @@ import Navbar from "./Components/Navbar.jsx"
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
-} from "react-router-dom";
+  Link,
+  Route
+} from "react-router-dom"
 function App() {
   return (
     <>
