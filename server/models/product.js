@@ -32,7 +32,23 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    price: {
+    rentPrice: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'price must not be empty'
+        },
+        isInt: {
+          args: [true],
+          msg: 'price must be an integer'
+        },
+        min: {
+          args: [0],
+          msg: 'price cannot be minus'
+        },
+      }
+    },
+    guaranteePrice: {
       type: DataTypes.INTEGER,
       validate: {
         notEmpty: {

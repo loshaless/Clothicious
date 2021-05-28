@@ -19,8 +19,8 @@ class ProductController {
   static create(req, res, next) {
     let UserId = req.loggedUser.id
     let availability = true
-    let { name, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness } = req.body
-    Product.create({ name, UserId, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability })
+    let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness } = req.body
+    Product.create({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability })
       .then(data => {
         res.status(201).json(data)
       })
@@ -29,8 +29,8 @@ class ProductController {
   static update(req, res, next) {
     let UserId = req.loggedUser.id
     let id = req.params.id
-    let { name, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability } = req.body
-    Product.update({ name, UserId, price, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability }, { where: { id }, returning: true })
+    let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability } = req.body
+    Product.update({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability }, { where: { id }, returning: true })
       .then(data => {
         let productData = data[1][0]
         res.status(200).json(productData)

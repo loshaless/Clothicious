@@ -16,7 +16,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      price: {
+      rentPrice: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      guaranteePrice: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
