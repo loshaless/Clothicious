@@ -50,9 +50,6 @@ module.exports = (sequelize, DataTypes) => {
     period: {
       type: DataTypes.INTEGER,
       validate: {
-        notEmpty: {
-          msg: 'period must not be empty'
-        },
         isInt: {
           args: [true],
           msg: 'period must be an integer'
@@ -60,6 +57,19 @@ module.exports = (sequelize, DataTypes) => {
         min: {
           args: [0],
           msg: 'period cannot be minus'
+        },
+      }
+    },
+    confirmationPeriod: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInt: {
+          args: [true],
+          msg: 'confirmationPeriod must be an integer'
+        },
+        min: {
+          args: [0],
+          msg: 'confirmationPeriod cannot be minus'
         },
       }
     },
@@ -74,6 +84,12 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'status must be boolean'
         },
       }
+    },
+    msgForUser: {
+      type: DataTypes.STRING
+    },
+    msgForSeller: {
+      type: DataTypes.STRING,
     },
   }, {
     sequelize,
