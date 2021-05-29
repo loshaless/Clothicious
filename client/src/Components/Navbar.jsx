@@ -16,7 +16,6 @@ const Navbar = ({ Link }) => {
           cursor="pointer"
           ml="8"
         />
-
         <Text
           color="mainColor.fontColor"
           fontWeight="bold"

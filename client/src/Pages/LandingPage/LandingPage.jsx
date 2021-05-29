@@ -88,7 +88,7 @@ const LandingPage = () => {
         color="black"
         my="8"
       >
-        How It Works (perlu diganti)
+        The Flow
       </Text>
       <SimpleGrid columns={3} spacing={10} minH="25vh" mt="8" pb="8">
         <Flex
@@ -99,9 +99,10 @@ const LandingPage = () => {
           <Image
             src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
             w="80%"
+            h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Browse Products
+            Find Your Perfect Clothes
           </Text>
         </Flex>
         <Flex
@@ -110,11 +111,12 @@ const LandingPage = () => {
           flexDirection="column"
         >
           <Image
-            src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
+            src="https://images.unsplash.com/photo-1565665681743-6ff01c5181e3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=686&q=80"
             w="80%"
+            h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Browse Products
+            Make Aggreement
           </Text>
         </Flex>
         <Flex
@@ -123,11 +125,12 @@ const LandingPage = () => {
           flexDirection="column"
         >
           <Image
-            src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
+            src="https://images.unsplash.com/photo-1540578956368-95ae86e7012f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=749&q=80"
             w="80%"
+            h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Browse Products
+            Wear it
           </Text>
         </Flex>
       </SimpleGrid>
@@ -191,7 +194,13 @@ const LandingPage = () => {
               mt="8"
             />
           </Box>
-          <Flex flexDirection="column" alignItems="center">
+          <Flex
+            flexDirection="column"
+            alignItems="center"
+            borderWidth="2px"
+            borderColor="mainColor.fontColor"
+            p="4"
+          >
             <Text
               fontSize="2xl"
               fontWeight="bold"
@@ -203,17 +212,67 @@ const LandingPage = () => {
             <Text fontSize="lg" color="gray.500" textAlign="center">
               Fashion Designer
             </Text>
-            <ChatIcon mt="4" color="mainColor.fontColor" />
             <Text
               fontSize="2xl"
-              fontWeight="bold"
               color="mainColor.fontColor"
               textAlign="center"
+              mt="4"
             >
               Testimonial Advices Here, for Marketing Purposes
             </Text>
           </Flex>
         </Flex>
+      </Flex>
+      <Flex bg="black" color="white" minH="30vh">
+        <SimpleGrid columns={4} spacing={10} p="8" w="100%">
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text fontWeight="bold" ml="8" fontSize="xl" letterSpacing="widest">
+              TRY CLOTHES.
+            </Text>
+            <Text ml="8" fontSize="sm">
+              {new Date().getFullYear()} &bull; All Rights Reserved
+            </Text>
+          </Flex>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text fontWeight="bold" letterSpacing="widest">
+              Headquarter
+            </Text>
+            <Text textAlign="center" fontSize="sm" mt="2" cursor="pointer">
+              Cecilia Chapman 711-2880 Nulla St. Mankato Mississippi 96522 (257)
+              563-7401
+            </Text>
+          </Flex>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text fontWeight="bold" letterSpacing="widest">
+              Carreers
+            </Text>
+            <Text cursor="pointer">The Company</Text>
+            <Text cursor="pointer">Demand</Text>
+          </Flex>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text fontWeight="bold" letterSpacing="widest">
+              Products
+            </Text>
+            <Text cursor="pointer">License</Text>
+            <Text cursor="pointer">Payment Policy</Text>
+          </Flex>
+        </SimpleGrid>
       </Flex>
     </Box>
   );
