@@ -28,6 +28,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN
       },
+      msgForUser: {
+        type: Sequelize.STRING
+      },
+      msgForSeller: {
+        type: Sequelize.STRING
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -75,6 +75,12 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
+    msgForUser: {
+      type: DataTypes.STRING
+    },
+    msgForSeller: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
     modelName: 'Transaction',
