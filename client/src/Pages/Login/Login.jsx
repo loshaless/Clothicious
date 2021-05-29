@@ -81,7 +81,7 @@ const Login = () => {
               bg="mainColor.fontColor"
               borderRadius={null}
             >
-              Login
+              SIGN IN
             </Button>
             <Text fontSize="xs" mt="4" fontWeight="bold">
               Don't have an account yet ?{" "}
