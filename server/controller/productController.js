@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { Product, Transaction } = require('../models')
 
 class ProductController {
   static getProducts(req, res, next) {
@@ -34,16 +34,6 @@ class ProductController {
       .then(data => {
         let productData = data[1][0]
         res.status(200).json(productData)
-      })
-      .catch(next)
-  }
-  static patch(req, res, next) {
-    let id = req.params.id
-    let { availability } = req.body
-    Product.update({ availability }, { where: { id }, returning: true })
-      .then(data => {
-        let dataReturn = data[1][0]
-        res.status(200).json(dataReturn)
       })
       .catch(next)
   }
