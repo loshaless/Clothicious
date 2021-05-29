@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Text,
-  Button,
-  Flex,
-  Image,
-  SimpleGrid,
-  Icon,
-} from "@chakra-ui/react";
-import { ChatIcon } from "@chakra-ui/icons";
+import { Box, Text, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 const LandingPage = () => {

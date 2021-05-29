@@ -46,6 +46,11 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
                   <Text color="mainColor.fontColor">Dashboard</Text>
                 </Box>
               </Link>
+              <Link to="/products">
+                <Box cursor="pointer" w="100%" h="8">
+                  <Text color="mainColor.fontColor">My Products</Text>
+                </Box>
+              </Link>
             </VStack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>

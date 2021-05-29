@@ -41,7 +41,7 @@ const Dashboard = () => {
             >
               User Dashboard
             </Text>
-            <Tooltip label="edit your profile">
+            <Tooltip label="Settings">
               <Flex alignSelf="end" cursor="pointer" ml="2" onClick={onOpen}>
                 <EditIcon color="mainColor.fontColor" />
               </Flex>

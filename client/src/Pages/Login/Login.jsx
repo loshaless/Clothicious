@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Box,
   Button,
   Text,
   Image,
@@ -9,7 +8,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 const Login = () => {
