@@ -2,6 +2,7 @@ import LandingPage from "./Pages/LandingPage/LandingPage.jsx"
 import Login from "./Pages/Login/Login.jsx"
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx"
 import MyProducts from "./Pages/MyProducts/MyProducts.jsx"
+import TransactionDetails from "./Pages/TransactionDetails/TransactionDetails.jsx"
 import Navbar from "./Components/Navbar.jsx"
 import {
   BrowserRouter as Router,
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/products">
             <MyProducts />
+          </Route>
+          <Route path="/details-transaction/:id">
+            <TransactionDetails />
           </Route>
         </Switch>
       </Router>

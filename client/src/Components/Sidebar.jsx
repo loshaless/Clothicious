@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Menu.</DrawerHeader>
+          <DrawerHeader>MENU</DrawerHeader>
           <DrawerBody>
             <VStack
               divider={<StackDivider />}
@@ -34,21 +34,21 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
               alignItems="flex-start"
             >
               <Link to="/">
-                <Box cursor="pointer" w="100%" h="8">
-                  <Text color="mainColor.fontColor">Home</Text>
+                <Box cursor="pointer" w="40vh" h="8">
+                  <Text color="mainColor.fontColor">HOME</Text>
                 </Box>
               </Link>
-              <Box cursor="pointer" w="100%" h="8">
-                <Text color="mainColor.fontColor">Browse Products</Text>
+              <Box cursor="pointer" w="40vh" h="8">
+                <Text color="mainColor.fontColor">BROWSE PRODUCTS</Text>
               </Box>
               <Link to="/dashboard">
-                <Box cursor="pointer" w="100%" h="8">
-                  <Text color="mainColor.fontColor">Dashboard</Text>
+                <Box cursor="pointer" w="40vh" h="8">
+                  <Text color="mainColor.fontColor">DASHBOARD</Text>
                 </Box>
               </Link>
               <Link to="/products">
-                <Box cursor="pointer" w="100%" h="8">
-                  <Text color="mainColor.fontColor">My Products</Text>
+                <Box cursor="pointer" w="40vh" h="8">
+                  <Text color="mainColor.fontColor">MY PRODUCTS</Text>
                 </Box>
               </Link>
             </VStack>
