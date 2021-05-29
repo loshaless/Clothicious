@@ -18,10 +18,11 @@ router.get('/products/:id', ProductController.getOneProduct)
 router.use(authentication)
 router.post('/products', ProductController.create)
 router.put('/products/:id', authorization, ProductController.update)
-router.patch('/products/:id', authorization, ProductController.patch)
 router.delete('/products/:id', authorization, ProductController.delete)
 
 router.post('/transactions', TransactionController.create)
-router.get('/transactions', TransactionController.getAllTransaction)
+router.get('/transactions', TransactionController.getAllGoingTransaction)
+router.get('/historyTransactions', TransactionController.getAllDoneTransaction)
+router.patch('/transactions/:id', TransactionController.doneTransaction)
 
 module.exports = router
