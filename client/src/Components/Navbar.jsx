@@ -37,6 +37,15 @@ const Navbar = ({ Link }) => {
             Sign In
           </Button>
         </Link>
+        <Button
+          // variant="outline"
+          colorScheme="blackAlpha"
+          color="white"
+          borderRadius={null}
+          mr="8"
+        >
+          Sign Out
+        </Button>
       </Flex>
       <Sidebar
         isOpen={isOpen}
