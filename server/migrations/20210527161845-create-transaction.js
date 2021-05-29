@@ -21,7 +21,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       period: {
-        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      confirmationPeriod: {
         type: Sequelize.INTEGER
       },
       status: {

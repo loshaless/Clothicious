@@ -45,8 +45,22 @@ class TransactionController {
       let UserId = req.loggedUser.id
       const currentlyRenting = await Transaction.findAll({ where: { UserId, msgForUser: { [Op.ne]: null } } })
       const rentedProducts = await Transaction.findAll({ where: { SellerId: UserId, msgForSeller: { [Op.ne]: null } } })
-      const allTransaction = { msgAsUser: currentlyRenting.map(e => e.msgForUser), msgAsSeller: rentedProducts.map(e => e.msgForSeller) }
-      res.status(200).json(allTransaction)
+
+      const msgAsUser = await currentlyRenting.map(e => {
+        let filterData = {
+          transactionId: e.id,
+          message: e.msgForUser
+        }
+        return filterData
+      })
+      const msgAsSeller = await rentedProducts.map(e => {
+        let filterData = {
+          transactionId: e.id,
+          message: e.msgForSeller
+        }
+        return filterData
+      })
+      res.status(200).json({ msgAsUser, msgAsSeller })
     }
     catch {
       next(error)
@@ -70,7 +84,9 @@ class TransactionController {
     try {
       let id = req.params.id
       await Transaction.update({
-        msgForSeller: "have you received back your package?"
+        msgForSeller: "have you received back your package?",
+        period: null,
+        confirmationPeriod: 3
       }, { where: { id } })
       res.status(200).json({ message: "message udah Seller berhasil diubah dari null jadi have you received back your package?" })
     }
