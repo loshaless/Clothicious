@@ -19,9 +19,14 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
 import { EditIcon } from "@chakra-ui/icons";
 const Dashboard = () => {
+  const history = useHistory();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  function handleOnClickDetails() {
+    history.push("details-transaction/1");
+  }
   return (
     <>
       <Box
@@ -113,7 +118,9 @@ const Dashboard = () => {
                   <Badge colorScheme="twitter" textAlign="center">
                     Renter Name
                   </Badge>
-                  <Button borderRadius={null}>Details</Button>
+                  <Button borderRadius={null} onClick={handleOnClickDetails}>
+                    Details
+                  </Button>
                 </SimpleGrid>
                 <SimpleGrid
                   columns={4}
