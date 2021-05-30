@@ -27,6 +27,9 @@ const Dashboard = () => {
   function handleOnClickDetails() {
     history.push("details-transaction/1");
   }
+  function handleOnClickTransHistory() {
+    history.push("/history-transaction");
+  }
   return (
     <>
       <Box
@@ -36,7 +39,7 @@ const Dashboard = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Box bg="white" h="90vh" w="90%">
+        <Box bg="white" h="95vh" w="90%">
           <Flex justifyContent="center" alignItems="center" mt="4">
             <Text
               color="mainColor.fontColor"
@@ -89,7 +92,18 @@ const Dashboard = () => {
               </Table>
             </GridItem>
           </Grid>
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} mt="8">
+          <Flex justifyContent="center" mt="2">
+            <Button
+              borderRadius={null}
+              bg="black"
+              color="white"
+              colorScheme="black"
+              onClick={handleOnClickTransHistory}
+            >
+              Transaction History
+            </Button>
+          </Flex>
+          <Grid templateColumns="repeat(4, 1fr)" gap={6} mt="4">
             <GridItem
               d="flex"
               alignItems="center"
