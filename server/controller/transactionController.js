@@ -6,8 +6,26 @@ class TransactionController {
   static async getAllGoingTransaction(req, res, next) {
     try {
       let UserId = req.loggedUser.id
-      const currentlyRenting = await Transaction.findAll({ where: { UserId, status: true }, include: [{ model: User, as: 'seller' }, Product] })
-      const rentedProducts = await Transaction.findAll({ where: { SellerId: UserId, status: true }, include: [{ model: User, as: 'user' }, Product] })
+      const currentlyRenting = await Transaction.
+        findAll({ 
+          where: { 
+            UserId, 
+            status: true 
+          }, 
+          include: [{ 
+            model: User, 
+            as: 'seller' }, 
+          Product] })
+      const rentedProducts = await Transaction.
+        findAll({ 
+          where: { 
+            SellerId: UserId, 
+            status: true }, 
+          include: [{ 
+            model: User, 
+            as: 'user' }, 
+          Product] 
+        })
       const allTransaction = { currentlyRenting, rentedProducts }
       res.status(200).json(allTransaction)
     }
@@ -19,8 +37,24 @@ class TransactionController {
   static async getAllDoneTransaction(req, res, next) {
     try {
       let UserId = req.loggedUser.id
-      const currentlyRenting = await Transaction.findAll({ where: { UserId, status: false }, include: [{ model: User, as: 'seller' }, Product] })
-      const rentedProducts = await Transaction.findAll({ where: { SellerId: UserId, status: false }, include: [{ model: User, as: 'user' }, Product] })
+      const currentlyRenting = await Transaction.
+        findAll({ 
+          where: { UserId, status: false }, 
+          include: 
+            [{ model: User, 
+              as: 'seller' }, 
+            Product ] 
+        })
+      const rentedProducts = await Transaction.
+        findAll({ 
+          where: { 
+            SellerId: UserId, 
+            status: false }, 
+          include: [{ 
+            model: User, 
+            as: 'user' }, 
+          Product] 
+        })
       const allTransaction = { currentlyRenting, rentedProducts }
       res.status(200).json(allTransaction)
     }
@@ -71,8 +105,12 @@ class TransactionController {
     try {
       let UserId = req.loggedUser.id
       let { SellerId, ProductId, period } = req.body
-      const transaction = await Transaction.create({ UserId, SellerId, ProductId, period, status: true, msgForUser: null, msgForSeller: null })
-      await Product.update({ availability: false }, { where: { id: ProductId } })
+      const transaction = await Transaction.
+        create({ UserId, SellerId, ProductId, period, status: true })
+      await Product.
+        update({ availability: false }, { 
+          where: { id: ProductId } 
+        })
       res.status(201).json(transaction)
     }
     catch (error) {
@@ -98,8 +136,9 @@ class TransactionController {
   static async confirmFromSeller(req, res, next) {
     try {
       let id = req.params.id
-      let UserId = req.loggedUser.id
+      let UserId = req.loggedUser.idd 
       let { ProductId } = req.body
+      await Product.update({ availability: true }, { where: { id: ProductId, UserId } })
       await Transaction.update({
         status: false,
         msgForUser: "your deposit will be returned to you in 3 days",
@@ -107,7 +146,7 @@ class TransactionController {
       },
         { where: { id } })
       await Product.update({ availability: true }, { where: { id: ProductId, UserId } })
-      res.status(200).json({ message: "transaction status sudah false dan product availability sudah true" })
+      res.status(200).json({ message: "transaction status and availibility has been updated" })
     }
     catch (error) {
       next(error)
