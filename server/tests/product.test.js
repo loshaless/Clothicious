@@ -70,11 +70,13 @@ afterAll((done) => {
 beforeAll((done) => {
   User.create(user)
     .then((data) => {
-      token = generateToken({data})
+      // console.log('DATA USER>>>', data);
+      token = generateToken(data.dataValues)
+      console.log('token  ==> ',token);
       return User.create(wrongUser)    
     })
     .then((data) => {
-      invalidToken = generateToken({data})
+      invalidToken = generateToken(data.dataValues)
       return Product.create(newProduct)
     })
     .then((data) => {
@@ -87,6 +89,7 @@ beforeAll((done) => {
     })
 })
 
+
 // POST
 describe('Create product case POST /products', () => {
   it('Success test should return json of product', (done) => {
@@ -98,6 +101,7 @@ describe('Create product case POST /products', () => {
       .expect('Content-Type', /json/)
       .then(response => {
           let {body, status} = response
+          console.log({body, status});
           expect(status).toBe(201)
           expect(response).toHaveProperty('body', expect.any(Object))
           expect(body).toHaveProperty('id', expect.any(Number))
@@ -120,24 +124,28 @@ describe('Create product case POST /products', () => {
           done()
       })
       .catch(err => {
-          done()
+          done(err)
       })
   })
 
   it('it should return error message "authentication failed', (done) => {
     request(app)
     .post('/products')
+    // .timeout(1000)
     .set('Accept', 'application/json')
     .send(product)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
+        console.log('body', body);
+        console.log('status', status);
         expect(status).toBe(403)
-        expect(body).toHaveProperty('message', 'Please login first')
+        expect(body).toHaveProperty('message', 'authentication failed')
         done()
     })
     .catch(err => {
-        done()
+      // console.log('err', err);
+        done(err)
     })
   })
 
