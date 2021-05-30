@@ -2,8 +2,8 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const PORT = process.env.PORT || '3000';
-// AWAL CRON
+if (process.env.NODE_ENV !== 'test') {
+  // AWAL CRON
 const { Transaction } = require('./models')
 var CronJob = require('cron').CronJob;
 var job = new CronJob('0 0 0 * * *', async () => {
@@ -30,6 +30,7 @@ var job = new CronJob('0 0 0 * * *', async () => {
   }
 }, null, true, 'Asia/Jakarta');
 // AKHIR CRON
+}
 
 const express = require('express')
 const app = express()
