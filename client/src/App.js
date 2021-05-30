@@ -7,6 +7,7 @@ import ExploreProducts from "./Pages/ExploreProducts/ExploreProducts.jsx"
 import WomanProducts from "./Pages/ExploreProducts/WomanProducts.jsx"
 import ManProducts from "./Pages/ExploreProducts/ManProducts.jsx"
 import Details from "./Pages/Details/Details.jsx"
+import SuccessPage from "./Pages/SuccessPage/SuccessPage.jsx"
 import Navbar from "./Components/Navbar.jsx"
 import {
   BrowserRouter as Router,
@@ -46,6 +47,9 @@ function App() {
           </Route>
           <Route path="/browse/details/:id">
             <Details />
+          </Route>
+          <Route path="/success">
+            <SuccessPage />
           </Route>
         </Switch>
       </Router>
