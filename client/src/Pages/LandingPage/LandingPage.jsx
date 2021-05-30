@@ -1,8 +1,10 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Box, Text, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 const LandingPage = () => {
+  const history = useHistory();
   const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
   const responsive = {
     desktop: {
@@ -21,6 +23,9 @@ const LandingPage = () => {
       slidesToSlide: 1, // optional, default to 1.
     },
   };
+  function handleOnClickCard(id) {
+    history.push("browse/details/" + id);
+  }
   return (
     <Box minH="100vh" bg="mainColor.bg">
       <Flex alignItems="center" justifyContent="space-evenly">
@@ -145,6 +150,8 @@ const LandingPage = () => {
               h="100%"
               pb="5"
               ml="8"
+              onClick={() => handleOnClickCard(i)}
+              cursor="pointer"
             >
               <Image
                 src="https://images.unsplash.com/photo-1593075979461-e0116242e814?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"

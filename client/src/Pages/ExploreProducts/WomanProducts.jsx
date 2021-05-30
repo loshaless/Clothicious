@@ -1,10 +1,11 @@
 import React from "react";
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
+import { useHistory } from "react-router-dom";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 const NestedExploreProducts = () => {
+  const history = useHistory();
   const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
-
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -22,6 +23,10 @@ const NestedExploreProducts = () => {
       slidesToSlide: 1, // optional, default to 1.
     },
   };
+
+  function handleOnClickCard(id) {
+    history.push("details/" + id);
+  }
 
   return (
     <Box minH="90vh" bg="mainColor.bg">
@@ -48,6 +53,7 @@ const NestedExploreProducts = () => {
             bg="mainColor.lightGreen"
             cursor="pointer"
             ml="12"
+            onClick={() => handleOnClickCard(i)}
           >
             <Image
               src="https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
