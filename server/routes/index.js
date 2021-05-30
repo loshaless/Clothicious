@@ -5,12 +5,10 @@ const ProductController = require('../controller/productController')
 const TransactionController = require('../controller/transactionController')
 const { authentication, authorization, buyerAuthorization, sellerAuthorization } = require('../middleware/auth')
 
-router.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
+router.put('/profil', UserController.updateProfil)
+router.patch('/profil' , UserController.changePassword)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
