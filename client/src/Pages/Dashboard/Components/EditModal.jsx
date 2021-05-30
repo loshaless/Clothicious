@@ -33,6 +33,10 @@ const EditModal = ({ isOpen, onClose }) => {
             <Input type="text" placeholder="Address..." />
           </FormControl>
           <FormControl>
+            <FormLabel>Account Number</FormLabel>
+            <Input type="text" placeholder="Account Number" />
+          </FormControl>
+          <FormControl>
             <FormLabel>Password</FormLabel>
             <Input type="password" placeholder="******" />
           </FormControl>

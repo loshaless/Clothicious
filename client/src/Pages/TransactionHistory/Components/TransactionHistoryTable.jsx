@@ -12,19 +12,21 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { DeleteIcon, InfoIcon } from "@chakra-ui/icons";
-const ProductsTable = () => {
+const TransactionHistoryTable = () => {
   return (
     <Table variant="simple">
       <Thead>
         <Tr>
+          <Th>No</Th>
           <Th>Name</Th>
-          <Th>Message</Th>
-          <Th>Availability</Th>
+          <Th>Image</Th>
+          <Th>Transaction</Th>
           <Th>Actions</Th>
         </Tr>
       </Thead>
       <Tbody>
         <Tr>
+          <Td>1</Td>
           <Td>Clothes 1</Td>
           <Td>
             <Box h="150px" w="150px">
@@ -35,7 +37,7 @@ const ProductsTable = () => {
             </Box>
           </Td>
           <Td>
-            <Badge colorScheme="green">Available</Badge>
+            <Badge colorScheme="purple">RENTING</Badge>
           </Td>
           <Td>
             <IconButton
@@ -47,6 +49,7 @@ const ProductsTable = () => {
           </Td>
         </Tr>
         <Tr>
+          <Td>2</Td>
           <Td>Clothes 2</Td>
           <Td>
             <Box h="150px" w="150px">
@@ -58,7 +61,7 @@ const ProductsTable = () => {
             </Box>
           </Td>
           <Td>
-            <Badge colorScheme="red">Rented</Badge>
+            <Badge colorScheme="twitter">LENDING</Badge>
           </Td>
           <Td>
             <IconButton
@@ -74,4 +77,4 @@ const ProductsTable = () => {
   );
 };
 
-export default ProductsTable;
+export default TransactionHistoryTable;
