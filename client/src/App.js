@@ -3,6 +3,9 @@ import Login from "./Pages/Login/Login.jsx"
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx"
 import MyProducts from "./Pages/MyProducts/MyProducts.jsx"
 import TransactionDetails from "./Pages/TransactionDetails/TransactionDetails.jsx"
+import ExploreProducts from "./Pages/ExploreProducts/ExploreProducts.jsx"
+import WomanProducts from "./Pages/ExploreProducts/WomanProducts.jsx"
+import ManProducts from "./Pages/ExploreProducts/ManProducts.jsx"
 import Navbar from "./Components/Navbar.jsx"
 import {
   BrowserRouter as Router,
@@ -30,6 +33,15 @@ function App() {
           </Route>
           <Route path="/details-transaction/:id">
             <TransactionDetails />
+          </Route>
+          <Route exact path="/browse">
+            <ExploreProducts />
+          </Route>
+          <Route path="/browse/woman">
+            <WomanProducts />
+          </Route>
+          <Route path="/browse/man">
+            <ManProducts />
           </Route>
         </Switch>
       </Router>

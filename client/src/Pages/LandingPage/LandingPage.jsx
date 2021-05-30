@@ -133,7 +133,7 @@ const LandingPage = () => {
           color="mainColor.fontColor"
           my="8"
         >
-          Browse Clothes
+          Pick Your Style
         </Text>
         <Carousel responsive={responsive} showDots={true}>
           {colIdx.map((i) => (
@@ -141,7 +141,7 @@ const LandingPage = () => {
               d="flex"
               flexDirection="column"
               bg="mainColor.bg"
-              w="80%"
+              w="250px"
               h="100%"
               pb="5"
               ml="8"
@@ -149,6 +149,7 @@ const LandingPage = () => {
               <Image
                 src="https://images.unsplash.com/photo-1593075979461-e0116242e814?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
                 h="90%"
+                w="250px"
               />
               <Text
                 textAlign="center"
