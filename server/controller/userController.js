@@ -4,16 +4,13 @@ let { hash, compare } = require('../helper/bcrypt')
 
 class UserController {
   static register(req, res, next) {
-    let { username, email, password, phone, address, bankAccount } = req.body
-    User.create({ username, email, password, phone, address, bankAccount })
+    let { username, email, password } = req.body
+    User.create({ username, email, password })
       .then(user => {
         let data = {
           id: user.id,
           username: user.username,
           email: user.email,
-          phone: user.phone,
-          address: user.address,
-          bankAccount: user.bankAccount
         }
         res.status(201).json(data)
       })
@@ -38,11 +35,21 @@ class UserController {
       .catch(next)
   }
 
+  static allUser(req, res, next) {
+    console.log("disni");
+    User.findAll()
+      .then(user => {
+        let username = user.map(e => e.username)
+        res.status(200).json(username)
+      })
+      .catch(next)
+  }
+
   static updateProfil(req, res, next) {
-    let id = +req.params.id
+    let id = +req.loggedUser.id
     let { username, email, phone, address, bankAccount } = req.body
     User.update({ username, email, phone, address, bankAccount }, {
-      where: {id},
+      where: { id },
       returning: true
     })
       .then(user => {
@@ -59,14 +66,14 @@ class UserController {
       .catch(next)
   }
 
-  static changePassword(req, res, next) { 
-    let id = +req.params.id
-    let { passoword } = req.body
-    User.update({ passoword }, {
+  static changePassword(req, res, next) {
+    let id = +req.loggedUser.id
+    let { password } = req.body
+    User.update({ password }, {
       where: { id }
     })
       .then(user => {
-        res.status(200).json({ message: "Password has been successfully updated "})
+        res.status(200).json({ message: "Password has been successfully updated " })
       })
       .catch(next)
   }

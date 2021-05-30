@@ -7,8 +7,9 @@ const { authentication, authorization, buyerAuthorization, sellerAuthorization }
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
+router.get('/users', UserController.allUser)
 router.put('/profil', UserController.updateProfil)
-router.patch('/profil' , UserController.changePassword)
+router.patch('/profil', UserController.changePassword)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
