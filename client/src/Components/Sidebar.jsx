@@ -38,9 +38,11 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
                   <Text color="mainColor.fontColor">HOME</Text>
                 </Box>
               </Link>
-              <Box cursor="pointer" w="40vh" h="8">
-                <Text color="mainColor.fontColor">BROWSE PRODUCTS</Text>
-              </Box>
+              <Link to="/browse">
+                <Box cursor="pointer" w="40vh" h="8">
+                  <Text color="mainColor.fontColor">BROWSE PRODUCTS</Text>
+                </Box>
+              </Link>
               <Link to="/dashboard">
                 <Box cursor="pointer" w="40vh" h="8">
                   <Text color="mainColor.fontColor">DASHBOARD</Text>
