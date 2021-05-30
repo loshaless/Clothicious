@@ -266,6 +266,82 @@ describe('Create product case POST /products', () => {
         done(err)
     })
   })
+
+
+
+  // guarantee sewa harus integer
+
+  it('it should return error message "price must be an integer', (done) => {
+    request(app)
+    .post('/products')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .send({
+      name: 'barang',
+      UserId: 1,
+      rentPrice: 10000,
+      guaranteePrice: 'sepuluh',
+      frontImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      backImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      sideImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      fit: 'fitDong',
+      lining: true,
+      sheerLevel: true,
+      bustSize: 3,
+      waistSize: 3,
+      hipsSize: 3,
+      length: 3,
+      stretchability: 3,
+      thickness: 3,
+      availability: true
+    })
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'price must be an integer')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+  // harga sewa harus lebih dari 0
+  it('it should return error message "price cannot be minus"', (done) => {
+    request(app)
+    .post('/products')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .send({
+      name: 'barang',
+      UserId: 1,
+      rentPrice: 10000,
+      guaranteePrice: -1,
+      frontImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      backImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      sideImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      fit: 'fitDong',
+      lining: true,
+      sheerLevel: true,
+      bustSize: 3,
+      waistSize: 3,
+      hipsSize: 3,
+      length: 3,
+      stretchability: 3,
+      thickness: 3,
+      availability: true
+    })
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'price cannot be minus')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
 })
 
 // GET
@@ -490,9 +566,6 @@ describe('Update product case PUT /products', () => {
     })
   })
 
-    
-
-
   // harga harus integer
   it('it should return error message "price must be an integer', (done) => {
     request(app)
@@ -523,6 +596,81 @@ describe('Update product case PUT /products', () => {
         let {body, status} = response
         expect(status).toBe(400)
         expect(body).toHaveProperty('message', 'price must be an integer')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+
+  // guarantee sewa harus integer
+
+  it('it should return error message "price must be an integer', (done) => {
+    request(app)
+    .put(`/products/${productId}`)
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .send({
+      name: 'barang',
+      UserId: 1,
+      rentPrice: 10000,
+      guaranteePrice: 'sepuluh',
+      frontImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      backImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      sideImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      fit: 'fitDong',
+      lining: true,
+      sheerLevel: true,
+      bustSize: 3,
+      waistSize: 3,
+      hipsSize: 3,
+      length: 3,
+      stretchability: 3,
+      thickness: 3,
+      availability: true
+    })
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'price must be an integer')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+  // harga sewa harus lebih dari 0
+  it('it should return error message "price cannot be minus"', (done) => {
+    request(app)
+    .put(`/products/${productId}`)
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .send({
+      name: 'barang',
+      UserId: 1,
+      rentPrice: 10000,
+      guaranteePrice: -1,
+      frontImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      backImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      sideImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      fit: 'fitDong',
+      lining: true,
+      sheerLevel: true,
+      bustSize: 3,
+      waistSize: 3,
+      hipsSize: 3,
+      length: 3,
+      stretchability: 3,
+      thickness: 3,
+      availability: true
+    })
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message', 'price cannot be minus')
         done()
     })
     .catch(err => {

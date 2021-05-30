@@ -3,45 +3,34 @@ const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
 const { generateToken, verivyToken } = require('../helper/jwt')
-const {User, Product, Transaction} = require('../models');
+const {User, Product} = require('../models');
 
 
 let token = ""
 let invalidToken = ""
-let UserId = 0
-let SellerId = 0
-let ProductId = 0
+let transactionId = 0
 
 const user = {
   username: 'user',
   email: 'user@mail.com',
   password: 'user',
-  phone: '021223344',
-  address: 'Jl. Juanda No. 1 Jakarta Pusat',
-  bankAccount: '00000123'
 } 
 
 const wrongUser = {
   username: 'wrongUser',
   email: 'wrongUser@mail.com',
   password: 'wrongUser',
-  phone: '021223344',
-  address: 'Jl. Juanda No. 1 Jakarta Pusat',
-  bankAccount: '00000123'
 }
 
 const seller = {
   username: 'seller',
   email: 'seller@mail.com',
   password: 'seller',
-  phone: '021223344',
-  address: 'Jl. Juanda No. 1 Jakarta Pusat',
-  bankAccount: '00000123'  
 }
 
 const product = {
   name: 'barang',
-  SellerId,
+  UserId: 1,
   rentPrice: 10000,
   guaranteePrice: 10000,
   frontImg: 'https://images.unsplash.com/photo-1621972660772-6a0427d5e102?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
@@ -60,6 +49,15 @@ const product = {
 }
 
 
+const newTransaction = {
+  UserId: 0,
+  SellerId: 1,
+  ProductId: 1,
+  period: 4,
+  status: true
+}
+
+
 afterAll((done) => {
   queryInterface.bulkDelete('Products')
     .then(user => {
@@ -75,33 +73,23 @@ afterAll((done) => {
     .catch(err => {
       done();
     })
-  // queryInterface.bulkDelete('Transactions')
-  // .then(user => {
-  //   done()
-  // })
-  // .catch(err => {
-  //   done();
-  // })
 })
+
+
 
 
 beforeAll((done) => {
   User.create(user)
     .then((data) => {
-      token = generateToken({data})
-      UserId = data.id
+      token = generateToken(data.dataValues)
       return User.create(seller)    
     })
     .then((data) => {
-      SellerId = data.id
+      sellerToken = generateToken(data.dataValues)
       return User.create(wrongUser)
     })
     .then((data) => {
-      invalidToken = generateToken({data})
-      return Product.create(product)
-    })
-    .then((data) => {
-      ProductId = data.id
+      invalidToken = generateToken(data.dataValues)      
       done()
     })
     .catch((err) => {
@@ -109,14 +97,6 @@ beforeAll((done) => {
     })
 })
 
-
-const newTransaction = {
-  UserId,
-  SellerId,
-  ProductId,
-  period: 4,
-  status: true
-}
 
 // GET ALL GOING TRANSACTION
 describe('Read product case GET /transactions', () => {
@@ -128,30 +108,15 @@ describe('Read product case GET /transactions', () => {
       .expect('Content-Type', /json/)
       .then(response => {
         let {body, status} = response
+        console.log('going', response.body);
+        console.log({body, status});
         expect(status).toBe(200)
         expect(body).toHaveProperty('currentlyRenting', expect.any(Array))
         expect(body).toHaveProperty('rentedProducts', expect.any(Array))
         done()
     })
     .catch(err => {
-        done()
-    })
-  })
-
-  it('it should return error message internal server error', (done) => {
-    request(app)
-    .get('/transactions')
-    .set('access_token', token)
-    .set('Accept', 'application/json')
-    .expect('Content-Type', /json/)
-    .then(response => {
-        let {body, status} = response
-        expect(status).toBe(500)
-        expect(body).toHaveProperty('message', "internal server error")
-        done()
-    })
-    .catch(err => {
-        done()
+        done(err)
     })
   })
 })
@@ -172,27 +137,12 @@ describe('Read product case GET /transactions', () => {
         done()
     })
     .catch(err => {
-        done()
-    })
-  })
-
-  it('it should return error message internal server error', (done) => {
-    request(app)
-    .get('/historyTransactions')
-    .set('access_token', token)
-    .set('Accept', 'application/json')
-    .expect('Content-Type', /json/)
-    .then(response => {
-        let {body, status} = response
-        expect(status).toBe(500)
-        expect(body).toHaveProperty('message', "internal server error")
-        done()
-    })
-    .catch(err => {
-        done()
+        done(err)
     })
   })
 })
+
+
 
 //CREATE TRANSACTION
 describe('Create Transaction success case POST /transactions', () => {
@@ -200,23 +150,25 @@ describe('Create Transaction success case POST /transactions', () => {
       request(app)
       .post('/transactions')
       .send(newTransaction)
+      .set('access_token', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .then(response => {
+          transactionId = body.id
           let {body, status} = response
-          expect(status).toBe(200)
+          // console.log('response>>>>', {body, status});
+          expect(status).toBe(201)
           expect(body).toHaveProperty('id', expect.any(Number))
-          expect(body).toHaveProperty('UserId', newTransaction.UserId)
-          expect(body).toHaveProperty('SellerId', newTransaction.SellerId)
-          expect(body).toHaveProperty('ProductId', newTransaction.ProductId)
+          // expect(body).toHaveProperty('SellerId', newTransaction.SellerId)
+          // expect(body).toHaveProperty('ProductId', newTransaction.ProductId)
           done()
       })
       .catch(err => {
-          done()
+          done(err)
       })
   })
 
-  it('it should return error message "authentication failed', (done) => {
+  it('it should return error message "jwt must be provided', (done) => {
     request(app)
     .post('/transactions')
     .set('Accept', 'application/json')
@@ -224,92 +176,203 @@ describe('Create Transaction success case POST /transactions', () => {
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('message', 'authentication failed')
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
         done()
     })
     .catch(err => {
-        done()
+        done(err)
     })
   })
 
-  it('it should return error message "unauthorized', (done) => {
+  it('it should return error message "unauthorized"', (done) => {
     request(app)
-    .patch('/transactions')
+    .post('/transactions')
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(403)
+        expect(status).toBe(401)
         expect(body).toHaveProperty('message', "unauthorized")
         done()
     })
     .catch(err => {
-        done()
+        done(err)
     })
   })
 })
 
-// Update Transaction
-describe('Create Transaction success case PATCH /transactions/:id', () => {
-  it('Success test should return json with message transaction status and availibility has been updated', (done) => {
+// Update  Buyer Transaction
+describe('Create Transaction success case PATCH /buyerTransactions/:id', () => {
+  it('Success test should return json with message: unauthorized', (done) => {
       request(app)
-      .patch('/transactions/1')
+      .patch('/buyerTransactions/'+transactionId)
       .send({
-        ProductId
+        msgForSeller: "have you received back your package?",
+        period: null,
+        confirmationPeriod: 3
       })
+      .set('access_token', invalidToken)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .then(response => {
           let {body, status} = response
-          expect(status).toBe(200)
-          expect(body).toHaveProperty('message', 'transaction status and availibility has been updated')
+          console.log('RESPONSE', {body, status});
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'unauthorized')
           done()
       })
       .catch(err => {
-          done()
+          done(err)
       })
   })
 
-  it('it should return error message "authentication failed', (done) => {
+  it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .patch('/transactions')
+    .patch('/buyerTransactions'+transactionId)
     .set('Accept', 'application/json')
     .send({
-      ProductId
+      msgForSeller: "have you received back your package?",
+      period: null,
+      confirmationPeriod: 3
     })
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(401)
-        expect(body).toHaveProperty('message', 'authentication failed')
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
         done()
     })
     .catch(err => {
-        done()
+        done(err)
     })
   })
 
-  it('it should return error message "unauthorized', (done) => {
+})
+
+
+
+  // Update Seller Transaction 
+describe('Create Transaction success case PATCH /sellerTransactions/:id', () => {
+  it('Success test should return json with message: unauthorized', (done) => {
+      request(app)
+      .patch('/sellerTransactions/'+transactionId)
+      .send({
+        status: false,
+        msgForUser: "your deposit will be returned to you in 3 days",
+        msgForSeller: "your money will be sent to you in 3 days"
+      })
+      .set('access_token', invalidToken)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then(response => {
+          let {body, status} = response
+          console.log('RESPONSE', {body, status});
+          expect(status).toBe(401)
+          expect(body).toHaveProperty('message', 'unauthorized')
+          done()
+      })
+      .catch(err => {
+          done(err)
+      })
+  })
+
+  it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .patch('/transactions/1')
+    .patch('/sellerTransactions'+transactionId)
+    .set('Accept', 'application/json')
+    .send({
+      status: false,
+      msgForUser: "your deposit will be returned to you in 3 days",
+      msgForSeller: "your money will be sent to you in 3 days"
+    })
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+})
+
+
+// DELETE User Message
+describe('Delete product case DELETE /userMessages/:id', () => {
+  it('Success test should return message unauthorized', (done) => {
+    request(app)
+    .delete(`/userMessages/${transactionId}`)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
-    .send({
-      ProductId
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      expect(status).toBe(401)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      expect(body).toHaveProperty('message', 'unauthorized')
+      done()
     })
+    .catch(err => {
+        done(err)
+    })
+  })
+ 
+  it('it should return error message "authentication failed" when the token is empty', (done) => {
+    request(app)
+    .delete(`/userMessages/${transactionId}`)
+    .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(403)
-        expect(body).toHaveProperty('message', "unauthorized")
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
         done()
     })
     .catch(err => {
-        done()
+        done(err)
     })
   })
+})
 
+
+// DELETE Seller Message
+describe('Delete product case DELETE /sellerMessages/:id', () => {
+  it('Success test should return message unauthorized', (done) => {
+    request(app)
+    .delete(`/sellerMessages/${transactionId}`)
+    .set('access_token', invalidToken)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      expect(status).toBe(401)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      expect(body).toHaveProperty('message', 'unauthorized')
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+ 
+  it('it should return error message "authentication failed" when the token is empty', (done) => {
+    request(app)
+    .delete(`/sellerMessages/${transactionId}`)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
 })
