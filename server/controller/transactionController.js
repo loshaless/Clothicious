@@ -7,24 +7,28 @@ class TransactionController {
     try {
       let UserId = req.loggedUser.id
       const currentlyRenting = await Transaction.
-        findAll({ 
-          where: { 
-            UserId, 
-            status: true 
-          }, 
-          include: [{ 
-            model: User, 
-            as: 'seller' }, 
-          Product] })
+        findAll({
+          where: {
+            UserId,
+            status: true
+          },
+          include: [{
+            model: User,
+            as: 'seller'
+          },
+            Product]
+        })
       const rentedProducts = await Transaction.
-        findAll({ 
-          where: { 
-            SellerId: UserId, 
-            status: true }, 
-          include: [{ 
-            model: User, 
-            as: 'user' }, 
-          Product] 
+        findAll({
+          where: {
+            SellerId: UserId,
+            status: true
+          },
+          include: [{
+            model: User,
+            as: 'user'
+          },
+            Product]
         })
       const allTransaction = { currentlyRenting, rentedProducts }
       res.status(200).json(allTransaction)
@@ -38,22 +42,26 @@ class TransactionController {
     try {
       let UserId = req.loggedUser.id
       const currentlyRenting = await Transaction.
-        findAll({ 
-          where: { UserId, status: false }, 
-          include: 
-            [{ model: User, 
-              as: 'seller' }, 
-            Product ] 
+        findAll({
+          where: { UserId, status: false },
+          include:
+            [{
+              model: User,
+              as: 'seller'
+            },
+              Product]
         })
       const rentedProducts = await Transaction.
-        findAll({ 
-          where: { 
-            SellerId: UserId, 
-            status: false }, 
-          include: [{ 
-            model: User, 
-            as: 'user' }, 
-          Product] 
+        findAll({
+          where: {
+            SellerId: UserId,
+            status: false
+          },
+          include: [{
+            model: User,
+            as: 'user'
+          },
+            Product]
         })
       const allTransaction = { currentlyRenting, rentedProducts }
       res.status(200).json(allTransaction)
@@ -108,8 +116,8 @@ class TransactionController {
       const transaction = await Transaction.
         create({ UserId, SellerId, ProductId, period, status: true })
       await Product.
-        update({ availability: false }, { 
-          where: { id: ProductId } 
+        update({ availability: false }, {
+          where: { id: ProductId }
         })
       res.status(201).json(transaction)
     }
@@ -136,7 +144,7 @@ class TransactionController {
   static async confirmFromSeller(req, res, next) {
     try {
       let id = req.params.id
-      let UserId = req.loggedUser.idd 
+      let UserId = req.loggedUser.id
       let { ProductId } = req.body
       await Product.update({ availability: true }, { where: { id: ProductId, UserId } })
       await Transaction.update({
