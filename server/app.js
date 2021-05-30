@@ -3,7 +3,7 @@ require('dotenv').config()
 // AWAL CRON
 const { Transaction } = require('./models')
 var CronJob = require('cron').CronJob;
-var job = new CronJob('* * * * * *', async () => {
+var job = new CronJob('0 0 0 * * *', async () => {
   try {
     let minus = await Transaction.findAll({ where: { status: true } })
     let updatedData = minus.map(e => {
