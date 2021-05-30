@@ -134,7 +134,7 @@ class TransactionController {
         period: null,
         confirmationPeriod: 3
       }, { where: { id } })
-      res.status(200).json({ message: "message udah Seller berhasil diubah dari null jadi have you received back your package?" })
+      res.status(200).json({ message: "message changed" })
     }
     catch (error) {
       next(error)
