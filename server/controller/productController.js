@@ -1,4 +1,4 @@
-const { Product, Transaction } = require('../models')
+const { Product, User } = require('../models')
 
 class ProductController {
   static getProducts(req, res, next) {
@@ -10,7 +10,12 @@ class ProductController {
   }
   static getOneProduct(req, res, next) {
     let id = req.params.id
-    Product.findOne({ where: { id } })
+    Product.findOne({
+      where: { id },
+      include: [
+        { model: User, include: [Product] }
+      ]
+    })
       .then((product) => {
         res.status(200).json(product)
       })
