@@ -9,6 +9,8 @@ import ManProducts from "./Pages/ExploreProducts/ManProducts.jsx"
 import Details from "./Pages/Details/Details.jsx"
 import SuccessPage from "./Pages/SuccessPage/SuccessPage.jsx"
 import TransactionHistory from "./Pages/TransactionHistory/TransactionHistory.jsx"
+import UploadProduct from "./Pages/UploadProduct/UploadProduct.jsx"
+import NoMatch from "./Pages/NoMatch/NoMatch.jsx"
 import Navbar from "./Components/Navbar.jsx"
 import {
   BrowserRouter as Router,
@@ -54,6 +56,12 @@ function App() {
           </Route>
           <Route path="/history-transaction">
             <TransactionHistory />
+          </Route>
+          <Route path="/upload">
+            <UploadProduct />
+          </Route>
+          <Route path="*">
+            <NoMatch />
           </Route>
         </Switch>
       </Router>

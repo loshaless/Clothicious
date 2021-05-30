@@ -1,11 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Flex, Text, Button, Stack } from "@chakra-ui/react";
-const SuccessPage = () => {
+const NoMatch = () => {
   const history = useHistory();
-
-  function handleOnClickBrowseMore() {
-    history.push("/browse");
+  function handleOnClickTakeMeHome() {
+    history.push("/");
   }
   return (
     <Flex
@@ -27,22 +26,22 @@ const SuccessPage = () => {
           fontWeight="bold"
           letterSpacing="widest"
         >
-          Transaction Success
+          Are You Lost ?
         </Text>
-        <Text>Kata kata here</Text>
+        <Text>There is nothing to do here ...</Text>
         <Button
           w="100%"
           borderRadius="0"
           bg="black"
           color="white"
           colorScheme="black"
-          onClick={handleOnClickBrowseMore}
+          onClick={handleOnClickTakeMeHome}
         >
-          Browse More
+          Take Me Home
         </Button>
       </Stack>
     </Flex>
   );
 };
 
-export default SuccessPage;
+export default NoMatch;

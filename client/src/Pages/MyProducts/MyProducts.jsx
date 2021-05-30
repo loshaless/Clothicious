@@ -1,7 +1,14 @@
 import React from "react";
 import ProductsTable from "./Components/ProductsTable";
+import { useHistory } from "react-router-dom";
 import { Flex, Text, Box, Button } from "@chakra-ui/react";
+
 const MyProducts = () => {
+  const history = useHistory();
+
+  function handleOnClickUploadProduct() {
+    history.push("/upload");
+  }
   return (
     <Flex
       minH="90vh"
@@ -30,6 +37,7 @@ const MyProducts = () => {
             colorScheme="black"
             bg="blue.100"
             color="blue.700"
+            onClick={handleOnClickUploadProduct}
           >
             Add Product to Rent
           </Button>
