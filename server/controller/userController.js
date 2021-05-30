@@ -30,7 +30,7 @@ class UserController {
           res.status(200).json({ access_token })
         }
         else {
-          next({ status: 401, message: 'invalid email or passsword' })
+          next({ status: 401, message: 'invalid email or password' })
         }
       })
       .catch(next)
