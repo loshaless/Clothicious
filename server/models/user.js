@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: 'email must not be empty'
+        },
+        isEmail: {
+          msg: 'email should be valid'
         }
       }
     },
@@ -40,10 +43,40 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    phone: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'phone must not be empty'
+        },
+        isNumeric: {
+          msg: 'phone must be numbers'
+        }
+      }
+    },
+    address: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'address must not be empty'
+        }
+      }
+    },
+    bankAccount: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'bank account must not be empty'
+        },
+      }
+    }
   }, {
     sequelize,
     hooks: {
       beforeCreate: (instance, options) => {
+        instance.password = hash(instance.password)
+      }, 
+      beforeUpdate: (instance, options) => {
         instance.password = hash(instance.password)
       }
     },

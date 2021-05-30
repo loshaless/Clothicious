@@ -1,5 +1,8 @@
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
+const PORT = process.env.PORT || '3000';
 // AWAL CRON
 const { Transaction } = require('./models')
 var CronJob = require('cron').CronJob;
@@ -28,20 +31,20 @@ var job = new CronJob('0 0 0 * * *', async () => {
 }, null, true, 'Asia/Jakarta');
 // AKHIR CRON
 
-var cors = require('cors')
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 3000
-const router = require('./routes/index')
+const router = require('./routes')
 const errorHandler = require('./middleware/errorHandler')
+const cors = require('cors')
 
 app.use(cors())
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
+app.use(router)
+app.use(errorHandler)
 
-app.use('/', router)
-app.use('/', errorHandler)
+// app.listen(PORT, () => {
+//   console.log(`Example app listening at http://localhost:${PORT}`)
+// })
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+module.exports=app
