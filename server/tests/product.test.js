@@ -9,18 +9,12 @@ const user = {
   username: 'user',
   email: 'user@mail.com',
   password: 'user',
-  phone: '021223344',
-  address: 'Jl. Juanda No. 1 Jakarta Pusat',
-  bankAccount: '00000123'
 } 
 
 const wrongUser = {
   username: 'wrongUser',
   email: 'wrongUser@mail.com',
   password: 'wrongUser',
-  phone: '021223344',
-  address: 'Jl. Juanda No. 1 Jakarta Pusat',
-  bankAccount: '00000123'
 }
 
 
