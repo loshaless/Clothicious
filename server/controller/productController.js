@@ -21,6 +21,21 @@ class ProductController {
       })
       .catch(next)
   }
+
+  static getOneProduct(req, res, next) {
+    let id = req.params.id
+    Product.findOne({
+      where: { id },
+      include: [
+        { model: User, include: [Product] }
+      ]
+    })
+      .then((product) => {
+        res.status(200).json(product)
+      })
+      .catch(next)
+  }
+  
   static create(req, res, next) {
     let UserId = req.loggedUser.id
     let availability = true
