@@ -53,6 +53,11 @@ const Sidebar = ({ isOpen, onClose, sideBarRef, Link }) => {
                   <Text color="mainColor.fontColor">MY PRODUCTS</Text>
                 </Box>
               </Link>
+              <Link to="/chats">
+                <Box cursor="pointer" w="40vh" h="8">
+                  <Text color="mainColor.fontColor">CHATS</Text>
+                </Box>
+              </Link>
             </VStack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>
