@@ -35,31 +35,32 @@ class UserController {
       .catch(next)
   }
 
-  static allUser(req, res, next) {
-    console.log("disni");
-    User.findAll()
-      .then(user => {
-        let username = user.map(e => e.username)
-        res.status(200).json(username)
-      })
-      .catch(next)
-  }
+  // static allUser(req, res, next) {
+  //   console.log("disni");
+  //   User.findAll()
+  //     .then(user => {
+  //       let username = user.map(e => e.username)
+  //       res.status(200).json(username)
+  //     })
+  //     .catch(next)
+  // }
 
   static updateProfil(req, res, next) {
-    let id = +req.loggedUser.id
+    let id = req.loggedUser.id
     let { username, email, phone, address, bankAccount } = req.body
+    console.log(req.body, id);
     User.update({ username, email, phone, address, bankAccount }, {
       where: { id },
       returning: true
     })
       .then(user => {
         let data = {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          address: user.address,
-          bankAccount: user.bankAccount
+          id: user[1][0].id,
+          username: user[1][0].username,
+          email: user[1][0].email,
+          phone: user[1][0].phone,
+          address: user[1][0].address,
+          bankAccount: user[1][0].bankAccount
         }
         res.status(200).json(data)
       })
@@ -69,7 +70,8 @@ class UserController {
   static changePassword(req, res, next) {
     let id = +req.loggedUser.id
     let { password } = req.body
-    User.update({ password }, {
+    let updatedPassword = hash(password)
+    User.update({ password: updatedPassword }, {
       where: { id }
     })
       .then(user => {
@@ -77,7 +79,6 @@ class UserController {
       })
       .catch(next)
   }
-
 }
 
 module.exports = UserController

@@ -7,14 +7,14 @@ const { authentication, authorization, buyerAuthorization, sellerAuthorization }
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-router.get('/users', UserController.allUser)
-router.put('/profil', UserController.updateProfil)
-router.patch('/profil', UserController.changePassword)
+// router.get('/users', UserController.allUser)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
 
 router.use(authentication)
+router.put('/profil', UserController.updateProfil)
+router.patch('/profil', UserController.changePassword)
 router.post('/products', ProductController.create)
 router.put('/products/:id', authorization, ProductController.update)
 router.delete('/products/:id', authorization, ProductController.delete)
