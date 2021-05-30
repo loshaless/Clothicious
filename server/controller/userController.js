@@ -16,6 +16,7 @@ class UserController {
       })
       .catch(next)
   }
+  
   static login(req, res, next) {
     let { email, password } = req.body
     User.findOne({ where: { email: email } })
@@ -26,10 +27,12 @@ class UserController {
             username: user.username,
             email: user.email
           })
-          res.status(200).json({ access_token })
+          res.status(200).json({access_token})
         }
         else {
-          next({ status: 401, message: 'invalid email or password' })
+          next({ 
+            status: 401, 
+            message: 'invalid email or password' })
         }
       })
       .catch(next)
@@ -48,7 +51,7 @@ class UserController {
   static updateProfil(req, res, next) {
     let id = req.loggedUser.id
     let { username, email, phone, address, bankAccount } = req.body
-    console.log(req.body, id);
+    // console.log(req.body, id);
     User.update({ username, email, phone, address, bankAccount }, {
       where: { id },
       returning: true
@@ -75,7 +78,7 @@ class UserController {
       where: { id }
     })
       .then(user => {
-        res.status(200).json({ message: "Password has been successfully updated " })
+        res.status(200).json({ message: "Password has been successfully updated" })
       })
       .catch(next)
   }
