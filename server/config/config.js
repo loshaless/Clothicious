@@ -1,9 +1,10 @@
-{
+require('dotenv').config(); // this is important!
+module.exports = {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": process.env.DB_USERNAME,
+    "password": process.env.DB_PASSWORD,
     "database": "clothicious",
-    "host": "clothicious.cu3mzzmaivmv.us-east-1.rds.amazonaws.com",
+    "host": process.env.DB_URL,
     "dialect": "postgres"
   },
   "test": {

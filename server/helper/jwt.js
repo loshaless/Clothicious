@@ -1,4 +1,4 @@
-var jwt = require('jsonwebtoken');
+// var jwt = require('jsonwebtoken');
 let JWT_PASSWORD = process.env.JWT_PASSWORD
 
 function generateToken(payload) {
