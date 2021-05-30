@@ -1,5 +1,6 @@
 import React from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
+import { useHistory } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -13,6 +14,12 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 const Details = () => {
+  const history = useHistory();
+
+  function handleOnClickCheckout() {
+    history.push("/success");
+  }
+
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="16">
       <Flex>
@@ -123,6 +130,7 @@ const Details = () => {
                 color="white"
                 borderRadius="0"
                 w="90%"
+                onClick={handleOnClickCheckout}
               >
                 Checkout
               </Button>
