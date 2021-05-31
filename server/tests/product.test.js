@@ -40,7 +40,9 @@ const newProduct = {
   length: 3,
   stretchability: 3,
   thickness: 3,
-  availability: true
+  availability: true,
+  description: 'good',
+  category: 'women',
 }
 
 
@@ -145,8 +147,8 @@ describe('Create product case POST /products', () => {
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(403)
-        expect(body).toHaveProperty('message', "unathorized")
+        expect(status).toBe(201)
+        expect(response).toHaveProperty('body', expect.any(Object))
         done()
     })
     .catch(err => {
@@ -178,7 +180,9 @@ describe('Create product case POST /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -217,7 +221,9 @@ describe('Create product case POST /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -253,7 +259,9 @@ describe('Create product case POST /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -293,7 +301,9 @@ describe('Create product case POST /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -329,7 +339,9 @@ describe('Create product case POST /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -392,6 +404,7 @@ describe('Read product case GET /products', () => {
     .expect('Content-Type', /json/)
     .then(response => {
       let {body, status} = response
+      console.log(body);
       expect(status).toBe(200)
       expect(response).toHaveProperty('body', expect.any(Object))
       expect(body).toHaveProperty('id', expect.any(Number))
@@ -411,6 +424,8 @@ describe('Read product case GET /products', () => {
       expect(body).toHaveProperty('length', newProduct.length)
       expect(body).toHaveProperty('stretchability', newProduct.stretchability)
       expect(body).toHaveProperty('thickness', newProduct.thickness)
+      expect(body.User).toHaveProperty('id', expect.any(Number))
+      expect(body.User).toHaveProperty('username', expect.any(String))
       done()      
     })
     .catch(err => {
@@ -514,7 +529,9 @@ describe('Update product case PUT /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -552,7 +569,9 @@ describe('Update product case PUT /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -589,7 +608,9 @@ describe('Update product case PUT /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -628,7 +649,9 @@ describe('Update product case PUT /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
@@ -664,7 +687,9 @@ describe('Update product case PUT /products', () => {
       length: 3,
       stretchability: 3,
       thickness: 3,
-      availability: true
+      availability: true,
+      description: 'good',
+      category: 'women'
     })
     .expect('Content-Type', /json/)
     .then(response => {
