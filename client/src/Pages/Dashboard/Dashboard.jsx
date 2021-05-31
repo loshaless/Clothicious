@@ -1,5 +1,6 @@
 import React from "react";
 import EditModal from "./Components/EditModal";
+import NotificationModal from "./Components/NotificationModal";
 import {
   Box,
   Text,
@@ -24,6 +25,12 @@ import { EditIcon } from "@chakra-ui/icons";
 const Dashboard = () => {
   const history = useHistory();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: isNotifOpen,
+    onClose: onCloseNotif,
+    onOpen: onOpenNotif,
+  } = useDisclosure();
+
   function handleOnClickDetails() {
     history.push("details-transaction/1");
   }
@@ -54,6 +61,20 @@ const Dashboard = () => {
                 <EditIcon color="mainColor.fontColor" />
               </Flex>
             </Tooltip>
+            <Button
+              size="sm"
+              variant="outline"
+              alignSelf="end"
+              ml="4"
+              borderRadius="0"
+              colorScheme="blackAlpha"
+              onClick={onOpenNotif}
+            >
+              Notifications
+              <Badge colorScheme="purple" fontSize="xs" ml="1">
+                New
+              </Badge>
+            </Button>
           </Flex>
           <Grid templateColumns="repeat(3, 1fr)" gap={6} mt="4">
             <GridItem d="flex" justifyContent="center">
@@ -214,6 +235,7 @@ const Dashboard = () => {
         </Box>
       </Box>
       <EditModal isOpen={isOpen} onClose={onClose} />
+      <NotificationModal isOpen={isNotifOpen} onClose={onCloseNotif} />
     </>
   );
 };

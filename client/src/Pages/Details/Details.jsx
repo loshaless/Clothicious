@@ -11,7 +11,6 @@ import {
   HStack,
   VStack,
   Button,
-  StackDivider,
 } from "@chakra-ui/react";
 const Details = () => {
   const history = useHistory();
@@ -86,6 +85,7 @@ const Details = () => {
             />
           </Box>
         </Box>
+
         <Box>
           <Flex w="60%" h="43vh" border="1px" flexDirection="column">
             <VStack mt="2" px="4" spacing="5">
@@ -115,6 +115,15 @@ const Details = () => {
                   Owner
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
+                  <Button
+                    size="xs"
+                    mr="2"
+                    colorScheme="black"
+                    bg="blue.100"
+                    color="blue.600"
+                  >
+                    Chat Owner
+                  </Button>
                   Tsuyuri Kanao
                 </Text>
               </HStack>
@@ -202,6 +211,20 @@ const Details = () => {
           </Flex>
         </Box>
       </SimpleGrid>
+      <Box w="40%" h="30vh" ml="40" mt="-40">
+        <Text fontWeight="bold" color="gray.500">
+          Notes & Description
+        </Text>
+        <Text>
+          Endlessly versatile, this shirt works just as well tucked into smart
+          trousers for the evening as it does untucked with jeans for the day.
+          Cut from crisp cotton mix fabric, this structured shirt boasts
+          cut-about panelling with three contrasting stripes, feminine
+          architectural ruffles to the sleeves and shoulders for a sense of
+          modern drama and is finished with a subtle waisted fit. Nude
+          undergarment is advised.
+        </Text>
+      </Box>
     </Box>
   );
 };
