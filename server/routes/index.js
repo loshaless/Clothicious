@@ -8,7 +8,7 @@ const MidtransController = require('../controller/midtransController')
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-// router.get('/users', UserController.allUser)
+router.get('/users', UserController.getUserChatEngine)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
