@@ -97,7 +97,6 @@ beforeAll((done) => {
     })
 })
 
-
 // GET ALL GOING TRANSACTION
 describe('Read product case GET /transactions', () => {
   it('Success test should return object with keys', (done) => {
@@ -136,7 +135,6 @@ describe('Read product case GET /transactions', () => {
         done(err)
     })
   })
-
 
   it('it should return error message "unauthorized"', (done) => {
     request(app)
@@ -637,4 +635,6 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
         done(err)
     })
   })
+
+  
 })

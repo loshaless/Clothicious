@@ -29,8 +29,8 @@ class TransactionController {
       const allTransaction = { currentlyRenting, rentedProducts }
       res.status(200).json(allTransaction)
     }
-    catch (err) {
-      next(err)
+    catch (error) {
+      next(error)
     }
   }
 
