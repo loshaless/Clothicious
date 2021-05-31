@@ -11,7 +11,6 @@ import {
   HStack,
   VStack,
   Button,
-  StackDivider,
 } from "@chakra-ui/react";
 const Details = () => {
   const history = useHistory();
@@ -120,8 +119,8 @@ const Details = () => {
                     size="xs"
                     mr="2"
                     colorScheme="black"
-                    bg="purple.100"
-                    color="purple.600"
+                    bg="blue.100"
+                    color="blue.600"
                   >
                     Chat Owner
                   </Button>
