@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Box,
   Flex,
   Text,
   Input,
@@ -11,7 +10,29 @@ import {
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 import { FiUsers, FiPhone } from "react-icons/fi";
+import { register } from '../../Stores/action'
+import { useDispatch } from 'react-redux'
+import { useHistory } from "react-router-dom";
+
 const Register = () => {
+  let history = useHistory();
+  const dispatch = useDispatch()
+  const initialFormState = { name: '', email: '', password: '', phone: '' }
+  const [data, setData] = useState(initialFormState)
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setData({ ...data, [name]: value })
+    // console.log(data);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    // console.log(data);
+    dispatch(register(data))
+    history.push("/login")
+  }
+
   return (
     <Flex
       bg="mainColor.bg"
@@ -46,6 +67,9 @@ const Register = () => {
             borderColor="mainColor.fontColor"
             placeholder="Full Name"
             type="text"
+            name="name"
+            value={data.name}
+            onChange={handleInputChange}
           />
         </InputGroup>
         <InputGroup justifyContent="center" mt="4">
@@ -61,6 +85,9 @@ const Register = () => {
             borderColor="mainColor.fontColor"
             placeholder="Email"
             type="email"
+            name="email"
+            value={data.email}
+            onChange={handleInputChange}
           />
         </InputGroup>
         <InputGroup justifyContent="center" mt="4">
@@ -76,6 +103,9 @@ const Register = () => {
             borderColor="mainColor.fontColor"
             placeholder="Password"
             type="password"
+            name="password"
+            value={data.password}
+            onChange={handleInputChange}
           />
         </InputGroup>
         <InputGroup justifyContent="center" mt="4">
@@ -91,9 +121,12 @@ const Register = () => {
             borderColor="mainColor.fontColor"
             placeholder="Phone Number"
             type="number"
+            name="phone"
+            value={data.phone}
+            onChange={handleInputChange}
           />
         </InputGroup>
-        <Button colorScheme="blackAlpha" w="85%" borderRadius="0" mt="4">
+        <Button colorScheme="blackAlpha" w="85%" borderRadius="0" mt="4" onClick={(event) => handleSubmit(event)}>
           Sign Up
         </Button>
       </Flex>

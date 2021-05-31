@@ -32,11 +32,15 @@ class UserController {
           res.status(200).json({ access_token })
         }
         else {
-          next({ status: 401, message: 'invalid email or passsword' })
+          next({
+            status: 401,
+            message: 'invalid email or password'
+          })
         }
       })
       .catch(next)
   }
+
 
   static getUserChatEngine(req, res, next) {
     axios({
@@ -56,6 +60,15 @@ class UserController {
     })
   }
 
+  static loggedUser(req, res, next) {
+    let id = req.loggedUser.id
+    User.findOne({ where: { id } })
+      .then(user => {
+        res.status(200).json(user)
+      })
+      .catch(next)
+  }
+
   // static allUser(req, res, next) {
   //   console.log("disni");
   //   User.findAll()
@@ -69,7 +82,7 @@ class UserController {
   static updateProfil(req, res, next) {
     let id = req.loggedUser.id
     let { username, email, phone, address, bankAccount } = req.body
-    console.log(req.body, id);
+    // console.log(req.body, id);
     User.update({ username, email, phone, address, bankAccount }, {
       where: { id },
       returning: true
@@ -96,7 +109,7 @@ class UserController {
       where: { id }
     })
       .then(user => {
-        res.status(200).json({ message: "Password has been successfully updated " })
+        res.status(200).json({ message: "Password has been successfully updated" })
       })
       .catch(next)
   }
