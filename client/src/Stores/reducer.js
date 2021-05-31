@@ -17,6 +17,10 @@ function reducer(state = initialState, action) {
       return { ...state, transactions: action.payload }
     case 'FETCH_TRANSACTION_DETAIL':
       return { ...state, transactionDetail: action.payload }
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.payload }
+    case 'SET_LOGIN':
+      return { ...state, isLogin: action.payload }
     default:
       return state
   }

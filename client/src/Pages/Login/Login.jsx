@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Button,
@@ -11,11 +11,32 @@ import {
   InputLeftElement,
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
+import { login } from '../../Stores/action'
+import { useDispatch, useSelector } from 'react-redux'
+
 const Login = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const initialFormState = { email: '', password: '' }
+  const [data, setData] = useState(initialFormState)
+  const isLogin = useSelector(state => state.isLogin)
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setData({ ...data, [name]: value })
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    dispatch(login(data))
+  }
 
   function handleOnClickRegister() {
     history.push("/register");
+  }
+
+  if (isLogin || localStorage.getItem('access_token')) {
+    history.push("/");
   }
 
   return (
@@ -62,6 +83,9 @@ const Login = () => {
                 borderColor="mainColor.fontColor"
                 placeholder="Email"
                 type="email"
+                name="email"
+                value={data.email}
+                onChange={handleInputChange}
               />
             </InputGroup>
             <InputGroup justifyContent="center" mt="4">
@@ -77,6 +101,9 @@ const Login = () => {
                 borderColor="mainColor.fontColor"
                 placeholder="Password"
                 type="password"
+                name="password"
+                value={data.password}
+                onChange={handleInputChange}
               />
             </InputGroup>
             <Button
@@ -85,6 +112,7 @@ const Login = () => {
               colorScheme="black"
               bg="mainColor.fontColor"
               borderRadius={null}
+              onClick={(event) => handleSubmit(event)}
             >
               SIGN IN
             </Button>
