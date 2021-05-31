@@ -39,6 +39,7 @@ const NestedExploreProducts = () => {
 
   return (
     <Box minH="90vh" bg="mainColor.bg">
+      <Text>{JSON.stringify(products)}</Text>
       <Flex>
         <ExploreBreadcrumbs category="Woman" />
       </Flex>

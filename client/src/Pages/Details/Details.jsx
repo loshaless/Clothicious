@@ -3,8 +3,7 @@ import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
 import { fetchProductDetail } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
 import {
   Box,
@@ -25,44 +24,46 @@ const Details = () => {
   function handleOnClickCheckout() {
     // ambil token
     let parameter = {
-      "transaction_details": {
-        "order_id": "test-transactaion-1123424",
-        "gross_amount": 10000
+      transaction_details: {
+        order_id: "test-transactaion-1123424",
+        gross_amount: 10000,
       },
-      "item_details": [{
-        "id": "ITEM1",
-        "price": 10000,
-        "quantity": 1,
-        "name": "Midtrans Bear",
-        "brand": "Midtrans",
-        "category": "Toys",
-        "merchant_name": "Midtrans"
-      }],
-      "customer_details": {
-        "first_name": "John",
-        "last_name": "Watson",
-        "email": "test@example.com",
-        "phone": "+628123456",
-        "billing_address": {
-          "first_name": "John",
-          "last_name": "Watson",
-          "email": "test@example.com",
-          "phone": "081 2233 44-55",
-          "address": "Sudirman",
-          "city": "Jakarta",
-          "postal_code": "12190",
-          "country_code": "IDN"
+      item_details: [
+        {
+          id: "ITEM1",
+          price: 10000,
+          quantity: 1,
+          name: "Midtrans Bear",
+          brand: "Midtrans",
+          category: "Toys",
+          merchant_name: "Midtrans",
         },
-        "shipping_address": {
-          "first_name": "John",
-          "last_name": "Watson",
-          "email": "test@example.com",
-          "phone": "0 8128-75 7-9338",
-          "address": "Sudirman",
-          "city": "Jakarta",
-          "postal_code": "12190",
-          "country_code": "IDN"
-        }
+      ],
+      customer_details: {
+        first_name: "John",
+        last_name: "Watson",
+        email: "test@example.com",
+        phone: "+628123456",
+        billing_address: {
+          first_name: "John",
+          last_name: "Watson",
+          email: "test@example.com",
+          phone: "081 2233 44-55",
+          address: "Sudirman",
+          city: "Jakarta",
+          postal_code: "12190",
+          country_code: "IDN",
+        },
+        shipping_address: {
+          first_name: "John",
+          last_name: "Watson",
+          email: "test@example.com",
+          phone: "0 8128-75 7-9338",
+          address: "Sudirman",
+          city: "Jakarta",
+          postal_code: "12190",
+          country_code: "IDN",
+        },
       },
     };
 
@@ -70,43 +71,42 @@ const Details = () => {
       url: "http://localhost:3000/getTokenMidtrans",
       method: "POST",
       data: {
-        parameter
-      }
-    })
-      .then(snapResponse => {
-        console.log("Retrieved snap token:", snapResponse.data);
-        window.snap.pay(snapResponse.data, {
-          onSuccess: function (result) {
-            console.log('success')
-            axios({
-              url: "http://localhost:3000/transactions",
-              method: "post",
-              data: {
-                'SellerId': 1,
-                'ProductId': 2,
-                'period': 3
-              }
+        parameter,
+      },
+    }).then((snapResponse) => {
+      console.log("Retrieved snap token:", snapResponse.data);
+      window.snap.pay(snapResponse.data, {
+        onSuccess: function (result) {
+          console.log("success");
+          axios({
+            url: "http://localhost:3000/transactions",
+            method: "post",
+            data: {
+              SellerId: 1,
+              ProductId: 2,
+              period: 3,
+            },
+          })
+            .then((response) => {
+              history.push("/success");
+              console.log("response dari transactions:", response);
             })
-              .then(response => {
-                history.push("/success");
-                console.log("response dari transactions:", response);
-              })
-              .catch(error => {
-                console.log('error dari transactions response', error)
-              })
-          },
-          onPending: function (result) {
-            history.push("/success");
-            console.log('pending')
-          },
-          onError: function (result) {
-            console.log('error')
-          },
-          onClose: function () {
-            console.log('di close')
-          }
-        })
-      })
+            .catch((error) => {
+              console.log("error dari transactions response", error);
+            });
+        },
+        onPending: function (result) {
+          history.push("/success");
+          console.log("pending");
+        },
+        onError: function (result) {
+          console.log("error");
+        },
+        onClose: function () {
+          console.log("di close");
+        },
+      });
+    });
   }
 
   useEffect(() => {
