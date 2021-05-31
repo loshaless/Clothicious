@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Product } = require('../models')
 let { generateToken, verivyToken } = require('../helper/jwt')
 let { hash, compare } = require('../helper/bcrypt')
 const axios = require('axios')
@@ -62,22 +62,12 @@ class UserController {
 
   static loggedUser(req, res, next) {
     let id = req.loggedUser.id
-    User.findOne({ where: { id } })
+    User.findOne({ where: { id }, include: [Product] })
       .then(user => {
         res.status(200).json(user)
       })
       .catch(next)
   }
-
-  // static allUser(req, res, next) {
-  //   console.log("disni");
-  //   User.findAll()
-  //     .then(user => {
-  //       let username = user.map(e => e.username)
-  //       res.status(200).json(username)
-  //     })
-  //     .catch(next)
-  // }
 
   static updateProfil(req, res, next) {
     let id = req.loggedUser.id

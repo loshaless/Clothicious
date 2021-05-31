@@ -13,7 +13,6 @@ router.get('/users', UserController.getUserChatEngine)
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
 
-
 router.use(authentication)
 router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
 router.get('/loggedUsers', UserController.loggedUser)
