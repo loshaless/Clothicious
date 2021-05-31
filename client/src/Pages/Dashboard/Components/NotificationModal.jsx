@@ -10,8 +10,6 @@ import {
   Stack,
   Button,
   Text,
-  Spacer,
-  Box,
   SimpleGrid,
 } from "@chakra-ui/react";
 const NotificationModal = ({ isOpen, onClose }) => {
