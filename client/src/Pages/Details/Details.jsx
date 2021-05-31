@@ -116,6 +116,15 @@ const Details = () => {
                   Owner
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
+                  <Button
+                    size="xs"
+                    mr="2"
+                    colorScheme="black"
+                    bg="purple.100"
+                    color="purple.600"
+                  >
+                    Chat Owner
+                  </Button>
                   Tsuyuri Kanao
                 </Text>
               </HStack>
