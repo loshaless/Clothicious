@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import EditProductModal from "../Components/EditProductModal";
 import {
@@ -15,12 +15,25 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { DeleteIcon, InfoIcon, EditIcon } from "@chakra-ui/icons";
+import { fetchProductsByLoggedUser, deleteProduct } from '../../../Stores/action'
+import { useDispatch, useSelector } from 'react-redux'
+
 const ProductsTable = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.products)
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  useEffect(() => {
+    dispatch(fetchProductsByLoggedUser())
+  }, [dispatch, products]);
 
   function handleOnClickDetails(id) {
     history.push("/details/" + id);
+  }
+
+  function handleDelete(id) {
+    dispatch(deleteProduct(id))
   }
 
   return (
@@ -29,69 +42,44 @@ const ProductsTable = () => {
         <Thead>
           <Tr>
             <Th>Name</Th>
-            <Th>Message</Th>
+            <Th>Image</Th>
             <Th>Availability</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>Clothes 1</Td>
-            <Td>
-              <Box h="150px" w="150px">
-                <Image
-                  src="https://images.unsplash.com/photo-1485527691629-8e370684924c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=753&q=80"
-                  h="100%"
-                />
-              </Box>
-            </Td>
-            <Td>
-              <Badge colorScheme="green">Available</Badge>
-            </Td>
-            <Td>
-              <IconButton
-                colorScheme="teal"
-                icon={<InfoIcon />}
-                onClick={() => handleOnClickDetails(1)}
-              />
-              <IconButton
-                colorScheme="yellow"
-                icon={<EditIcon />}
-                ml="2"
-                onClick={onOpen}
-              />
-              <IconButton ml="2" icon={<DeleteIcon />} />
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>Clothes 2</Td>
-            <Td>
-              <Box h="150px" w="150px">
-                <Image
-                  src="https://images.unsplash.com/photo-1554568218-0f1715e72254?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80"
-                  alt="product img"
-                  h="100%"
-                />
-              </Box>
-            </Td>
-            <Td>
-              <Badge colorScheme="red">Rented</Badge>
-            </Td>
-            <Td>
-              <IconButton
-                colorScheme="teal"
-                icon={<InfoIcon />}
-                onClick={() => handleOnClickDetails(2)}
-              />
-              <IconButton
-                colorScheme="yellow"
-                icon={<EditIcon />}
-                ml="2"
-                onClick={onOpen}
-              />
-              <IconButton ml="2" icon={<DeleteIcon />} />
-            </Td>
-          </Tr>
+          {products.map(product => {
+            return (
+              <Tr>
+                <Td>{product.name}</Td>
+                <Td>
+                  <Box h="150px" w="150px">
+                    <Image
+                      src={product.frontImg}
+                      h="100%"
+                    />
+                  </Box>
+                </Td>
+                <Td>
+                  <Badge colorScheme={product.availability ? "green" : "red"}>{product.availability ? "Available" : "Rented"}</Badge>
+                </Td>
+                <Td>
+                  <IconButton
+                    colorScheme="teal"
+                    icon={<InfoIcon />}
+                    onClick={() => handleOnClickDetails(product.id)}
+                  />
+                  <IconButton
+                    colorScheme="yellow"
+                    icon={<EditIcon />}
+                    ml="2"
+                    onClick={onOpen}
+                  />
+                  {product.availability && <IconButton ml="2" icon={<DeleteIcon />} onClick={() => handleDelete(product.id)} />}
+                </Td>
+              </Tr>
+            )
+          })}
         </Tbody>
       </Table>
       <EditProductModal isOpen={isOpen} onClose={onClose} />
