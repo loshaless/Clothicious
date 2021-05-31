@@ -1,5 +1,6 @@
 import LandingPage from "./Pages/LandingPage/LandingPage.jsx"
 import Login from "./Pages/Login/Login.jsx"
+import Register from "./Pages/Register/Register.jsx"
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx"
 import MyProducts from "./Pages/MyProducts/MyProducts.jsx"
 import TransactionDetails from "./Pages/TransactionDetails/TransactionDetails.jsx"
@@ -29,6 +30,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
           </Route>
           <Route path="/dashboard">
             <Dashboard />
