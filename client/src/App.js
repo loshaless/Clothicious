@@ -1,5 +1,6 @@
 import LandingPage from "./Pages/LandingPage/LandingPage.jsx"
 import Login from "./Pages/Login/Login.jsx"
+import Chat from "./Pages/Chatengine/Chat"
 import Register from "./Pages/Register/Register.jsx"
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx"
 import MyProducts from "./Pages/MyProducts/MyProducts.jsx"
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/chats">
+            <Chat />
           </Route>
           <Route path="/dashboard">
             <Dashboard />

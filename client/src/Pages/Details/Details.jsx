@@ -1,5 +1,6 @@
 import React from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
+import { getOrCreateChat } from 'react-chat-engine';
 import { useHistory } from "react-router-dom";
 import {
   Box,
@@ -18,6 +19,13 @@ const Details = () => {
   function handleOnClickCheckout() {
     history.push("/success");
   }
+
+  function createDirectChatHandler(creds) {
+		getOrCreateChat(
+			creds,
+			{ is_direct_chat: true, usernames: ['Adams'] }
+		)
+	}
 
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="16">
@@ -121,6 +129,7 @@ const Details = () => {
                     colorScheme="black"
                     bg="blue.100"
                     color="blue.600"
+                    onClick={createDirectChatHandler}
                   >
                     Chat Owner
                   </Button>
