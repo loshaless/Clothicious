@@ -22,8 +22,12 @@ const Details = () => {
   let { id } = useParams();
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
-  console.log(loading, 'ini loading')
-  console.log(productDetail, 'ini product detail ya')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
+  const [sellerId, setSellerId] = useState('')
+  const [productId, setProductId] = useState('')
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
@@ -32,11 +36,31 @@ const Details = () => {
 
   if (loading) return <div>Loading</div>
   else {
+
+    axios({
+      url: 'http://localhost:3000/loggedUsers',
+      method: 'get',
+      headers: {
+        access_token: localStorage.getItem('access_token')
+      }
+    })
+      .then(({ data }) => {
+        console.log(data, 'ini data user login dan axios')
+        setName(data.username)
+        setEmail(data.email)
+        setAddress(data.address)
+        setPhone(data.phone)
+      })
+      .catch(error => {
+        console.log(error, 'ini error axios data user login')
+      })
+
     function handleOnClickCheckout() {
-      // ambil token
+      const sellerId = productDetail.UserId
+      const productId = productDetail.id
       const date = new Date()
       const miliseconds = date.getMilliseconds()
-      const order_id = `order-user${productDetail.User.username}-${miliseconds}`
+      const order_id = `order-user${name}-${miliseconds}`
       let parameter = {
         "transaction_details": {
           "order_id": order_id,
@@ -52,60 +76,57 @@ const Details = () => {
           "merchant_name": "Try Clothes"
         }],
         "customer_details": {
-          "username": "John",
-          "email": "test@example.com",
-          "phone": "+628123456",
-          "billing_address": {
-            "first_name": "John",
-            "last_name": "Watson",
-            "email": "test@example.com",
-            "phone": "081 2233 44-55",
-            "address": "Sudirman",
-            "city": "Jakarta",
-            "postal_code": "12190",
-            "country_code": "IDN"
-          },
+          "username": name,
+          "email": email,
+          "phone": phone,
           "shipping_address": {
-            "first_name": "John",
-            "last_name": "Watson",
-            "email": "test@example.com",
-            "phone": "0 8128-75 7-9338",
-            "address": "Sudirman",
+            "first_name": name,
+            "email": email,
+            "phone": phone,
+            "address": address,
             "city": "Jakarta",
-            "postal_code": "12190",
             "country_code": "IDN"
           }
         },
       };
-  
+
+
+
       axios({
         url: "http://localhost:3000/getTokenMidtrans",
         method: "POST",
         data: {
           parameter
+        },
+        headers: {
+          access_token: localStorage.getItem('access_token')
         }
       })
         .then(snapResponse => {
           console.log("Retrieved snap token:", snapResponse.data);
+          axios({
+            url: "http://localhost:3000/transactions",
+            method: "post",
+            data: {
+              'SellerId': sellerId,
+              'ProductId': productId,
+              'period': 4
+            },
+            headers: {
+              access_token: localStorage.getItem('access_token')
+            }
+          })
+            .then(response => {
+              history.push("/success");
+              console.log("response dari transactions:", response);
+            })
+            .catch(error => {
+              console.log('error dari transactions response', error)
+            })
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
+
               console.log('success')
-              axios({
-                url: "http://localhost:3000/transactions",
-                method: "post",
-                data: {
-                  'SellerId': productDetail.User.UserId,
-                  'ProductId': productDetail.id,
-                  'period': 4
-                }
-              })
-                .then(response => {
-                  history.push("/success");
-                  console.log("response dari transactions:", response);
-                })
-                .catch(error => {
-                  console.log('error dari transactions response', error)
-                })
             },
             onPending: function (result) {
               history.push("/success");
@@ -119,6 +140,8 @@ const Details = () => {
             }
           })
         })
+
+
     }
 
     return (
@@ -171,7 +194,7 @@ const Details = () => {
               <Image src={productDetail.sideImg} h="100%" w="300px" />
             </Box>
           </Box>
-  
+
           <Box>
             <Flex w="60%" h="48vh" border="1px" flexDirection="column">
               <VStack mt="2" px="4" spacing="5">
@@ -231,6 +254,7 @@ const Details = () => {
                     {productDetail.availability ? "Available to Rent" : "Rented"}
                   </Badge>
                 </HStack>
+
                 <Button
                   colorScheme="black"
                   bg="black"
@@ -238,6 +262,7 @@ const Details = () => {
                   borderRadius="0"
                   w="90%"
                   onClick={handleOnClickCheckout}
+                  disabled={!productDetail.availability}
                 >
                   Rent Now
                 </Button>
@@ -314,7 +339,7 @@ const Details = () => {
             Notes & Description
           </Text>
           <Text>
-              {productDetail.description}
+            {productDetail.description}
           </Text>
         </Box>
       </Box>
