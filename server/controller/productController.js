@@ -2,7 +2,7 @@ const { Product, User } = require('../models')
 
 class ProductController {
   static getProducts(req, res, next) {
-    Product.findAll()
+    Product.findAll({ include: [User] })
       .then((product) => {
         res.status(200).json(product)
       })
@@ -22,7 +22,7 @@ class ProductController {
       })
       .catch(next)
   }
-  
+
   static create(req, res, next) {
     let UserId = req.loggedUser.id
     let availability = true

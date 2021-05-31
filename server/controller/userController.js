@@ -4,13 +4,14 @@ let { hash, compare } = require('../helper/bcrypt')
 
 class UserController {
   static register(req, res, next) {
-    let { username, email, password } = req.body
-    User.create({ username, email, password })
+    let { username, email, password, phone } = req.body
+    User.create({ username, email, password, phone })
       .then(user => {
         let data = {
           id: user.id,
           username: user.username,
           email: user.email,
+          phone: user.phone
         }
         res.status(201).json(data)
       })
