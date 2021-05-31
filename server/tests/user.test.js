@@ -2,6 +2,14 @@ const request = require('supertest');
 const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
+const { User } = require('../models')
+
+
+const existingUser = {
+    username: 'dummy',
+    password: 'dummy',
+    email: 'dummy@mail.com'
+}
 
 afterAll((done) => {
     queryInterface.bulkDelete('Users')
@@ -13,6 +21,17 @@ afterAll((done) => {
         })
 })
 
+beforeAll((done) => {
+    User.create(existingUser)
+        .then((data) => {
+            console.log(data);
+            done()
+        })
+        .catch((err) => {
+            done()
+        })
+})
+
 //register
 describe('Register success case POST /register', () => {
     it('Success test should return json with id, username, email, phone, address, bankAccount value', (done) => {
@@ -20,28 +39,23 @@ describe('Register success case POST /register', () => {
         .post('/register')
         .send(
             {
-                name: 'budi',
+                username: 'budi',
                 email: 'budi@mail.com',
                 password: 'budi',
-                phone: '021223344',
-                address: 'Jl. Juanda No. 1 Jakarta Pusat',
-                bankAccount: '00000123'
             })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
+            console.log({body, status});
             expect(status).toBe(201)
             expect(body).toHaveProperty('id', expect.any(Number))
-            expect(body).toHaveProperty('username', UserValid.name)
-            expect(body).toHaveProperty('email', UserValid.email)
-            expect(body).toHaveProperty('phone', UserValid.phone)
-            expect(body).toHaveProperty('address', UserValid.address)
-            expect(body).toHaveProperty('bankAccount', UserValid.bankAccount)
+            expect(body).toHaveProperty('username', body.username)
+            expect(body).toHaveProperty('email', body.email)
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
@@ -50,11 +64,9 @@ describe('Register success case POST /register', () => {
         request(app)
         .post('/register')
         .send({
+            username: '',
             email: 'budi@mail.com',
             password: 'budi',
-            phone: '021223344',
-            address: 'Jl. Juanda No. 1 Jakarta Pusat',
-            bankAccount: '00000123'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -65,7 +77,7 @@ describe('Register success case POST /register', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
@@ -76,9 +88,7 @@ describe('Register success case POST /register', () => {
         .send({
             username: 'budi00',
             password: 'budi',
-            phone: '021223344',
-            address: 'Jl. Juanda No. 1 Jakarta Pusat',
-            bankAccount: '00000123'
+            email: ''
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -89,22 +99,41 @@ describe('Register success case POST /register', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
+
+    //username must be unique
+    it('It should return error message "username must be unique"', (done) => {
+        request(app)
+        .post('/register')
+        .send({
+            username: 'budi',
+            email: 'budi123@mail.com',
+            password: 'budi123',
+        })
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .then(response => {
+            let {body, status} = response
+            expect(status).toBe(400)
+            expect(body).toHaveProperty('message', "username must be unique")
+            done()
+        })
+        .catch(err => {
+            done(err)
+        })
+    })
 
     //email must be unique
     it('It should return error message "email must be unique"', (done) => {
         request(app)
         .post('/register')
         .send({
-            username: 'budi',
+            username: 'budi000',
             email: 'budi@mail.com',
-            password: 'budi',
-            phone: '021223344',
-            address: 'Jl. Juanda No. 1 Jakarta Pusat',
-            bankAccount: '00000123'
+            password: 'budi123',
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -115,7 +144,7 @@ describe('Register success case POST /register', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
@@ -127,9 +156,6 @@ describe('Register success case POST /register', () => {
             username: 'budi',
             email: 'budi aja',
             password: 'budi',
-            phone: '021223344',
-            address: 'Jl. Juanda No. 1 Jakarta Pusat',
-            bankAccount: '00000123'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -140,84 +166,7 @@ describe('Register success case POST /register', () => {
             done()
         })
         .catch(err => {
-            done()
-        })
-    })
-
-    //phone is required
-    it('It should return error message "phone must be unique"', (done) => {
-        request(app)
-        .post('/register')
-        .send({
-            username: 'budi',
-            email: 'budi@mail.com',
-            password: 'budi',
-            phone: '',
-            address: 'Jl. Juanda No. 1 Jakarta Pusat',
-            bankAccount: '00000123'
-        })
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .then(response => {
-            let {body, status} = response
-            expect(status).toBe(400)
-            expect(body).toHaveProperty('message', "phone must be unique")
-            done()
-        })
-        .catch(err => {
-            done()
-        })
-    })
-
-
-
-    //address is required
-    it('It should return error message "address must be unique"', (done) => {
-        request(app)
-        .post('/register')
-        .send({
-            username: 'budi',
-            email: 'budi@mail.com',
-            password: 'budi',
-            phone: '021223344',
-            address: '',
-            bankAccount: '00000123'
-        })
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .then(response => {
-            let {body, status} = response
-            expect(status).toBe(400)
-            expect(body).toHaveProperty('message', "address must be unique")
-            done()
-        })
-        .catch(err => {
-            done()
-        })
-    })
-
-   //bankAccount is required
-   it('It should return error message "bank account must be unique"', (done) => {
-        request(app)
-        .post('/register')
-        .send({
-            username: 'budi',
-            email: 'budi@mail.com',
-            password: 'budi',
-            phone: '021223344',
-            address: '',
-            bankAccount: '00000123'
-        })
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .then(response => {
-            let {body, status} = response
-            expect(status).toBe(400)
-            expect(body).toHaveProperty('message', "bank account must be unique")
-            done()
-        })
-        .catch(err => {
-            done()
+            done(err)
         })
     })
 })
@@ -238,16 +187,16 @@ describe('Login success case POST /login', () => {
         .then(response => {
             let {body, status} = response
             expect(status).toBe(200)
-            expect(body).toHaveProperty('token', expect.any(String))
+            expect(body).toHaveProperty('access_token', expect.any(String))
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
     // wrong email
-    it('it response json with invalid email orpassword', (done) => {
+    it('it response json with invalid email or password', (done) => {
         request(app)
         .post('/login')
         .send({
@@ -259,11 +208,11 @@ describe('Login success case POST /login', () => {
         .then(response => {
             let {body, status} = response
             expect(status).toBe(401)
-            expect(body).toHaveProperty('message', 'invalid email orpassword')
+            expect(body).toHaveProperty('message', 'invalid email or password')
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
     
@@ -284,7 +233,7 @@ describe('Login success case POST /login', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
@@ -305,7 +254,7 @@ describe('Login success case POST /login', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 })

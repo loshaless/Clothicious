@@ -56,7 +56,7 @@ function App() {
           <Route path="/browse/man">
             <ManProducts />
           </Route>
-          <Route path="/browse/details/:id">
+          <Route path="/details/:id">
             <Details />
           </Route>
           <Route path="/success">

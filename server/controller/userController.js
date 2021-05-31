@@ -1,6 +1,7 @@
 const { User } = require('../models')
 let { generateToken, verivyToken } = require('../helper/jwt')
 let { hash, compare } = require('../helper/bcrypt')
+const axios = require('axios')
 
 class UserController {
   static register(req, res, next) {
@@ -17,6 +18,7 @@ class UserController {
       })
       .catch(next)
   }
+
   static login(req, res, next) {
     let { email, password } = req.body
     User.findOne({ where: { email: email } })
@@ -30,8 +32,39 @@ class UserController {
           res.status(200).json({ access_token })
         }
         else {
-          next({ status: 401, message: 'invalid email or passsword' })
+          next({
+            status: 401,
+            message: 'invalid email or password'
+          })
         }
+      })
+      .catch(next)
+  }
+
+
+  static getUserChatEngine(req, res, next) {
+    axios({
+      method: 'get',
+      url: 'https://api.chatengine.io/users/',
+      headers: { 
+        'PRIVATE-KEY': '93a6043a-5d0f-4587-bbd7-957fe1885986'
+      }
+    })
+    .then(({ data }) => {
+      const user = data.map(e => e.username)
+      res.status(200).json(user)
+    })
+    .catch(error => {
+      console.log(error, 'error chatengine di model user');
+      next(error)
+    })
+  }
+
+  static loggedUser(req, res, next) {
+    let id = req.loggedUser.id
+    User.findOne({ where: { id } })
+      .then(user => {
+        res.status(200).json(user)
       })
       .catch(next)
   }
@@ -49,7 +82,7 @@ class UserController {
   static updateProfil(req, res, next) {
     let id = req.loggedUser.id
     let { username, email, phone, address, bankAccount } = req.body
-    console.log(req.body, id);
+    // console.log(req.body, id);
     User.update({ username, email, phone, address, bankAccount }, {
       where: { id },
       returning: true
@@ -76,7 +109,7 @@ class UserController {
       where: { id }
     })
       .then(user => {
-        res.status(200).json({ message: "Password has been successfully updated " })
+        res.status(200).json({ message: "Password has been successfully updated" })
       })
       .catch(next)
   }
