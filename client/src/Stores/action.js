@@ -89,6 +89,27 @@ export function fetchProductsByLoggedUser() {
   }
 }
 
+export function editProduct(input) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/products/' + input.id,
+        method: "PUT",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        },
+        data: input
+      })
+      fetchProductsByLoggedUser()
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
 export function deleteProduct(id) {
   return async (dispatch) => {
     try {
