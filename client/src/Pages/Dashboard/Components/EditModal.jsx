@@ -37,6 +37,22 @@ const EditModal = ({ isOpen, onClose }) => {
             <Input type="text" placeholder="Account Number" />
           </FormControl>
           <FormControl>
+            <FormLabel textAlign="center">Thickness</FormLabel>
+            <Input
+              type="number"
+              placeholder="1 to 100"
+              borderColor="mainColor.fontColor"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel textAlign="center">Strechability</FormLabel>
+            <Input
+              type="number"
+              placeholder="1 to 100"
+              borderColor="mainColor.fontColor"
+            />
+          </FormControl>
+          <FormControl>
             <FormLabel>Password</FormLabel>
             <Input type="password" placeholder="******" />
           </FormControl>

@@ -12,6 +12,7 @@ import {
   Radio,
   Stack,
   RadioGroup,
+  Select,
 } from "@chakra-ui/react";
 const UploadProduct = () => {
   const [lining, setLining] = useState(true);
@@ -110,6 +111,16 @@ const UploadProduct = () => {
               placeholder="1 to 100"
               borderColor="mainColor.fontColor"
             />
+          </FormControl>
+          <FormControl>
+            <FormLabel textAlign="center">Category</FormLabel>
+            <Select border="1px" borderColor="mainColor.fontColor">
+              <option value="" selected disabled>
+                Select Category
+              </option>
+              <option value="man">Man</option>
+              <option value="woman">Woman</option>
+            </Select>
           </FormControl>
         </VStack>
         <VStack spacing="5">

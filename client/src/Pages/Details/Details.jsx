@@ -87,7 +87,7 @@ const Details = () => {
         </Box>
 
         <Box>
-          <Flex w="60%" h="43vh" border="1px" flexDirection="column">
+          <Flex w="60%" h="48vh" border="1px" flexDirection="column">
             <VStack mt="2" px="4" spacing="5">
               <HStack w="90%">
                 <Text fontWeight="bold" color="mainColor.fontColor">
@@ -108,6 +108,14 @@ const Details = () => {
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
                   IDR 200.000
+                </Text>
+              </HStack>
+              <HStack d="flex" justifyContent="space-between" w="90%">
+                <Text color="gray.500" fontSize="sm" fontWeight="bold">
+                  Total Price
+                </Text>
+                <Text color="black" fontSize="sm" fontWeight="bold">
+                  IDR 300.000
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -141,7 +149,7 @@ const Details = () => {
                 w="90%"
                 onClick={handleOnClickCheckout}
               >
-                Checkout
+                Rent Now
               </Button>
             </VStack>
           </Flex>

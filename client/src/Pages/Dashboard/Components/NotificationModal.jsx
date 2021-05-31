@@ -45,7 +45,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
               color="blue.600"
               size="sm"
             >
-              Return Guarantee
+              Details Transaction
             </Button>
           </SimpleGrid>
           <SimpleGrid
@@ -61,11 +61,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
             </Text>
             <Button
               colorScheme="black"
-              bg="green.100"
-              color="green.600"
+              bg="blue.100"
+              color="blue.600"
               size="sm"
             >
-              Accept & Close
+              Details Transaction
             </Button>
           </SimpleGrid>
           <SimpleGrid
@@ -82,11 +82,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
             </Text>
             <Button
               colorScheme="black"
-              bg="green.100"
-              color="green.600"
+              bg="blue.100"
+              color="blue.600"
               size="sm"
             >
-              Accept & Close
+              Details Transaction
             </Button>
           </SimpleGrid>
         </ModalBody>
