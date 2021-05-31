@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   Button,
   Text,
@@ -11,6 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 const Login = () => {
+  const history = useHistory();
+
+  function handleOnClickRegister() {
+    history.push("/register");
+  }
+
   return (
     <Flex
       h="90vh"
@@ -83,7 +90,12 @@ const Login = () => {
             </Button>
             <Text fontSize="xs" mt="4" fontWeight="bold">
               Don't have an account yet ?{" "}
-              <span style={{ color: "blue", cursor: "pointer" }}>Register</span>
+              <span
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={handleOnClickRegister}
+              >
+                Register
+              </span>
             </Text>
           </Flex>
         </HStack>
