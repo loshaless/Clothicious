@@ -307,6 +307,23 @@ describe('Delete product case DELETE /userMessages/:id', () => {
   it('Success test should return message unauthorized', (done) => {
     request(app)
     .delete(`/userMessages/${transactionId}`)
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      expect(status).toBe(200)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      expect(body).toHaveProperty('message', 'message has been deleted')
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+  it('Itshould return message unauthorized', (done) => {
+    request(app)
+    .delete(`/userMessages/${transactionId}`)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -342,7 +359,26 @@ describe('Delete product case DELETE /userMessages/:id', () => {
 
 // DELETE Seller Message
 describe('Delete product case DELETE /sellerMessages/:id', () => {
+    
   it('Success test should return message unauthorized', (done) => {
+    request(app)
+    .delete(`/sellerMessages/${transactionId}`)
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      expect(status).toBe(200)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      expect(body).toHaveProperty('message', 'message has been deleted')
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('It should return message unauthorized', (done) => {
     request(app)
     .delete(`/sellerMessages/${transactionId}`)
     .set('access_token', invalidToken)
