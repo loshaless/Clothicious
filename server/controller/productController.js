@@ -1,3 +1,4 @@
+const cloudinary = require('cloudinary').v2;
 const { Product, User } = require('../models')
 
 class ProductController {
@@ -22,17 +23,60 @@ class ProductController {
       })
       .catch(next)
   }
+  // static create(req, res, next) {
+  //   let UserId = req.loggedUser.id
+  //   let availability = true
+  //   let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness } = req.body
+  //   Product.create({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability })
+  //     .then(data => {
+  //       res.status(201).json(data)
+  //     })
+  //     .catch(next)
+  // }
 
+  /** CREATE WITH UPLOAD FILES */
   static create(req, res, next) {
-    let UserId = req.loggedUser.id
-    let availability = true
-    let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, description, category } = req.body
-    Product.create({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, description, category, availability })
-      .then(data => {
-        res.status(201).json(data)
-      })
-      .catch(next)
+    cloudinary.uploader.upload(file, async (err, image) => {
+      try {
+        if (!err) {
+          console.log("* " + image.secure_url);
+          let UserId = req.loggedUser.id
+          let availability = true
+          let { name, rentPrice, guaranteePrice, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness } = req.body
+          let frontImg = ''
+          let backImg = ''
+          let sideImg = ''
+
+          const urls = [];
+          const files = req.files;
+          for (const file of files) {
+            const { path } = file;
+            const newPath = await cloudinaryImageUploadMethod(path)
+            urls.push(newPath)
+          }
+          
+          urls.forEach(image => {
+            frontImg = image[0]
+            backImg = image[1]
+            sideImg = image[2]
+          })
+
+          const newData = await Product.create({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability })
+            res.status(201).json({
+              message: "File Uploaded",
+              data: newData
+            })
+        } else {
+          throw ({
+            message: "Error Upload",
+          })
+        }
+      } catch (error) {
+        next(error)
+      };
+    })
   }
+
   static update(req, res, next) {
     let UserId = req.loggedUser.id
     let id = req.params.id
