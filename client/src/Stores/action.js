@@ -134,3 +134,54 @@ export function payMidtrans(parameter) {
     }
   }
 }
+
+export function payMidtrans(parameter) {
+  return async (dispatch) => {
+    try {
+      const data = await axios({
+          url: "http://localhost:3000/getTokenMidtrans",
+          method: "POST",
+          data: {
+            parameter
+          }
+        })
+          .then(snapResponse => {
+            console.log("Retrieved snap token:", snapResponse.data);
+            window.snap.pay(snapResponse.data, {
+              onSuccess: function (result) {
+                console.log('success')
+                axios({
+                  url: "http://localhost:3000/transactions",
+                  method: "post",
+                  data: {
+                    'SellerId': 1,
+                    'ProductId': 2,
+                    'period': 3
+                  }
+                })
+                  .then(response => {
+                    // history.push("/success");
+                    console.log("response dari transactions:", response);
+                  })
+                  .catch(error => {
+                    console.log('error dari transactions response', error)
+                  })
+              },
+              onPending: function (result) {
+                // history.push("/success");
+                console.log('pending')
+              },
+              onError: function (result) {
+                console.log('error')
+              },
+              onClose: function () {
+                console.log('di close')
+              }
+            })
+          })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
