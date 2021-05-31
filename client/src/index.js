@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ChakraProvider, extendTheme  } from "@chakra-ui/react"
+import { ChakraProvider, extendTheme } from "@chakra-ui/react"
 import "@fontsource/raleway/400.css"
 import "@fontsource/open-sans/700.css"
+import { Provider } from 'react-redux'
+import store from '../src/Stores'
+
 const theme = extendTheme({
   fonts: {
     heading: "Open Sans",
@@ -25,10 +28,13 @@ const theme = extendTheme({
 
 
 ReactDOM.render(
+
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

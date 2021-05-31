@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { fetchProducts } from '../../Stores/action'
+import { useDispatch, useSelector } from 'react-redux'
+
 const NestedExploreProducts = () => {
-  const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.products)
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch]);
 
   const responsive = {
     desktop: {
@@ -40,7 +48,7 @@ const NestedExploreProducts = () => {
         </Text>
       </Flex>
       <Carousel responsive={responsive} showDots={true}>
-        {colIdx.map((i) => (
+        {products.map((product) => (
           <Box
             h="65vh"
             w="245px"
@@ -48,9 +56,10 @@ const NestedExploreProducts = () => {
             bg="mainColor.lightGreen"
             cursor="pointer"
             ml="12"
+            key={product.id}
           >
             <Image
-              src="https://images.unsplash.com/photo-1604073536770-8a33e332f830?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=324&q=80"
+              src={product.frontImg}
               h="100%"
               w="245px"
             ></Image>
@@ -60,7 +69,7 @@ const NestedExploreProducts = () => {
               fontWeight="bold"
               mt="1"
             >
-              Cloth Name
+              {product.name}
             </Text>
             <Text
               color="mainColor.hardGreen"
@@ -68,7 +77,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : Owner Name
+              Owner : {product.User.username}
             </Text>
           </Box>
         ))}

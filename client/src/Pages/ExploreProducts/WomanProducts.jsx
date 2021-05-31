@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
 import { useHistory } from "react-router-dom";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { fetchProducts } from '../../Stores/action'
+import { useDispatch, useSelector } from 'react-redux'
+
 const NestedExploreProducts = () => {
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.products)
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch]);
+
   const history = useHistory();
-  const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -45,7 +54,7 @@ const NestedExploreProducts = () => {
         </Text>
       </Flex>
       <Carousel responsive={responsive} showDots={true}>
-        {colIdx.map((i) => (
+        {products.map((product) => (
           <Box
             h="65vh"
             w="245px"
@@ -53,10 +62,11 @@ const NestedExploreProducts = () => {
             bg="mainColor.lightGreen"
             cursor="pointer"
             ml="12"
-            onClick={() => handleOnClickCard(i)}
+            key={product.id}
+            onClick={() => handleOnClickCard(product)}
           >
             <Image
-              src="https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+              src={product.frontImg}
               h="100%"
               w="245px"
             ></Image>
@@ -66,7 +76,7 @@ const NestedExploreProducts = () => {
               fontWeight="bold"
               mt="1"
             >
-              Cloth Name
+              {product.name}
             </Text>
             <Text
               color="mainColor.hardGreen"
@@ -74,7 +84,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : Owner Name
+              Owner : {product.User.username}
             </Text>
           </Box>
         ))}
