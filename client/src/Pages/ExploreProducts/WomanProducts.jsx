@@ -3,15 +3,15 @@ import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
 import { useHistory } from "react-router-dom";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
-import { fetchProducts } from '../../Stores/action'
-import { useDispatch, useSelector } from 'react-redux'
+import { fetchProducts } from "../../Stores/action";
+import { useDispatch, useSelector } from "react-redux";
 
 const NestedExploreProducts = () => {
-  const dispatch = useDispatch()
-  const products = useSelector(state => state.products)
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch(fetchProducts())
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   const history = useHistory();
@@ -63,13 +63,9 @@ const NestedExploreProducts = () => {
             cursor="pointer"
             ml="12"
             key={product.id}
-            onClick={() => handleOnClickCard(product)}
+            onClick={() => handleOnClickCard(product.id)}
           >
-            <Image
-              src={product.frontImg}
-              h="100%"
-              w="245px"
-            ></Image>
+            <Image src={product.frontImg} h="100%" w="245px"></Image>
             <Text
               color="mainColor.hardGreen"
               textAlign="center"

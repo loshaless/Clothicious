@@ -37,3 +37,18 @@ export function fetchProducts() {
     }
   }
 }
+
+export function fetchProductDetail(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: baseURL + '/products/' + id,
+        method: "GET"
+      })
+      return dispatch({ type: 'FETCH_PRODUCT_DETAIL', payload: data })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}

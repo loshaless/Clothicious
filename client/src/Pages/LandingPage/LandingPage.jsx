@@ -152,6 +152,7 @@ const LandingPage = () => {
               ml="8"
               onClick={() => handleOnClickCard(i)}
               cursor="pointer"
+              key={i}
             >
               <Image
                 src="https://images.unsplash.com/photo-1593075979461-e0116242e814?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
