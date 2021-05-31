@@ -23,6 +23,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       phone: {
+        unique: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
       address: {
