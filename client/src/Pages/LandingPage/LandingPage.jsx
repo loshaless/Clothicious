@@ -24,7 +24,7 @@ const LandingPage = () => {
     },
   };
   function handleOnClickCard(id) {
-    history.push("browse/details/" + id);
+    history.push("/details/" + id);
   }
   return (
     <Box minH="100vh" bg="mainColor.bg">

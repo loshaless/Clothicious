@@ -25,7 +25,7 @@ const NestedExploreProducts = () => {
   };
 
   function handleOnClickCard(id) {
-    history.push("details/" + id);
+    history.push("/details/" + id);
   }
 
   return (
