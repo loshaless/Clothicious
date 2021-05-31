@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
+const job = require('./helper/cron')
 const express = require('express')
 const app = express()
 const router = require('./routes')
