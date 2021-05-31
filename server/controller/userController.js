@@ -17,7 +17,7 @@ class UserController {
       })
       .catch(next)
   }
-  
+
   static login(req, res, next) {
     let { email, password } = req.body
     User.findOne({ where: { email: email } })
@@ -28,13 +28,23 @@ class UserController {
             username: user.username,
             email: user.email
           })
-          res.status(200).json({access_token})
+          res.status(200).json({ access_token })
         }
         else {
-          next({ 
-            status: 401, 
-            message: 'invalid email or password' })
+          next({
+            status: 401,
+            message: 'invalid email or password'
+          })
         }
+      })
+      .catch(next)
+  }
+
+  static loggedUser(req, res, next) {
+    let id = req.loggedUser.id
+    User.findOne({ where: { id } })
+      .then(user => {
+        res.status(200).json(user)
       })
       .catch(next)
   }
