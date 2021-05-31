@@ -21,8 +21,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       period: {
-        allowNull: false,
         type: Sequelize.INTEGER
+      },
+      confirmationPeriod: {
+        type: Sequelize.INTEGER
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
+      },
+      msgForUser: {
+        type: Sequelize.STRING
+      },
+      msgForSeller: {
+        type: Sequelize.STRING
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

@@ -248,6 +248,22 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
+    description: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'description must not be empty'
+        },
+      }
+    },
+    category: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'category must not be empty'
+        },
+      }
+    }
   }, {
     sequelize,
     modelName: 'Product',

@@ -23,10 +23,74 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Transaction.init({
-    UserId: DataTypes.INTEGER,
-    SellerId: DataTypes.INTEGER,
-    ProductId: DataTypes.INTEGER,
-    period: DataTypes.INTEGER
+    UserId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'UserId must not be empty'
+        }
+      }
+    },
+    SellerId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'SellerId must not be empty'
+        }
+      }
+    },
+    ProductId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          msg: 'ProductId must not be empty'
+        }
+      }
+    },
+    period: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInt: {
+          args: [true],
+          msg: 'period must be an integer'
+        },
+        min: {
+          args: [0],
+          msg: 'period cannot be minus'
+        },
+      }
+    },
+    confirmationPeriod: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isInt: {
+          args: [true],
+          msg: 'confirmationPeriod must be an integer'
+        },
+        min: {
+          args: [0],
+          msg: 'confirmationPeriod cannot be minus'
+        },
+      }
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      validate: {
+        notEmpty: {
+          msg: 'status must not be empty'
+        },
+        isBoolean: {
+          args: [true],
+          msg: 'status must be boolean'
+        },
+      }
+    },
+    msgForUser: {
+      type: DataTypes.STRING
+    },
+    msgForSeller: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
     modelName: 'Transaction',

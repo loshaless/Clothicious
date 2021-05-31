@@ -1,17 +1,23 @@
-const { Product } = require('../models')
 const cloudinary = require('cloudinary').v2;
+const { Product, User } = require('../models')
 
 class ProductController {
   static getProducts(req, res, next) {
-    Product.findAll()
+    Product.findAll({ include: [User] })
       .then((product) => {
         res.status(200).json(product)
       })
       .catch(next)
   }
+
   static getOneProduct(req, res, next) {
     let id = req.params.id
-    Product.findOne({ where: { id } })
+    Product.findOne({
+      where: { id },
+      include: [
+        { model: User, include: [Product] }
+      ]
+    })
       .then((product) => {
         res.status(200).json(product)
       })
@@ -74,21 +80,11 @@ class ProductController {
   static update(req, res, next) {
     let UserId = req.loggedUser.id
     let id = req.params.id
-    let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability } = req.body
-    Product.update({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability }, { where: { id }, returning: true })
+    let { name, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability, description, category } = req.body
+    Product.update({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, availability, description, category }, { where: { id }, returning: true })
       .then(data => {
         let productData = data[1][0]
         res.status(200).json(productData)
-      })
-      .catch(next)
-  }
-  static patch(req, res, next) {
-    let id = req.params.id
-    let { availability } = req.body
-    Product.update({ availability }, { where: { id }, returning: true })
-      .then(data => {
-        let dataReturn = data[1][0]
-        res.status(200).json(dataReturn)
       })
       .catch(next)
   }

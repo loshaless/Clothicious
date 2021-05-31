@@ -1,5 +1,5 @@
 const { generateToken, verivyToken } = require('../helper/jwt')
-const { User, Product } = require('../models')
+const { User, Product, Transaction } = require('../models')
 
 function authentication(req, res, next) {
   try {
@@ -17,14 +17,15 @@ function authentication(req, res, next) {
       .catch(next)
   }
   catch (err) {
+    console.log(err);
     next(err)
   }
 }
 
 function authorization(req, res, next) {
   Product.findOne({ where: { id: req.params.id, UserId: req.loggedUser.id } })
-    .then(foundTask => {
-      if (foundTask) {
+    .then(found => {
+      if (found) {
         next()
       }
       else {
@@ -34,4 +35,30 @@ function authorization(req, res, next) {
     .catch(next)
 }
 
-module.exports = { authentication, authorization }
+function buyerAuthorization(req, res, next) {
+  Transaction.findOne({ where: { id: req.params.id, UserId: req.loggedUser.id } })
+    .then(found => {
+      if (found) {
+        next()
+      }
+      else {
+        next({ status: 401, message: 'unauthorized' })
+      }
+    })
+    .catch(next)
+}
+
+function sellerAuthorization(req, res, next) {
+  Transaction.findOne({ where: { id: req.params.id, SellerId: req.loggedUser.id } })
+    .then(found => {
+      if (found) {
+        next()
+      }
+      else {
+        next({ status: 401, message: 'unauthorized' })
+      }
+    })
+    .catch(next)
+}
+
+module.exports = { authentication, authorization, buyerAuthorization, sellerAuthorization }
