@@ -30,13 +30,16 @@ class ProductController {
 
   /** CREATE WITH UPLOAD FILES */
   static create(req, res, next) {
-    cloudinary.uploader.upload(req.file.path, async (err, image) => {
+    cloudinary.uploader.upload(file, async (err, image) => {
       try {
         if (!err) {
           console.log("* " + image.secure_url);
           let UserId = req.loggedUser.id
           let availability = true
           let { name, rentPrice, guaranteePrice, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness } = req.body
+          let frontImg = ''
+          let backImg = ''
+          let sideImg = ''
 
           const urls = [];
           const files = req.files;
@@ -46,9 +49,6 @@ class ProductController {
             urls.push(newPath)
           }
           
-          let frontImg = ''
-          let backImg = ''
-          let sideImg = ''
           urls.forEach(image => {
             frontImg = image[0]
             backImg = image[1]
