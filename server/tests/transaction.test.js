@@ -212,6 +212,25 @@ describe('Read product case GET /transactions', () => {
         done(err)
     })
   })  
+
+
+  it('it should return error message "invalid server error"', (done) => {
+    request(app)
+    .get('/historyTransactions')
+    .set('access_tokeen', invalidToken )
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', "invalid server error")
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })  
 })
 
 //CREATE TRANSACTION
@@ -494,8 +513,8 @@ describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', 
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(500)
-        expect(body).toHaveProperty('message', 'jwt must be provided')
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'unauthorized')
         done()
     })
     .catch(err => {

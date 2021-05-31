@@ -168,21 +168,21 @@ describe('Update success case PATCH /profil/:id', () => {
         })
     })
 
-    it('it should return error message "unauthorized', (done) => {
+    it('it should return error message "unauthorized"', (done) => {
         request(app)
-        .patch('/profil/id')
+        .patch(`/profil/${userId}`)
         .set('access_token', invalidToken)
         .set('Accept', 'application/json')
         .send({password: 'password'})
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(403)
+            expect(status).toBe(401)
             expect(body).toHaveProperty('message', "unauthorized")
             done()
         })
         .catch(err => {
             done(err)
         })
-    })
+      })
 })

@@ -145,8 +145,8 @@ describe('Create product case POST /products', () => {
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(403)
-        expect(body).toHaveProperty('message', "unathorized")
+        expect(status).toBe(201)
+        expect(response).toHaveProperty('body', expect.any(Object))
         done()
     })
     .catch(err => {
