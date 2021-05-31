@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
-import { useHistory } from "react-router-dom";
+import { fetchProductDetail } from "../../Stores/action";
+import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Flex,
@@ -14,10 +16,16 @@ import {
 } from "@chakra-ui/react";
 const Details = () => {
   const history = useHistory();
-
+  const dispatch = useDispatch();
+  let { id } = useParams();
+  const productDetail = useSelector((state) => state.productDetail);
   function handleOnClickCheckout() {
     history.push("/success");
   }
+
+  useEffect(() => {
+    dispatch(fetchProductDetail(id));
+  }, [id]);
 
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="16">
@@ -44,11 +52,7 @@ const Details = () => {
               transition="200ms"
               _hover={{ opacity: 1 }}
             >
-              <Image
-                src="https://images.unsplash.com/photo-1536891648359-888e3aa968f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80"
-                h="100%"
-                w="100px"
-              />
+              <Image src={productDetail.frontImg} h="100%" w="100px" />
             </Box>
             <Box
               h="20vh"
@@ -57,11 +61,7 @@ const Details = () => {
               transition="200ms"
               _hover={{ opacity: 1 }}
             >
-              <Image
-                src="https://images.unsplash.com/photo-1536891648359-888e3aa968f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80"
-                h="100%"
-                w="100px"
-              />
+              <Image src={productDetail.frontImg} h="100%" w="100px" />
             </Box>
             <Box
               h="20vh"
@@ -70,19 +70,11 @@ const Details = () => {
               transition="200ms"
               _hover={{ opacity: 1 }}
             >
-              <Image
-                src="https://images.unsplash.com/photo-1536891648359-888e3aa968f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80"
-                h="100%"
-                w="100px"
-              />
+              <Image src={productDetail.backImg} h="100%" w="100px" />
             </Box>
           </VStack>
           <Box h="70vh" w="300px">
-            <Image
-              src="https://images.unsplash.com/photo-1536891648359-888e3aa968f0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80"
-              h="100%"
-              w="300px"
-            />
+            <Image src={productDetail.sideImg} h="100%" w="300px" />
           </Box>
         </Box>
 
@@ -91,7 +83,7 @@ const Details = () => {
             <VStack mt="2" px="4" spacing="5">
               <HStack w="90%">
                 <Text fontWeight="bold" color="mainColor.fontColor">
-                  Asymmetric Ruffled Striped Shirt
+                  {productDetail.name}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -99,7 +91,7 @@ const Details = () => {
                   Rent Price
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  IDR 100.000
+                  IDR {productDetail.rentPrice}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -107,7 +99,7 @@ const Details = () => {
                   Deposit Price
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  IDR 200.000
+                  IDR {productDetail.guaranteePrice}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -115,7 +107,7 @@ const Details = () => {
                   Total Price
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  IDR 300.000
+                  IDR {productDetail.rentPrice + productDetail.guaranteePrice}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -132,14 +124,18 @@ const Details = () => {
                   >
                     Chat Owner
                   </Button>
-                  Tsuyuri Kanao
+                  {productDetail.User.username}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
                 <Text color="gray.500" fontSize="sm" fontWeight="bold">
                   Status
                 </Text>
-                <Badge colorScheme="green">Available to Rent</Badge>
+                <Badge
+                  colorScheme={productDetail.availability ? "green" : "red"}
+                >
+                  {productDetail.availability ? "Available to Rent" : "Rented"}
+                </Badge>
               </HStack>
               <Button
                 colorScheme="black"
@@ -160,7 +156,7 @@ const Details = () => {
                   Fit
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  REGULAR
+                  {productDetail.fit}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -180,7 +176,7 @@ const Details = () => {
                   Bust Size
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  Number
+                  {productDetail.bustSize}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -188,7 +184,7 @@ const Details = () => {
                   Waist Size
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  Number
+                  {productDetail.waistSize}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -196,7 +192,7 @@ const Details = () => {
                   Hips Size
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  Number
+                  {productDetail.hipsSize}
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -204,7 +200,7 @@ const Details = () => {
                   Thickness
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  Value / 100
+                  {productDetail.thickness} / 100
                 </Text>
               </HStack>
               <HStack d="flex" justifyContent="space-between" w="90%">
@@ -212,7 +208,7 @@ const Details = () => {
                   Strechability
                 </Text>
                 <Text color="black" fontSize="sm" fontWeight="bold">
-                  Value / 100
+                  {productDetail.stretchability} / 100
                 </Text>
               </HStack>
             </VStack>
