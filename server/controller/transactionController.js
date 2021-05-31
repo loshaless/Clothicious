@@ -134,7 +134,7 @@ class TransactionController {
         period: null,
         confirmationPeriod: 3
       }, { where: { id } })
-      res.status(200).json({ message: "message udah Seller berhasil diubah dari null jadi have you received back your package?" })
+      res.status(200).json({ message: "message changed" })
     }
     catch (error) {
       next(error)
@@ -165,7 +165,7 @@ class TransactionController {
     try {
       let id = req.params.id
       await Transaction.update({ msgForUser: null, }, { where: { id } })
-      res.status(200).json({ message: "message User sudah diubah menjadi null" })
+      res.status(200).json({ message: "message has been deleted" })
     }
     catch (error) {
       next(error)
@@ -176,7 +176,7 @@ class TransactionController {
     try {
       let id = req.params.id
       await Transaction.update({ msgForSeller: null, }, { where: { id } })
-      res.status(200).json({ message: "message Seller sudah diubah menjadi null" })
+      res.status(200).json({ message: "message has been deleted" })
     }
     catch (error) {
       next(error)

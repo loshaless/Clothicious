@@ -1,35 +1,55 @@
-
 const request = require('supertest');
 const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
 const { User } = require('../models')
+const { generateToken } = require('../helper/jwt')
 
-const admin = {
-    email: 'budi@mail.com',
-    password: 'budi'
+
+const user = {
+    username: 'user',
+    email: 'user@mail.com',
+    password: 'user',
+} 
+  
+const wrongUser = {
+    username: 'wrongUser',
+    email: 'wrongUser@mail.com',
+    password: 'wrongUser',
 }
-const tokenAdmin = ''
+
+let token = ""
+let invalidToken = ""
+let userId = 0
+
 
 const profil = {
-    name: 'admin',
-    email: 'admin@mail.com',
-    password: 'budi',
+    name: 'user',
+    email: 'user@mail.com',
+    password: 'user',
     phone: '021223344',
     address: 'Jl. Juanda No. 1 Jakarta Pusat',
     bankAccount: '00000123'
 }
 
 beforeAll((done) => {
-    User.create(admin)
-        .then((user) => {
-            tokenAdmin = signToken(user)
-            done()
-        })
-        .catch((err) => {
-            done()
-        })
+    User.create(user)
+    .then((data) => {
+        // console.log('HELLOOO', data.dataValues);
+        token = generateToken(data.dataValues)
+        userId = data.dataValues.id
+        return User.create(wrongUser)    
+    })
+    .then((data) => {
+        invalidToken = generateToken(data.dataValues)
+        // console.log(invalidToken);
+        done()
+    })
+    .catch((err) => {
+        done()
+    })
 })
+
 
 afterAll((done) => {
     queryInterface.bulkDelete('Users')
@@ -44,104 +64,114 @@ afterAll((done) => {
 describe('Update success case PUT /profil/:id', () => {
     it('Success test should return json with id, username, email, phone, address, bankAccount value', (done) => {
         request(app)
-        .put('/profil/1')
+        .put(`/profil/${userId}`)
         .send(profil)
-        .set('access_token', tokenAdmin)
+        .set('access_token', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(201)
+            expect(status).toBe(200)
             expect(body).toHaveProperty('id', expect.any(Number))
-            expect(body).toHaveProperty('username', UserValid.name)
-            expect(body).toHaveProperty('email', UserValid.email)
-            expect(body).toHaveProperty('phone', UserValid.phone)
-            expect(body).toHaveProperty('address', UserValid.address)
-            expect(body).toHaveProperty('bankAccount', UserValid.bankAccount)
+            expect(body).toHaveProperty('username', body.username)
+            expect(body).toHaveProperty('email', body.email)
+            expect(body).toHaveProperty('phone', body.phone)
+            expect(body).toHaveProperty('address', body.address)
+            expect(body).toHaveProperty('bankAccount', body.bankAccount)
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
-    it('it should return error message "authentication failed"', (done) => {
+    // no token
+    it('it should return error message "jwt must be provided"', (done) => {
         request(app)
-        .put('/profil/1')
+        .put(`/profil/${userId}`)
         .set('Accept', 'application/json')
         .send(profil)
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(401)
-            expect(body).toHaveProperty('message', 'authentication failed')
+            expect(status).toBe(500)
+            expect(body).toHaveProperty('message', "jwt must be provided")
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
+
+    //invalid Token
     it('it should return error message "unauthorized', (done) => {
         request(app)
-        .put('/profil/1')
-        .set('access_token', 'random')
+        .put(`/profil/${userId}`)
+        .set('access_token', invalidToken)
         .set('Accept', 'application/json')
-        .send(profil)
+        .send({
+            name: 'editUser',
+            email: 'user@mail.com',
+            password: 'editUser',
+            phone: '021223344',
+            address: 'Jl. Juanda No. 1 Jakarta Pusat',
+            bankAccount: '00000123'
+        })
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(403)
-            expect(body).toHaveProperty('message', "unauthorized")
+            expect(status).toBe(400)
+            expect(body).toHaveProperty('message', "invalid signature")
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 })
 
 
-describe('Update success case PATCH /profil:id', () => {
+describe('Update success case PATCH /profil/:id', () => {
     it('Success test should return json with message: Password has been successfully updated ', (done) => {
         request(app)
-        .patch('/profil:id')
+        .patch(`/profil/${userId}`)
         .send({password: 'password'})
-        .set('access_token', tokenAdmin)
+        .set('access_token', token)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(201)
+            expect(status).toBe(200)
             expect(body).toHaveProperty('message', 'Password has been successfully updated')
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
-    it('it should return error message "authentication failed', (done) => {
+    it('it should return error message "jwt must be provided"', (done) => {
         request(app)
-        .patch('/profil:id')
+        .patch(`/profil/${userId}`)
         .set('Accept', 'application/json')
         .send({password: 'password'})
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            expect(status).toBe(401)
-            expect(body).toHaveProperty('message', 'authentication failed')
+            expect(status).toBe(500)
+            expect(body).toHaveProperty('message', "jwt must be provided")
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 
     it('it should return error message "unauthorized', (done) => {
         request(app)
         .patch('/profil/id')
-        .set('access_token', 'random')
+        .set('access_token', invalidToken)
         .set('Accept', 'application/json')
         .send({password: 'password'})
         .expect('Content-Type', /json/)
@@ -152,7 +182,7 @@ describe('Update success case PATCH /profil:id', () => {
             done()
         })
         .catch(err => {
-            done()
+            done(err)
         })
     })
 })
