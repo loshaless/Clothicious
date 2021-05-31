@@ -9,6 +9,9 @@ const {User, Product} = require('../models');
 let token = ""
 let invalidToken = ""
 let transactionId = 0
+let UserId = 0
+let SellerId = 0
+let ProductId = 0
 
 const user = {
   username: 'user',
@@ -50,11 +53,9 @@ const product = {
 
 
 const newTransaction = {
-  UserId: 0,
-  SellerId: 1,
-  ProductId: 1,
-  period: 4,
-  status: true
+  UserId: 1,
+  SellerId: 2,
+  ProductId: 3,
 }
 
 
@@ -76,12 +77,11 @@ afterAll((done) => {
 })
 
 
-
-
 beforeAll((done) => {
   User.create(user)
     .then((data) => {
       token = generateToken(data.dataValues)
+      newTransaction.UserId = data.dataValues.id
       return User.create(seller)    
     })
     .then((data) => {
@@ -101,71 +101,140 @@ beforeAll((done) => {
 // GET ALL GOING TRANSACTION
 describe('Read product case GET /transactions', () => {
   it('Success test should return object with keys', (done) => {
-      request(app)
-      .get('/transactions')
-      .set('access_token', token)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .then(response => {
+    request(app)
+    .get('/transactions')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      console.log('going', response.body);
+      console.log({body, status});
+      expect(status).toBe(200)
+      expect(body).toHaveProperty('currentlyRenting', expect.any(Array))
+      expect(body).toHaveProperty('rentedProducts', expect.any(Array))
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('it should return error message "jwt must be provided', (done) => {
+    request(app)
+    .get('/transactions')
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
         let {body, status} = response
-        console.log('going', response.body);
-        console.log({body, status});
-        expect(status).toBe(200)
-        expect(body).toHaveProperty('currentlyRenting', expect.any(Array))
-        expect(body).toHaveProperty('rentedProducts', expect.any(Array))
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
         done()
     })
     .catch(err => {
         done(err)
     })
   })
+
+
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .get('/transactions')
+    .set('access_token', invalidToken )
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', "unauthorized")
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
 })
 
 // GET  ALL DONE TRANSACTIONS
 describe('Read product case GET /transactions', () => {
   it('Success test should return json of products', (done) => {
-      request(app)
-      .get('/historyTransactions')
-      .set('access_token', token)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .then(response => {
+    request(app)
+    .get('/historyTransactions')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      expect(status).toBe(200)
+      expect(body).toHaveProperty('currentlyRenting', expect.any(Array))
+      expect(body).toHaveProperty('rentedProducts', expect.any(Array))
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('it should return error message "jwt must be provided', (done) => {
+    request(app)
+    .get('/historyTransactions')
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
         let {body, status} = response
-        expect(status).toBe(200)
-        expect(body).toHaveProperty('currentlyRenting', expect.any(Array))
-        expect(body).toHaveProperty('rentedProducts', expect.any(Array))
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
         done()
     })
     .catch(err => {
         done(err)
     })
   })
+
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .get('/historyTransactions')
+    .set('access_token', invalidToken )
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', "unauthorized")
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })  
 })
-
-
 
 //CREATE TRANSACTION
 describe('Create Transaction success case POST /transactions', () => {
   it('Success test should return json with id, UserId, SellerId, and ProductId', (done) => {
-      request(app)
-      .post('/transactions')
-      .send(newTransaction)
-      .set('access_token', token)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .then(response => {
-          transactionId = body.id
-          let {body, status} = response
-          // console.log('response>>>>', {body, status});
-          expect(status).toBe(201)
-          expect(body).toHaveProperty('id', expect.any(Number))
-          // expect(body).toHaveProperty('SellerId', newTransaction.SellerId)
-          // expect(body).toHaveProperty('ProductId', newTransaction.ProductId)
-          done()
-      })
-      .catch(err => {
-          done(err)
-      })
+    request(app)
+    .post('/transactions')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        // console.log("TRANSACTIONS", body);
+        transactionId = body.id
+        ProductId = body.ProductId
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('id', expect.any(Number))
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
   })
 
   it('it should return error message "jwt must be provided', (done) => {
@@ -188,13 +257,13 @@ describe('Create Transaction success case POST /transactions', () => {
   it('it should return error message "unauthorized"', (done) => {
     request(app)
     .post('/transactions')
-    .set('access_token', invalidToken)
+    .set('access_token', invalidToken )
     .set('Accept', 'application/json')
     .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(401)
+        expect(status).toBe(201)
         expect(body).toHaveProperty('message', "unauthorized")
         done()
     })
@@ -204,24 +273,138 @@ describe('Create Transaction success case POST /transactions', () => {
   })
 })
 
+
+// GET ONE TRANSACTION
+describe('Read product case GET /transactions/id', () => {
+  it('Success test should return json of transaction', (done) => {
+    request(app)
+    .get(`/transactions/${transactionId}`)
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      console.log('body', body);
+      expect(status).toBe(200)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      done()      
+    })
+    .catch(err => {
+      done(err)
+    })
+  })
+
+  it('it should return error message "jwt must be provided', (done) => {
+    request(app)
+    .get(`/transactions/${transactionId}`)
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .get(`/transactions/${transactionId}`)
+    .set('access_token', invalidToken )
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', "unauthorized")
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+})
+
+//GET ALL MESSAGES
+describe('Read messages case GET /messages', () => {
+  it('Success test should return object with keys', (done) => {
+    request(app)
+    .get('/messages')
+    .set('access_token', token)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+      let {body, status} = response
+      console.log('MESSAGE', response.body);
+      console.log({body, status});
+      expect(status).toBe(200)
+      expect(response).toHaveProperty('body', expect.any(Object))
+      expect(body).toHaveProperty('msgAsSeller', expect.any(Array))
+      expect(body).toHaveProperty('msgAsUser', expect.any(Array))
+      done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('it should return error message "jwt must be provided', (done) => {
+    request(app)
+    .get('/messages')
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .get('/messages')
+    .set('access_token', invalidToken )
+    .set('Accept', 'application/json')
+    .send(newTransaction)
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(201)
+        expect(body).toHaveProperty('message', "unauthorized")
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+})
+
 // Update  Buyer Transaction
-describe('Create Transaction success case PATCH /buyerTransactions/:id', () => {
-  it('Success test should return json with message: unauthorized', (done) => {
+describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', () => {
+  it('Success test should return json with message: message changed', (done) => {
       request(app)
       .patch('/buyerTransactions/'+transactionId)
-      .send({
-        msgForSeller: "have you received back your package?",
-        period: null,
-        confirmationPeriod: 3
-      })
-      .set('access_token', invalidToken)
+      .set('access_token', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .then(response => {
           let {body, status} = response
           console.log('RESPONSE', {body, status});
-          expect(status).toBe(401)
-          expect(body).toHaveProperty('message', 'unauthorized')
+          expect(status).toBe(200)
+          expect(body).toHaveProperty('message', 'message changed')
           done()
       })
       .catch(err => {
@@ -233,11 +416,6 @@ describe('Create Transaction success case PATCH /buyerTransactions/:id', () => {
     request(app)
     .patch('/buyerTransactions'+transactionId)
     .set('Accept', 'application/json')
-    .send({
-      msgForSeller: "have you received back your package?",
-      period: null,
-      confirmationPeriod: 3
-    })
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -250,28 +428,39 @@ describe('Create Transaction success case PATCH /buyerTransactions/:id', () => {
     })
   })
 
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .patch('/buyerTransactions'+transactionId)
+    .set('access_token', invalidToken)
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+  })
 })
 
 
-
-  // Update Seller Transaction 
-describe('Create Transaction success case PATCH /sellerTransactions/:id', () => {
-  it('Success test should return json with message: unauthorized', (done) => {
+// Update  Seller Transaction
+describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', () => {
+  it('Success test should return json with message: message changed', (done) => {
       request(app)
       .patch('/sellerTransactions/'+transactionId)
-      .send({
-        status: false,
-        msgForUser: "your deposit will be returned to you in 3 days",
-        msgForSeller: "your money will be sent to you in 3 days"
-      })
-      .set('access_token', invalidToken)
+      .send({ProductId})
+      .set('access_token', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .then(response => {
           let {body, status} = response
           console.log('RESPONSE', {body, status});
-          expect(status).toBe(401)
-          expect(body).toHaveProperty('message', 'unauthorized')
+          expect(status).toBe(200)
+          expect(body).toHaveProperty('message', 'message changed')
           done()
       })
       .catch(err => {
@@ -281,13 +470,27 @@ describe('Create Transaction success case PATCH /sellerTransactions/:id', () => 
 
   it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .patch('/sellerTransactions'+transactionId)
+    .patch('/sellerTransactions/'+transactionId)
     .set('Accept', 'application/json')
-    .send({
-      status: false,
-      msgForUser: "your deposit will be returned to you in 3 days",
-      msgForSeller: "your money will be sent to you in 3 days"
+    .send({ProductId})
+    .expect('Content-Type', /json/)
+    .then(response => {
+        let {body, status} = response
+        expect(status).toBe(500)
+        expect(body).toHaveProperty('message', 'jwt must be provided')
+        done()
     })
+    .catch(err => {
+        done(err)
+    })
+  })
+
+  it('it should return error message "unauthorized"', (done) => {
+    request(app)
+    .patch('/sellerTransactions/'+transactionId)
+    .set('access_token', invalidToken)
+    .set('Accept', 'application/json')
+    .send({ProductId})
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -302,9 +505,13 @@ describe('Create Transaction success case PATCH /sellerTransactions/:id', () => 
 })
 
 
+
+
+
+
 // DELETE User Message
 describe('Delete product case DELETE /userMessages/:id', () => {
-  it('Success test should return message unauthorized', (done) => {
+  it('Success Delete test should return message has been deleted', (done) => {
     request(app)
     .delete(`/userMessages/${transactionId}`)
     .set('access_token', token)
@@ -360,7 +567,7 @@ describe('Delete product case DELETE /userMessages/:id', () => {
 // DELETE Seller Message
 describe('Delete product case DELETE /sellerMessages/:id', () => {
     
-  it('Success test should return message unauthorized', (done) => {
+  it('Success Delete test should return message has been deleted', (done) => {
     request(app)
     .delete(`/sellerMessages/${transactionId}`)
     .set('access_token', token)
