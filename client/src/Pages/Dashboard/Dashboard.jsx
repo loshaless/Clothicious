@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditModal from "./Components/EditModal";
 import NotificationModal from "./Components/NotificationModal";
 import {
@@ -22,8 +22,12 @@ import {
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import { EditIcon } from "@chakra-ui/icons";
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUserData, fetchTransactions } from '../../Stores/action'
+import RentedProductCard from './Components/RentedProductCard'
+import CurrentlyRentingCard from './Components/CurrentlyRentingCard'
+
 const Dashboard = () => {
-  const history = useHistory();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
     isOpen: isNotifOpen,
@@ -31,12 +35,28 @@ const Dashboard = () => {
     onOpen: onOpenNotif,
   } = useDisclosure();
 
-  function handleOnClickDetails() {
-    history.push("details-transaction/1");
-  }
+  const history = useHistory();
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const transactions = useSelector(state => state.transactions)
+
+  useEffect(() => {
+    dispatch(fetchUserData())
+    dispatch(fetchTransactions())
+  }, [dispatch]);
+
   function handleOnClickTransHistory() {
     history.push("/history-transaction");
   }
+
+  if (!transactions.rentedProducts || !transactions.currentlyRenting) {
+    return (
+      <>
+        <Text>Loading</Text>
+      </>
+    )
+  }
+
   return (
     <>
       <Box
@@ -88,26 +108,23 @@ const Dashboard = () => {
                 <Tbody>
                   <Tr>
                     <Th>Name</Th>
-                    <Td>Alexa Yu</Td>
+                    <Td>{user.username}</Td>
                   </Tr>
                   <Tr>
                     <Th>Email</Th>
-                    <Td>AlexaYu@mail.com</Td>
+                    <Td>{user.email}</Td>
                   </Tr>
                   <Tr>
                     <Th>Phone Number</Th>
-                    <Td>0182401934</Td>
+                    <Td>{user.phone}</Td>
                   </Tr>
                   <Tr>
                     <Th>Account Number</Th>
-                    <Td>00009999</Td>
+                    <Td>{user.bankAccount}</Td>
                   </Tr>
                   <Tr>
                     <Th>Address</Th>
-                    <Td>
-                      Theodore Lowe Ap #867-859 Sit Rd. Azusa New York 39531
-                      (793) 151-6230
-                    </Td>
+                    <Td>{user.address}</Td>
                   </Tr>
                 </Tbody>
               </Table>
@@ -135,48 +152,11 @@ const Dashboard = () => {
                 My Rented Products
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
-                <SimpleGrid
-                  columns={4}
-                  gap={5}
-                  alignItems="center"
-                  border="1px"
-                  p="4"
-                  borderColor="mainColor.fontColor"
-                  mb="4"
-                >
-                  <Image
-                    boxSize="100px"
-                    src="https://images.unsplash.com/photo-1581497396202-5645e76a3a8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                    alt="product img"
-                  />
-                  <Text textAlign="center">Products Name</Text>
-                  <Badge colorScheme="twitter" textAlign="center">
-                    Renter Name
-                  </Badge>
-                  <Button borderRadius={null} onClick={handleOnClickDetails}>
-                    Details
-                  </Button>
-                </SimpleGrid>
-                <SimpleGrid
-                  columns={4}
-                  gap={5}
-                  alignItems="center"
-                  border="1px"
-                  p="4"
-                  borderColor="mainColor.fontColor"
-                  mb="4"
-                >
-                  <Image
-                    boxSize="100px"
-                    src="https://images.unsplash.com/photo-1581497396202-5645e76a3a8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                    alt="product img"
-                  />
-                  <Text textAlign="center">Products Name</Text>
-                  <Badge colorScheme="twitter" textAlign="center">
-                    Renter Name
-                  </Badge>
-                  <Button borderRadius={null}>Details</Button>
-                </SimpleGrid>
+                {transactions.rentedProducts.map(transaction => {
+                  return (
+                    <RentedProductCard key={transaction.id} transaction={transaction} />
+                  )
+                })}
               </Box>
             </GridItem>
             <GridItem
@@ -189,46 +169,11 @@ const Dashboard = () => {
                 Currently Renting
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
-                <SimpleGrid
-                  columns={4}
-                  gap={5}
-                  alignItems="center"
-                  border="1px"
-                  p="4"
-                  borderColor="mainColor.fontColor"
-                  mb="4"
-                >
-                  <Image
-                    boxSize="100px"
-                    src="https://images.unsplash.com/photo-1581497396202-5645e76a3a8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                    alt="product img"
-                  />
-                  <Text textAlign="center">Products Name</Text>
-                  <Badge colorScheme="green" textAlign="center">
-                    Returned
-                  </Badge>
-                  <Button borderRadius={null}>Details</Button>
-                </SimpleGrid>
-                <SimpleGrid
-                  columns={4}
-                  gap={5}
-                  alignItems="center"
-                  border="1px"
-                  p="4"
-                  borderColor="mainColor.fontColor"
-                  mb="4"
-                >
-                  <Image
-                    boxSize="100px"
-                    src="https://images.unsplash.com/photo-1581497396202-5645e76a3a8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                    alt="product img"
-                  />
-                  <Text textAlign="center">Products Name</Text>
-                  <Badge colorScheme="purple" textAlign="center">
-                    3 Days
-                  </Badge>
-                  <Button borderRadius={null}>Details</Button>
-                </SimpleGrid>
+                {transactions.currentlyRenting.map(transaction => {
+                  return (
+                    <CurrentlyRentingCard key={transaction.id} transaction={transaction} />
+                  )
+                })}
               </Box>
             </GridItem>
           </Grid>
