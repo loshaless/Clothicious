@@ -3,7 +3,6 @@ import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
 import { fetchProductDetail } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import axios from 'axios'
 
 import {
