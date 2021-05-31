@@ -123,7 +123,6 @@ describe('Read product case GET /transactions', () => {
     request(app)
     .get('/transactions')
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -135,25 +134,6 @@ describe('Read product case GET /transactions', () => {
         done(err)
     })
   })
-
-  it('it should return error message "unauthorized"', (done) => {
-    request(app)
-    .get('/transactions')
-    .set('access_token', invalidToken )
-    .set('Accept', 'application/json')
-    .send(newTransaction)
-    .expect('Content-Type', /json/)
-    .then(response => {
-        let {body, status} = response
-        expect(status).toBe(201)
-        expect(body).toHaveProperty('message', "unauthorized")
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
-  })
-
 })
 
 // GET  ALL DONE TRANSACTIONS
@@ -180,7 +160,6 @@ describe('Read product case GET /transactions', () => {
     request(app)
     .get('/historyTransactions')
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -192,43 +171,6 @@ describe('Read product case GET /transactions', () => {
         done(err)
     })
   })
-
-  it('it should return error message "unauthorized"', (done) => {
-    request(app)
-    .get('/historyTransactions')
-    .set('access_token', invalidToken )
-    .set('Accept', 'application/json')
-    .send(newTransaction)
-    .expect('Content-Type', /json/)
-    .then(response => {
-        let {body, status} = response
-        expect(status).toBe(201)
-        expect(body).toHaveProperty('message', "unauthorized")
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
-  })  
-
-
-  it('it should return error message "invalid server error"', (done) => {
-    request(app)
-    .get('/historyTransactions')
-    .set('access_tokeen', invalidToken )
-    .set('Accept', 'application/json')
-    .send(newTransaction)
-    .expect('Content-Type', /json/)
-    .then(response => {
-        let {body, status} = response
-        expect(status).toBe(500)
-        expect(body).toHaveProperty('message', "invalid server error")
-        done()
-    })
-    .catch(err => {
-        done(err)
-    })
-  })  
 })
 
 //CREATE TRANSACTION
@@ -280,7 +222,7 @@ describe('Create Transaction success case POST /transactions', () => {
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(201)
+        expect(status).toBe(400)
         expect(body).toHaveProperty('message', "unauthorized")
         done()
     })
@@ -315,7 +257,6 @@ describe('Read product case GET /transactions/id', () => {
     request(app)
     .get(`/transactions/${transactionId}`)
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -333,11 +274,10 @@ describe('Read product case GET /transactions/id', () => {
     .get(`/transactions/${transactionId}`)
     .set('access_token', invalidToken )
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(201)
+        expect(status).toBe(200)
         expect(body).toHaveProperty('message', "unauthorized")
         done()
     })
@@ -375,7 +315,6 @@ describe('Read messages case GET /messages', () => {
     request(app)
     .get('/messages')
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -394,7 +333,6 @@ describe('Read messages case GET /messages', () => {
     .get('/messages')
     .set('access_token', invalidToken )
     .set('Accept', 'application/json')
-    .send(newTransaction)
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
@@ -450,11 +388,10 @@ describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', (
     .patch('/buyerTransactions'+transactionId)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
-    .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        expect(status).toBe(500)
-        expect(body).toHaveProperty('message', 'jwt must be provided')
+        expect(status).toBe(404)
+        expect(response).toHaveProperty('body', expect.any(Object))
         done()
     })
     .catch(err => {
@@ -521,11 +458,6 @@ describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', 
   })
 })
 
-
-
-
-
-
 // DELETE User Message
 describe('Delete product case DELETE /userMessages/:id', () => {
   it('Success Delete test should return message has been deleted', (done) => {
@@ -584,7 +516,7 @@ describe('Delete product case DELETE /userMessages/:id', () => {
 // DELETE Seller Message
 describe('Delete product case DELETE /sellerMessages/:id', () => {
     
-  it('Success Delete test should return message has been deleted', (done) => {
+  it('Success Delete test should return message unauthorized', (done) => {
     request(app)
     .delete(`/sellerMessages/${transactionId}`)
     .set('access_token', token)
@@ -592,9 +524,9 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
     .expect('Content-Type', /json/)
     .then(response => {
       let {body, status} = response
-      expect(status).toBe(200)
+      expect(status).toBe(401)
       expect(response).toHaveProperty('body', expect.any(Object))
-      expect(body).toHaveProperty('message', 'message has been deleted')
+      expect(body).toHaveProperty('message', 'unauthorized')
       done()
     })
     .catch(err => {
@@ -635,6 +567,7 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
         done(err)
     })
   })
+
 
   
 })

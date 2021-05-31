@@ -79,7 +79,6 @@ class TransactionController {
       let UserId = req.loggedUser.id
       const currentlyRenting = await Transaction.findAll({ where: { UserId, msgForUser: { [Op.ne]: null } } })
       const rentedProducts = await Transaction.findAll({ where: { SellerId: UserId, msgForSeller: { [Op.ne]: null } } })
-
       const msgAsUser = await currentlyRenting.map(e => {
         let filterData = {
           transactionId: e.id,
