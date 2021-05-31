@@ -1,10 +1,24 @@
 import React from "react";
 import Sidebar from "./Sidebar";
+import { useHistory } from "react-router-dom";
 import { Flex, Spacer, Button, Text, useDisclosure } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { useDispatch, useSelector } from 'react-redux'
+
+
 const Navbar = ({ Link }) => {
+  const history = useHistory();
+  const dispatch = useDispatch()
   const sideBarRef = React.useRef();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const isLogin = useSelector(state => state.isLogin)
+
+  function handleLogout() {
+    dispatch({ type: 'SET_LOGIN', payload: false })
+    localStorage.removeItem('access_token')
+    history.push("/");
+  }
+
   return (
     <>
       <Flex h="16" alignItems="center" bg="mainColor.bg">
@@ -43,6 +57,7 @@ const Navbar = ({ Link }) => {
           color="white"
           borderRadius={null}
           mr="8"
+          onClick={handleLogout}
         >
           Sign Out
         </Button>
