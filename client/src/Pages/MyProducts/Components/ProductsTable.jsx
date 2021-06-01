@@ -5,6 +5,8 @@ import {
   Tbody,
   Tr,
   Th,
+  Stack,
+  Skeleton, Text
 } from "@chakra-ui/react";
 import { fetchProductsByLoggedUser } from '../../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,6 +27,16 @@ const ProductsTable = () => {
       setRefresh(false)
     }
   }, [dispatch, refresh]);
+
+  if (!product) {
+    return (
+      <Stack spacing="5" w="100%">
+        <Skeleton h="33vh" w="100%" />
+        <Skeleton h="33vh" w="100%" />
+        <Skeleton h="33vh" w="100%" />
+      </Stack>
+    )
+  }
 
   return (
     <Table variant="simple">

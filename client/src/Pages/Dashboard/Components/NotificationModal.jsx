@@ -9,11 +9,11 @@ import {
   ModalCloseButton,
   Stack,
   Text,
+  Skeleton
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMessages } from '../../../Stores/action'
 import ModalData from './ModalData'
-import LoadingPage from '../../LoadingPage/LoadingPage'
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch()
@@ -24,7 +24,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
   }, [dispatch]);
 
   if (!messages.msgAsUser || !messages.msgAsSeller) {
-    return <LoadingPage />
+    return (<Stack spacing="5" w="100%">
+      <Skeleton h="33vh" w="100%" />
+      <Skeleton h="33vh" w="100%" />
+      <Skeleton h="33vh" w="100%" />
+    </Stack>)
   }
 
   return (
