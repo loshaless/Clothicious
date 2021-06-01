@@ -58,7 +58,7 @@ const NestedExploreProducts = () => {
           color="mainColor.fontColor"
           mt="4"
         >
-          AN ELEGANT WOMAN
+          RENT WOMAN FASHION
         </Text>
       </Flex>
       <Carousel responsive={responsive} showDots={true}>

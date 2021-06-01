@@ -105,7 +105,7 @@ const TransactionDetails = () => {
                 <Text>{rupiah(transactionDetail.Product.rentPrice)}</Text>
               </HStack>
               <HStack p="1" w="45vh">
-                <Text fontWeight="bold">Deposit Price</Text>
+                <Text fontWeight="bold">Deposit</Text>
                 <Spacer />
                 <Text>{rupiah(transactionDetail.Product.guaranteePrice)}</Text>
               </HStack>
