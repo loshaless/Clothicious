@@ -101,7 +101,7 @@ export function fetchProducts() {
         url: baseURL + '/products',
         method: "GET"
       })
-      console.log(data,'actions')
+      console.log(data, 'actions')
       dispatch({ type: 'FETCH_PRODUCTS', payload: data })
       dispatch({ type: 'SET_LOADING', payload: false })
     }
@@ -181,8 +181,7 @@ export function fetchProductDetail(id) {
         url: baseURL + '/products/' + id,
         method: "GET"
       })
-      // dispatch({ type: 'SET_LOADING', payload: false })
-
+      dispatch({ type: 'SET_LOADING', payload: false })
       return dispatch({ type: 'FETCH_PRODUCT_DETAIL', payload: data })
     }
     catch (error) {
@@ -220,7 +219,6 @@ export function fetchTransactions() {
           access_token: localStorage.getItem('access_token')
         }
       })
-      console.log(data);
       dispatch({ type: 'FETCH_TRANSACTIONS', payload: data })
       dispatch({ type: 'SET_LOADING', payload: false })
     }
@@ -262,7 +260,6 @@ export function fetchHistoryTransactions() {
           access_token: localStorage.getItem('access_token')
         }
       })
-
       dispatch({ type: 'FETCH_TRANSACTIONS', payload: data })
       dispatch({ type: 'SET_LOADING', payload: false })
     }
@@ -304,6 +301,7 @@ export function buyerConfirmation(id) {
           access_token: localStorage.getItem('access_token')
         }
       })
+      dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -324,6 +322,7 @@ export function sellerConfirmation(id, productId) {
           access_token: localStorage.getItem('access_token')
         }
       })
+      dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -343,6 +342,7 @@ export function deleteUserMessage(id) {
           access_token: localStorage.getItem('access_token')
         }
       })
+      dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -351,7 +351,7 @@ export function deleteUserMessage(id) {
   }
 }
 
-export function deletesSellerMessage(id) {
+export function deleteSellerMessage(id) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -362,6 +362,7 @@ export function deletesSellerMessage(id) {
           access_token: localStorage.getItem('access_token')
         }
       })
+      dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
