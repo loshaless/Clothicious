@@ -1,62 +1,38 @@
 [
-    {
-        "username": "Ari",
-        "email": "ari@gmail.com",
-        "password": "test1234",
-        "phone": "6287668493426",
-        "address": "Jl. Tubagus Ismail Pasar Minggu, Jakarta",
-        "bankAccount": "4017955243399",
-        "createdAt": "2020/8/24",
-        "updatedAt": "2021/5/13"
-    },
-    {
-        "username": "Ayu",
-        "email": "ayu@gmail.com",
-        "password": "test1234",
-        "phone": "6285391343509",
-        "address": "Jl. Surabaya Pulogadung, Jakarta",
-        "bankAccount": "4041376601654",
-        "createdAt": "2021/4/10",
-        "updatedAt": "2021/1/21"
-    },
-    {
-        "username": "Tika",
-        "email": "tika@gmail.com",
-        "password": "test1234",
-        "phone": "6285896189366",
-        "address": "Jl. Babakan Sembung Kalideres, Jakarta",
-        "bankAccount": "4041378392199900",
-        "createdAt": "2020/11/23",
-        "updatedAt": "2020/7/18"
-    },
-    {
-        "username": "Aulia",
-        "email": "aulia@gmail.com",
-        "password": "test1234",
-        "phone": "6284437774548",
-        "address": "Jl. Cikutra Baru V Pasar Minggu, Jakarta",
-        "bankAccount": "4017958560583",
-        "createdAt": "2020/10/17",
-        "updatedAt": "2020/9/9"
-    },
-    {
-        "username": "Pratiwi",
-        "email": "pratiwi@gmail.com",
-        "password": "test1234",
-        "phone": "6283586601943",
-        "address": "Jl. Gatot Subroto Pahlawan, Jakarta",
-        "bankAccount": "4041373936715",
-        "createdAt": "2021/2/11",
-        "updatedAt": "2021/5/20"
-    },
-    {
-        "username": "Utami",
-        "email": "utami@gmail.com",
-        "password": "test1234",
-        "phone": "6289533554587",
-        "address": "Jl. Asia Afrika Blok M, Jakarta",
-        "bankAccount": "4041377634902",
-        "createdAt": "2020/12/27",
-        "updatedAt": "2021/4/4"
-    }
+	{
+		"UserId" : 1,
+		"SellerId" : 2,
+		"ProductId" : 4,
+		"period" : 3,
+		"confirmationPeriod" : null,
+		"status" : true,
+		"msgForUser" : null,
+		"msgForSeller" : null,
+		"createdAt" : "2021-06-01T16:52:49.015Z",
+		"updatedAt" : "2021-06-01T16:52:49.015Z"
+	},
+	{
+		"UserId" : 2,
+		"SellerId" : 1,
+		"ProductId" : 1,
+		"period" : null,
+		"confirmationPeriod" : 3,
+		"status" : true,
+		"msgForUser" : null,
+		"msgForSeller" : "have you received back your package?",
+		"createdAt" : "2021-06-01T17:00:19.003Z",
+		"updatedAt" : "2021-06-01T17:01:33.839Z"
+	},
+	{
+		"UserId" : 3,
+		"SellerId" : 1,
+		"ProductId" : 11,
+		"period" : null,
+		"confirmationPeriod" : null,
+		"status" : false,
+		"msgForUser" : "your deposit will be returned to you in 3 days",
+		"msgForSeller" : "your money will be sent to you in 3 days",
+		"createdAt" : "2021-06-01T17:15:29.115Z",
+		"updatedAt" : "2021-06-01T17:20:27.655Z"
+	}
 ]
