@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from "react-router-dom"
 import { Box, Text, Image, Skeleton } from "@chakra-ui/react"
 const LandingPageBox = ({ p }) => {
@@ -7,11 +7,11 @@ const LandingPageBox = ({ p }) => {
         history.push("/details/" + id);
       }
 
-      if(!p.User.username) return (
-        <Skeleton
-        w="250px"
-        h="100%"/>
-      )
+    //   if(!p.User.username) return (
+    //     <Skeleton
+    //     w="250px"
+    //     h="100%"/>
+    //   )
 
     return (
         <Box
@@ -41,7 +41,7 @@ const LandingPageBox = ({ p }) => {
           {p.name}
         </Text>
         <Text textAlign="center" color="mainColor.fontColor" mt="2">
-          Owner : {p.User.username}
+          {/* Owner : {p.User.username ? p.User.username : "owner name"} */}
         </Text>
       </Box>
     )

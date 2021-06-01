@@ -163,7 +163,7 @@ export function deleteProduct(id) {
           access_token: localStorage.getItem('access_token')
         }
       })
-      fetchProductsByLoggedUser()
+      dispatch(fetchProductsByLoggedUser())
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
