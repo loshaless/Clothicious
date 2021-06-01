@@ -57,7 +57,7 @@ const TransactionDetails = () => {
                 <Text>Rp.100.000</Text>
               </HStack>
               <HStack p="1" w="45vh">
-                <Text fontWeight="bold">Deposit Price</Text>
+                <Text fontWeight="bold">Deposit</Text>
                 <Spacer />
                 <Text>Rp.200.000</Text>
               </HStack>
@@ -70,7 +70,7 @@ const TransactionDetails = () => {
               color="white"
               colorScheme="black"
             >
-              Proceed Return
+              Request Return
             </Button>
           </Flex>
         </SimpleGrid>

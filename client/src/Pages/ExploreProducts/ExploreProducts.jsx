@@ -35,7 +35,7 @@ const ExploreProducts = () => {
           onClick={() => handleOnClickCategory("man")}
         >
           <Image
-            src="https://images.unsplash.com/photo-1604073536770-8a33e332f830?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=324&q=80"
+            src="https://i.pinimg.com/564x/55/a4/94/55a494774d74d69ab0af0ef25901bfc9.jpg"
             h="100%"
           ></Image>
           <Text
@@ -44,7 +44,7 @@ const ExploreProducts = () => {
             fontWeight="bold"
             mt="4"
           >
-            A COOL AND STYLISH MAN
+            MAN FASHION
           </Text>
         </Box>
         <Box
@@ -62,7 +62,7 @@ const ExploreProducts = () => {
           onClick={() => handleOnClickCategory("woman")}
         >
           <Image
-            src="https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+            src="https://images.unsplash.com/photo-1599309329365-0a9ed45a1da3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
             h="100%"
           ></Image>
           <Text
@@ -71,7 +71,7 @@ const ExploreProducts = () => {
             fontWeight="bold"
             mt="4"
           >
-            AN ELEGANT WOMAN
+            WOMAN FASHION
           </Text>
         </Box>
       </SimpleGrid>

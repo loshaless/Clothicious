@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Box, Text, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { Icon } from "@chakra-ui/react"
+import { FaShippingFast, FaRecycle } from 'react-icons/fa'
+import { GiClothes } from 'react-icons/gi'
+
 const LandingPage = () => {
   const history = useHistory();
   const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -31,18 +35,18 @@ const LandingPage = () => {
       <Flex alignItems="center" justifyContent="space-evenly">
         <Flex flexDirection="column">
           <Text fontSize="3xl" fontWeight="bold" color="black">
-            Kata Kata yang paling nyentrik
+            Efortless Trendy Fashion With
           </Text>
           <Text fontSize="3xl" fontWeight="bold" color="black">
-            Buat memikat User
+            TRY CLOTHES
           </Text>
           <Text fontSize="lg" fontWeight="bold" color="gray.400">
-            Ini Subjudul juga pokonya yang keren
+            Clothes Renting To Answer Your Full-Closet Dilemma
           </Text>
           <Text fontSize="lg" fontWeight="bold" color="gray.400" mt="8">
-            Sewa baju mulai Harga{" "}
+            Rent Clothes Easily From{" "}
             <Text fontSize="lg" fontWeight="bold" color="black">
-              Rp.200.000
+              1.000+ Choices
             </Text>
           </Text>
           <Button
@@ -57,24 +61,27 @@ const LandingPage = () => {
             Get Started
           </Button>
         </Flex>
-        <Box bg="mainColor.lightGreen" mt="16" h="60vh">
+        <Box bg="mainColor.lightGreen" mt="16" h="50vh">
           <Image
-            src="https://images.unsplash.com/photo-1528356857578-6dc41b9a62e0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-            h="60vh"
+            src="https://cdn.shopify.com/s/files/1/0426/7006/3781/files/Banner_1200x.jpg?v=1601389314"
+            h="50vh"
             mt="-8"
             ml="-8"
           />
         </Box>
       </Flex>
       <SimpleGrid columns={3} spacing={10} bg="white" h="20vh" mt="8">
-        <Flex alignItems="center" justifyContent="center">
-          marketing Statistics 1
+        <Flex alignItems="center" justifyContent="center" flexDirection="column">
+          <Icon as={FaRecycle} w={8} h={8} />
+          <Text>Support Sustainable Fashion</Text>
         </Flex>
-        <Flex alignItems="center" justifyContent="center">
-          marketing Statistics 2
+        <Flex alignItems="center" justifyContent="center" flexDirection="column">
+          <Icon as={GiClothes} w={8} h={8} />
+          <Text>1.000+ Clothes</Text>
         </Flex>
-        <Flex alignItems="center" justifyContent="center">
-          marketing Statistics 3
+        <Flex alignItems="center" justifyContent="center" flexDirection="column">
+          <Icon as={FaShippingFast} w={8} h={8} />
+          <Text>Free Delivery Within Jakarta Area</Text>
         </Flex>
       </SimpleGrid>
       <Text
@@ -84,7 +91,7 @@ const LandingPage = () => {
         color="black"
         my="8"
       >
-        The Flow
+        Step By Step To Try Clothes
       </Text>
       <SimpleGrid columns={3} spacing={10} minH="25vh" mt="8" pb="8">
         <Flex
@@ -93,12 +100,12 @@ const LandingPage = () => {
           flexDirection="column"
         >
           <Image
-            src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
+            src="https://image.freepik.com/free-photo/close-up-clothes-hanging-rack_171337-7196.jpg"
             w="80%"
             h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Find Your Perfect Clothes
+            Browse Your Perfect Clothes
           </Text>
         </Flex>
         <Flex
@@ -107,12 +114,12 @@ const LandingPage = () => {
           flexDirection="column"
         >
           <Image
-            src="https://images.unsplash.com/photo-1565665681743-6ff01c5181e3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=686&q=80"
+            src="https://image.freepik.com/free-photo/beautiful-young-smiling-asian-woman-working-laptop-while-home-office-work-space_7861-914.jpg"
             w="80%"
             h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Make Aggreement
+            Get In Touch With The Owner
           </Text>
         </Flex>
         <Flex
@@ -121,12 +128,12 @@ const LandingPage = () => {
           flexDirection="column"
         >
           <Image
-            src="https://images.unsplash.com/photo-1540578956368-95ae86e7012f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=749&q=80"
+            src="https://image.freepik.com/free-photo/happy-smiling-couple-isolated-active-jumping-white-studio_285396-4960.jpg"
             w="80%"
             h="35vh"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
-            Wear it
+            Upgrade Your Style
           </Text>
         </Flex>
       </SimpleGrid>
@@ -183,12 +190,12 @@ const LandingPage = () => {
         pb="16"
       >
         <Text fontSize="2xl" fontWeight="bold" color="black" my="8">
-          What Are They Said ?
+          What They Said About Try Clothes
         </Text>
         <Flex justifyContent="space-around" w="100%" alignItems="center">
           <Box w="20%" bg="mainColor.lightGreen" h="55vh">
             <Image
-              src="https://images.unsplash.com/photo-1578100584776-fdf3ff0b367f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80"
+              src="https://images.unsplash.com/photo-1608571857076-a52fe7c3321a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=978&q=80"
               h="55vh"
               ml="10"
               mt="8"
@@ -207,10 +214,10 @@ const LandingPage = () => {
               color="mainColor.fontColor"
               textAlign="center"
             >
-              Stephanie Sarah
+              Stephanie Santoso
             </Text>
             <Text fontSize="lg" color="gray.500" textAlign="center">
-              Fashion Designer
+              Entrepreneur
             </Text>
             <Text
               fontSize="2xl"
@@ -218,7 +225,7 @@ const LandingPage = () => {
               textAlign="center"
               mt="4"
             >
-              Testimonial Advices Here, for Marketing Purposes
+              "Try Clothes really helped me to find my perfect pre-wedding dress."
             </Text>
           </Flex>
         </Flex>
@@ -246,7 +253,7 @@ const LandingPage = () => {
               Headquarter
             </Text>
             <Text textAlign="center" fontSize="sm" mt="2" cursor="pointer">
-              Cecilia Chapman 711-2880 Nulla St. Mankato Mississippi 96522 (257)
+              888 Hacktiv8 St. Jakarta Indonesia 11840 (021)
               563-7401
             </Text>
           </Flex>
