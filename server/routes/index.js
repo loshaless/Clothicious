@@ -44,7 +44,7 @@ router.get('/products/:id', ProductController.getOneProduct)
 router.use(authentication)
 
 // router.post('/products', ProductController.create)
-router.post('/products', authorization, upload.array('images', 3), ProductController.create)
+router.post('/products', upload.array('productImages', 3), ProductController.create)
 
 router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
 router.get('/loggedUsers', UserController.loggedUser)

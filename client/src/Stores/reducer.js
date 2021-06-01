@@ -1,6 +1,6 @@
 const initialState = {
   products: [],
-  productDetail: {},
+  productDetail: { User: {} },
   transactions: [],
   transactionDetail: {},
   messages: [],

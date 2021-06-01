@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
+import LoadingPage from "../LoadingPage/LoadingPage"
 import { useHistory } from "react-router-dom";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { fetchProducts } from "../../Stores/action";
@@ -9,10 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 const NestedExploreProducts = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-
+  const isLoading = useSelector((state) => state.isLoading)
+  const [filtered, setFiltered] = useState([])
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    setFiltered(products.filter(p => p.category === 'woman'))
+  },[products])
 
   const history = useHistory();
   const responsive = {
@@ -37,6 +43,8 @@ const NestedExploreProducts = () => {
     history.push("/details/" + id);
   }
 
+  if(isLoading || !products[0].User.username) return <LoadingPage />
+
   return (
     <Box minH="90vh" bg="mainColor.bg">
       <Flex>
@@ -54,7 +62,7 @@ const NestedExploreProducts = () => {
         </Text>
       </Flex>
       <Carousel responsive={responsive} showDots={true}>
-        {products.map((product) => (
+        {filtered.map((product) => (
           <Box
             h="65vh"
             w="245px"
@@ -80,7 +88,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : {product.User.username}
+              Owner : {product?.User.username}
             </Text>
           </Box>
         ))}

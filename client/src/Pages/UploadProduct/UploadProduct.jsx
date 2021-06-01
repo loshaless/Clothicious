@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FormControl,
   FormLabel,
@@ -13,10 +14,11 @@ import {
   Stack,
   RadioGroup,
   Select,
+  Button
 } from "@chakra-ui/react";
 const UploadProduct = () => {
   const [lining, setLining] = useState(true);
-  const [arrOfFiles, setArrOfFiles] = useState([{}, {}, {}]);
+  const [arrOfFiles, setArrOfFiles] = useState([null, null, null]);
   let [counter, setCounter] = useState(0);
   const [sheerLevel, setSheerLevel] = useState(true);
   const [category, setCategory] = useState("");
@@ -38,25 +40,28 @@ const UploadProduct = () => {
   });
 
   function onChangeFrontImg(event) {
+    if(arrOfFiles[0] === null)
+    setCounter((counter += 1));
+
     let val = [...arrOfFiles];
     val[0] = event.target.files[0];
-    console.log(val);
     setArrOfFiles(val);
-    setCounter((counter += 1));
   }
   function onChangeBackImg(event) {
+    if(arrOfFiles[1] === null)
+    setCounter((counter += 1));
+
     let val = [...arrOfFiles];
     val[1] = event.target.files[0];
-    console.log(val);
     setArrOfFiles(val);
-    setCounter((counter += 1));
   }
   function onChangeSideImg(event) {
+    if(arrOfFiles[2] === null)
+    setCounter((counter += 1));
+
     let val = [...arrOfFiles];
     val[2] = event.target.files[0];
-    console.log(val);
     setArrOfFiles(val);
-    setCounter((counter += 1));
   }
 
   const fd = new FormData();
@@ -74,9 +79,23 @@ const UploadProduct = () => {
   useEffect(() => {
     setInput({ ...input, lining, sheerLevel, category });
   }, [sheerLevel, lining, category]);
+
+  async function uploadProduct() {
+    try {
+      const { data } = await axios.post('http://localhost:3000/products', fd, {
+        headers: {
+          "content-type": 'multipart/form-data',
+          access_token: localStorage.access_token,
+        }
+      })
+      console.log(data)
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="8">
-      <Text>{JSON.stringify(arrOfFiles)}</Text>
       <Flex justifyContent="center">
         <Text
           fontWeight="bold"
@@ -131,13 +150,20 @@ const UploadProduct = () => {
               }
             />
           </FormControl>
-          <RadioGroup onChange={setLining}>
-            <Stack direction="row">
-              <Text>Lining</Text>
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </Stack>
-          </RadioGroup>
+         <FormControl>
+            <FormLabel textAlign="center">Lining</FormLabel>
+            <Select
+              border="1px"
+              borderColor="mainColor.fontColor"
+              onChange={(e) => setLining(e.target.value)}
+            >
+              <option value="" defaultValue disabled>
+                Select Lining Type
+              </option>
+              <option value="true">With Lining</option>
+              <option value="false">Without Lining</option>
+            </Select>
+          </FormControl>
         </VStack>
         <VStack spacing={5}>
           <FormControl>
@@ -169,8 +195,10 @@ const UploadProduct = () => {
           <FormControl>
             <FormLabel textAlign="center">Thickness</FormLabel>
             <Input
+              min="1"
+              max="5"
               type="number"
-              placeholder="1 to 100"
+              placeholder="1 to 5"
               borderColor="mainColor.fontColor"
               onChange={(e) =>
                 setInput({ ...input, thickness: e.target.value })
@@ -181,7 +209,9 @@ const UploadProduct = () => {
             <FormLabel textAlign="center">Strechability</FormLabel>
             <Input
               type="number"
-              placeholder="1 to 100"
+              min="1"
+              max="5"
+              placeholder="1 to 5"
               borderColor="mainColor.fontColor"
               onChange={(e) =>
                 setInput({ ...input, stretchability: e.target.value })
@@ -251,15 +281,25 @@ const UploadProduct = () => {
               onChange={(e) => setInput({ ...input, length: e.target.value })}
             />
           </FormControl>
-          <RadioGroup onChange={setSheerLevel}>
-            <Stack direction="row">
-              <Text>Sheer Level</Text>
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </Stack>
-          </RadioGroup>
+          <FormControl>
+            <FormLabel textAlign="center">Sheer Level</FormLabel>
+            <Select
+              border="1px"
+              borderColor="mainColor.fontColor"
+              onChange={(e) => setSheerLevel(e.target.value)}
+            >
+              <option value="" defaultValue disabled>
+                Select Sheer Level Type
+              </option>
+              <option value="true">With Sheer Level</option>
+              <option value="false">Without Sheer Level</option>
+            </Select>
+          </FormControl>
         </VStack>
       </HStack>
+      <Flex justifyContent="center" mt="3">
+        <Button w="35%" colorScheme="green" onClick={uploadProduct}>Upload</Button>
+      </Flex>
     </Box>
   );
 };

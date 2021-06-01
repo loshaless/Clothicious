@@ -38,7 +38,6 @@ export function login(data) {
       })
       if (user.status === 200) {
         localStorage.setItem('access_token', user.data.access_token)
-        dispatch({ type: 'FETCH_PRODUCTS', payload: data })
         dispatch({ type: 'SET_LOADING', payload: false })
         dispatch({ type: 'SET_LOGIN', payload: true })
       }
@@ -96,11 +95,13 @@ export function editUser(input) {
 export function fetchProducts() {
   return async (dispatch) => {
     try {
+      console.log('here')
       dispatch({ type: 'SET_LOADING', payload: true })
       const { data } = await axios({
         url: baseURL + '/products',
         method: "GET"
       })
+      console.log(data,'actions')
       dispatch({ type: 'FETCH_PRODUCTS', payload: data })
       dispatch({ type: 'SET_LOADING', payload: false })
     }
