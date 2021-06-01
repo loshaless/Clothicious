@@ -4,6 +4,7 @@ import { fetchProductDetail, fetchDataUser } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 import {
   Box,
@@ -30,7 +31,7 @@ const Details = () => {
   }, [id]);
 
 
-  if (loading) return <div>Loading</div>
+  if (loading) return <LoadingPage />
   else {
 
     const createNewChatHandler = () => {
@@ -130,7 +131,6 @@ const Details = () => {
               console.log('success')
             },
             onPending: function (result) {
-              history.push("/success");
               console.log('pending')
             },
             onError: function (result) {
@@ -179,7 +179,7 @@ const Details = () => {
                 transition="200ms"
                 _hover={{ opacity: 1 }}
               >
-                <Image src={productDetail.frontImg} h="100%" w="100px" />
+                <Image src={productDetail.sideImg} h="100%" w="100px" />
               </Box>
               <Box
                 h="20vh"
@@ -192,7 +192,7 @@ const Details = () => {
               </Box>
             </VStack>
             <Box h="70vh" w="300px">
-              <Image src={productDetail.sideImg} h="100%" w="300px" />
+              <Image src={productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
 

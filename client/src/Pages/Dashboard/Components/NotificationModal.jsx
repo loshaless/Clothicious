@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -8,88 +8,70 @@ import {
   ModalBody,
   ModalCloseButton,
   Stack,
-  Button,
   Text,
-  SimpleGrid,
+  Skeleton
 } from "@chakra-ui/react";
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchMessages } from '../../../Stores/action'
+import ModalData from './ModalData'
+
 const NotificationModal = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch()
+  const messages = useSelector(state => state.messages)
+
+  useEffect(() => {
+    dispatch(fetchMessages())
+  }, [dispatch]);
+
+  if (!messages.msgAsUser || !messages.msgAsSeller) {
+    return (<Stack spacing="5" w="100%">
+      <Skeleton h="33vh" w="100%" />
+      <Skeleton h="33vh" w="100%" />
+      <Skeleton h="33vh" w="100%" />
+    </Stack>)
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Notifications</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Stack direction="row" justifyContent="space-between" px="4">
-            <Text fontWeight="bold" letterSpacing="widest">
-              Message
+        {messages.msgAsUser.length > 0 && (
+          <ModalBody>
+            <Stack direction="row" justifyContent="space-between" px="4">
+              <Text fontWeight="bold" letterSpacing="widest">
+                Rented Product Messages
             </Text>
-            <Text fontWeight="bold" letterSpacing="widest">
-              Actions
+              <Text fontWeight="bold" letterSpacing="widest">
+                Actions
             </Text>
-          </Stack>
-          <SimpleGrid
-            columns={2}
-            spacing="5"
-            py="2"
-            px="4"
-            bg="gray.100"
-            my="2"
-          >
-            <Text letterSpacing="widest" fontSize="sm">
-              Your Product has been Returned by : Name
+            </Stack>
+            {messages.msgAsUser.map(message => {
+              return (
+                <ModalData key={message.transactionId} message={message} />
+              )
+            })}
+          </ModalBody>
+        )}
+        {messages.msgAsSeller.length > 0 && (
+          <ModalBody>
+            <Stack direction="row" justifyContent="space-between" px="4">
+              <Text fontWeight="bold" letterSpacing="widest">
+                Currently Renting Messages
             </Text>
-            <Button
-              colorScheme="black"
-              bg="blue.100"
-              color="blue.600"
-              size="sm"
-            >
-              Details Transaction
-            </Button>
-          </SimpleGrid>
-          <SimpleGrid
-            columns={2}
-            spacing="5"
-            py="2"
-            px="4"
-            bg="gray.100"
-            my="2"
-          >
-            <Text letterSpacing="widest" fontSize="sm">
-              Your Deposit has been Returned by : Name
+              <Text fontWeight="bold" letterSpacing="widest">
+                Actions
             </Text>
-            <Button
-              colorScheme="black"
-              bg="blue.100"
-              color="blue.600"
-              size="sm"
-            >
-              Details Transaction
-            </Button>
-          </SimpleGrid>
-          <SimpleGrid
-            columns={2}
-            spacing="5"
-            py="2"
-            px="4"
-            bg="gray.100"
-            my="2"
-          >
-            <Text letterSpacing="widest" fontSize="sm">
-              Transaction of "product name" succesfull, your payment will be
-              sent within 3 working days
-            </Text>
-            <Button
-              colorScheme="black"
-              bg="blue.100"
-              color="blue.600"
-              size="sm"
-            >
-              Details Transaction
-            </Button>
-          </SimpleGrid>
-        </ModalBody>
+            </Stack>
+            {messages.msgAsSeller.map(message => {
+              return (
+                <ModalData key={message.transactionId} message={message} />
+              )
+            })}
+          </ModalBody>
+        )}
+
         <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>

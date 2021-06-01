@@ -1,8 +1,10 @@
 const initialState = {
   products: [],
-  productDetail: {},
+  productDetail: { User: {} },
   transactions: [],
   transactionDetail: {},
+  messages: [],
+  user: {},
   isLoading: true,
   isLogin: false,
   listUserChatEngine: [],
@@ -23,6 +25,10 @@ function reducer(state = initialState, action) {
       return { ...state, listUserChatEngine: action.payload }
     case 'FETCH_DATA_USER':
       return { ...state, dataUser: action.payload }
+    case 'FETCH_USER':
+      return { ...state, user: action.payload }
+    case 'FETCH_MESSAGES':
+      return { ...state, messages: action.payload }
     case 'SET_LOADING':
       return { ...state, isLoading: action.payload }
     case 'SET_LOGIN':
