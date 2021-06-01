@@ -85,8 +85,21 @@ class TransactionController {
   static async getAllMessage(req, res, next) {
     try {
       let UserId = req.loggedUser.id
-      const currentlyRenting = await Transaction.findAll({ where: { UserId, msgForUser: { [Op.ne]: null } } })
-      const rentedProducts = await Transaction.findAll({ where: { SellerId: UserId, msgForSeller: { [Op.ne]: null } } })
+      const currentlyRenting = await Transaction.
+      findAll({ 
+        where: { UserId, 
+          msgForUser: 
+          { [Op.ne]: null } 
+        } 
+      })
+      const rentedProducts = await Transaction.findAll({ 
+        where: { 
+          SellerId: UserId, 
+          msgForSeller: { 
+            [Op.ne]: null 
+          } 
+        } 
+      })
       const msgAsUser = await currentlyRenting.map(e => {
         let filterData = {
           transactionId: e.id,
@@ -103,7 +116,7 @@ class TransactionController {
       })
       res.status(200).json({ msgAsUser, msgAsSeller })
     }
-    catch {
+    catch {rentedProducts
       next(error)
     }
   }
@@ -148,6 +161,7 @@ class TransactionController {
       await Product.update({ availability: true }, { where: { id: ProductId, UserId } })
       await Transaction.update({
         status: false,
+        confirmationPeriod: null,
         msgForUser: "your deposit will be returned to you in 3 days",
         msgForSeller: "your money will be sent to you in 3 days"
       },

@@ -3,12 +3,12 @@ const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
 const { generateToken, verivyToken } = require('../helper/jwt')
-const {User, Product} = require('../models');
+const {User, Product, Transaction} = require('../models');
 
 
 let token = ""
 let invalidToken = ""
-let transactionId = 0
+let TransactionId = 0
 let UserId = 0
 let SellerId = 0
 let ProductId = 0
@@ -17,18 +17,21 @@ const user = {
   username: 'user',
   email: 'user@mail.com',
   password: 'user',
+  phone: '114'
 } 
 
 const wrongUser = {
   username: 'wrongUser',
   email: 'wrongUser@mail.com',
   password: 'wrongUser',
+  phone: '115'
 }
 
 const seller = {
   username: 'seller',
   email: 'seller@mail.com',
   password: 'seller',
+  phone: '108'
 }
 
 const product = {
@@ -57,6 +60,15 @@ const newTransaction = {
   SellerId: 2,
   ProductId: 3,
 }
+
+
+const dummyRentedProducts = [
+
+]
+const dummyCurrentlyRenting = []
+const userMsg = null
+const sellerMsg = null
+
 
 
 afterAll((done) => {
@@ -184,9 +196,10 @@ describe('Create Transaction success case POST /transactions', () => {
     .expect('Content-Type', /json/)
     .then(response => {
         let {body, status} = response
-        // console.log("TRANSACTIONS", body);
-        transactionId = body.id
+        TransactionId = body.id
         ProductId = body.ProductId
+        UserId = body.UserId
+        console.log('TRANSACTION', body);
         expect(status).toBe(201)
         expect(body).toHaveProperty('id', expect.any(Number))
         done()
@@ -237,7 +250,7 @@ describe('Create Transaction success case POST /transactions', () => {
 describe('Read product case GET /transactions/id', () => {
   it('Success test should return json of transaction', (done) => {
     request(app)
-    .get(`/transactions/${transactionId}`)
+    .get(`/transactions/${TransactionId}`)
     .set('access_token', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -255,7 +268,7 @@ describe('Read product case GET /transactions/id', () => {
 
   it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .get(`/transactions/${transactionId}`)
+    .get(`/transactions/${TransactionId}`)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {
@@ -271,7 +284,7 @@ describe('Read product case GET /transactions/id', () => {
 
   it('it should return error message "unauthorized"', (done) => {
     request(app)
-    .get(`/transactions/${transactionId}`)
+    .get(`/transactions/${TransactionId}`)
     .set('access_token', invalidToken )
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -290,6 +303,36 @@ describe('Read product case GET /transactions/id', () => {
 
 //GET ALL MESSAGES
 describe('Read messages case GET /messages', () => {
+  console.log('USERIDD', UserId);
+
+  const updateData = {
+    status: false,
+    confirmationPeriod: null,
+    msgForUser: "your deposit will be returned to you in 3 days",
+    msgForSeller: "your money will be sent to you in 3 days"
+  }
+
+  beforeEach((done) => {
+    Transaction.update(updateData, {
+      where: {
+        id: TransactionId
+      }
+    })
+      .then((data) => {
+        return Transaction.create({
+          UserId: 10,
+          SellerId: UserId,
+          ProductId: 20
+        })
+      })
+      .then((data) => {
+        done()
+      })
+      .catch((err) => {
+        done()
+      })
+  })
+
   it('Success test should return object with keys', (done) => {
     request(app)
     .get('/messages')
@@ -297,13 +340,18 @@ describe('Read messages case GET /messages', () => {
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {
+      // console.log('MESSAGE', response.body);
       let {body, status} = response
-      console.log('MESSAGE', response.body);
-      console.log({body, status});
+      let msgAsUser = body.msgAsUser
+      let msgAsSeller = body.msgAsSeller
+      console.log('!?', {body, status});
       expect(status).toBe(200)
       expect(response).toHaveProperty('body', expect.any(Object))
       expect(body).toHaveProperty('msgAsSeller', expect.any(Array))
       expect(body).toHaveProperty('msgAsUser', expect.any(Array))
+      expect(msgAsUser[0]).toHaveProperty('message', 'your deposit will be returned to you in 3 days')
+      expect(msgAsSeller[0]).toHaveProperty('message', 'your money will be sent to you in 3 days')
+
       done()
     })
     .catch(err => {
@@ -351,7 +399,7 @@ describe('Read messages case GET /messages', () => {
 describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', () => {
   it('Success test should return json with message: message changed', (done) => {
       request(app)
-      .patch('/buyerTransactions/'+transactionId)
+      .patch('/buyerTransactions/'+TransactionId)
       .set('access_token', token)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
@@ -369,7 +417,7 @@ describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', (
 
   it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .patch('/buyerTransactions'+transactionId)
+    .patch('/buyerTransactions'+TransactionId)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {
@@ -385,7 +433,7 @@ describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', (
 
   it('it should return error message "unauthorized"', (done) => {
     request(app)
-    .patch('/buyerTransactions'+transactionId)
+    .patch('/buyerTransactions'+TransactionId)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .then(response => {
@@ -405,7 +453,7 @@ describe('Update Buyer Transaction success case PATCH /buyerTransactions/:id', (
 describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', () => {
   it('Success test should return json with message: message changed', (done) => {
       request(app)
-      .patch('/sellerTransactions/'+transactionId)
+      .patch('/sellerTransactions/'+TransactionId)
       .send({ProductId})
       .set('access_token', token)
       .set('Accept', 'application/json')
@@ -424,7 +472,7 @@ describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', 
 
   it('it should return error message "jwt must be provided', (done) => {
     request(app)
-    .patch('/sellerTransactions/'+transactionId)
+    .patch('/sellerTransactions/'+TransactionId)
     .set('Accept', 'application/json')
     .send({ProductId})
     .expect('Content-Type', /json/)
@@ -441,7 +489,7 @@ describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', 
 
   it('it should return error message "unauthorized"', (done) => {
     request(app)
-    .patch('/sellerTransactions/'+transactionId)
+    .patch('/sellerTransactions/'+TransactionId)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .send({ProductId})
@@ -462,7 +510,7 @@ describe('Update Seller Transaction success case PATCH /buyerTransactions/:id', 
 describe('Delete product case DELETE /userMessages/:id', () => {
   it('Success Delete test should return message has been deleted', (done) => {
     request(app)
-    .delete(`/userMessages/${transactionId}`)
+    .delete(`/userMessages/${TransactionId}`)
     .set('access_token', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -477,9 +525,9 @@ describe('Delete product case DELETE /userMessages/:id', () => {
         done(err)
     })
   })
-  it('Itshould return message unauthorized', (done) => {
+  it('It should return message unauthorized', (done) => {
     request(app)
-    .delete(`/userMessages/${transactionId}`)
+    .delete(`/userMessages/${TransactionId}`)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -497,7 +545,7 @@ describe('Delete product case DELETE /userMessages/:id', () => {
  
   it('it should return error message "authentication failed" when the token is empty', (done) => {
     request(app)
-    .delete(`/userMessages/${transactionId}`)
+    .delete(`/userMessages/${TransactionId}`)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {
@@ -518,7 +566,7 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
     
   it('Success Delete test should return message unauthorized', (done) => {
     request(app)
-    .delete(`/sellerMessages/${transactionId}`)
+    .delete(`/sellerMessages/${TransactionId}`)
     .set('access_token', token)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -536,7 +584,7 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
 
   it('It should return message unauthorized', (done) => {
     request(app)
-    .delete(`/sellerMessages/${transactionId}`)
+    .delete(`/sellerMessages/${TransactionId}`)
     .set('access_token', invalidToken)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
@@ -554,7 +602,7 @@ describe('Delete product case DELETE /sellerMessages/:id', () => {
  
   it('it should return error message "authentication failed" when the token is empty', (done) => {
     request(app)
-    .delete(`/sellerMessages/${transactionId}`)
+    .delete(`/sellerMessages/${TransactionId}`)
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .then(response => {

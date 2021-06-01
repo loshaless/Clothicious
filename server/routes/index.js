@@ -3,7 +3,7 @@ var router = express.Router()
 const UserController = require('../controller/userController')
 const ProductController = require('../controller/productController')
 const TransactionController = require('../controller/transactionController')
-
+const ChatEngineController = require('../controller/chatEngineController')
 /** ------------------------------------- */
 /** Code Multer */
 const multer = require('multer')
@@ -36,7 +36,7 @@ const MidtransController = require('../controller/midtransController')
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-router.get('/users', UserController.getUserChatEngine)
+router.get('/users', ChatEngineController.getUserChatEngine)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
@@ -44,7 +44,7 @@ router.get('/products/:id', ProductController.getOneProduct)
 router.use(authentication)
 
 // router.post('/products', ProductController.create)
-router.post('/products', authorization, upload.array('images', 3), ProductController.create)
+router.post('/products',authorization, upload.array('productImages', 3), ProductController.create)
 
 router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
 router.get('/loggedUsers', UserController.loggedUser)

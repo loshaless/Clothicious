@@ -1,4 +1,4 @@
-const { generateToken, verivyToken } = require('../helper/jwt')
+const { verivyToken } = require('../helper/jwt')
 const { User, Product, Transaction } = require('../models')
 
 function authentication(req, res, next) {
@@ -11,7 +11,7 @@ function authentication(req, res, next) {
           next()
         }
         else {
-          next({ status: 401, message: 'authentication failed' })
+          next({ name: 'authentication failed' })
         }
       })
       .catch(next)
@@ -29,7 +29,7 @@ function authorization(req, res, next) {
         next()
       }
       else {
-        next({ status: 401, message: 'unauthorized' })
+        next({ name: 'unauthorized' })
       }
     })
     .catch(next)
@@ -42,7 +42,7 @@ function buyerAuthorization(req, res, next) {
         next()
       }
       else {
-        next({ status: 401, message: 'unauthorized' })
+        next({ name: 'unauthorized' })
       }
     })
     .catch(next)
@@ -55,7 +55,7 @@ function sellerAuthorization(req, res, next) {
         next()
       }
       else {
-        next({ status: 401, message: 'unauthorized' })
+        next({ name: 'unauthorized' })
       }
     })
     .catch(next)

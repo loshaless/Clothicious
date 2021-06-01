@@ -4,6 +4,9 @@ function errorHandler(err, req, res, next) {
     }
     else if (err.name === 'SequelizeUniqueConstraintError') {
         res.status(400).json({ message: err.errors[0].message });
+    } 
+    else if (err.name === 'unauthorized') {
+        res.status(401).json({message: 'unauthorized'})
     }
     else {
         let message = err.message || 'internal server error'

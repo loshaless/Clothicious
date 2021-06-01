@@ -1,7 +1,7 @@
 const { User, Product } = require('../models')
 let { generateToken, verivyToken } = require('../helper/jwt')
 let { hash, compare } = require('../helper/bcrypt')
-const axios = require('axios')
+
 
 class UserController {
   static register(req, res, next) {
@@ -42,24 +42,6 @@ class UserController {
   }
 
 
-  static getUserChatEngine(req, res, next) {
-    axios({
-      method: 'get',
-      url: 'https://api.chatengine.io/users/',
-      headers: { 
-        'PRIVATE-KEY': '93a6043a-5d0f-4587-bbd7-957fe1885986'
-      }
-    })
-    .then(({ data }) => {
-      const user = data.map(e => e.username)
-      res.status(200).json(user)
-    })
-    .catch(error => {
-      console.log(error, 'error chatengine di model user');
-      next(error)
-    })
-  }
-
   static loggedUser(req, res, next) {
     let id = req.loggedUser.id
     User.findOne({ where: { id }, include: [Product] })
@@ -71,9 +53,9 @@ class UserController {
 
   static updateProfil(req, res, next) {
     let id = req.loggedUser.id
-    let { username, email, phone, address, bankAccount } = req.body
+    let { username, phone, address, bankAccount } = req.body
     // console.log(req.body, id);
-    User.update({ username, email, phone, address, bankAccount }, {
+    User.update({ username, phone, address, bankAccount }, {
       where: { id },
       returning: true
     })
