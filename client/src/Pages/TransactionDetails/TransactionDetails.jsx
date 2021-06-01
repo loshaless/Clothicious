@@ -24,6 +24,7 @@ import {
   deletesSellerMessage
 }
   from '../../Stores/action'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 const TransactionDetails = () => {
   let { id } = useParams();
@@ -42,7 +43,7 @@ const TransactionDetails = () => {
   }, [dispatch, refresh]);
 
   if (!transactionDetail.Product) {
-    return <Text> Loading</Text>
+    return <LoadingPage />
   }
 
   if (user.id === transactionDetail.seller.id) {

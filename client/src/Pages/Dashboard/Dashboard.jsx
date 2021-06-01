@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserData, fetchTransactions, fetchMessages } from '../../Stores/action'
 import RentedProductCard from './Components/RentedProductCard'
 import CurrentlyRentingCard from './Components/CurrentlyRentingCard'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 const Dashboard = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -58,7 +59,7 @@ const Dashboard = () => {
   }
 
   if (!transactions.rentedProducts || !transactions.currentlyRenting || !messages.msgAsUser || !messages.msgAsSeller) {
-    return <Text>Loading</Text>
+    return <LoadingPage />
   }
 
   return (

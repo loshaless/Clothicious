@@ -8,13 +8,12 @@ import {
   ModalBody,
   ModalCloseButton,
   Stack,
-  Button,
   Text,
-  SimpleGrid,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMessages } from '../../../Stores/action'
 import ModalData from './ModalData'
+import LoadingPage from '../../LoadingPage/LoadingPage'
 
 const NotificationModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch()
@@ -25,7 +24,7 @@ const NotificationModal = ({ isOpen, onClose }) => {
   }, [dispatch]);
 
   if (!messages.msgAsUser || !messages.msgAsSeller) {
-    return <Text>Loading</Text>
+    return <LoadingPage />
   }
 
   return (

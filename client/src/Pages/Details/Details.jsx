@@ -4,6 +4,7 @@ import { fetchProductDetail } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 import {
   Box,
@@ -34,7 +35,7 @@ const Details = () => {
   }, [id]);
 
 
-  if (loading) return <div>Loading</div>
+  if (loading) return <LoadingPage />
   else {
 
     axios({

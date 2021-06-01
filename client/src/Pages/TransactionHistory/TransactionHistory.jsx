@@ -3,6 +3,7 @@ import TransactionHistoryTable from "./Components/TransactionHistoryTable";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { fetchHistoryTransactions } from '../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 const TransactionHistory = () => {
   const dispatch = useDispatch()
@@ -13,7 +14,7 @@ const TransactionHistory = () => {
   }, [dispatch]);
 
   if (!transactions.currentlyRenting || !transactions.rentedProducts) {
-    return <Text>Loading</Text>
+    return <LoadingPage />
   }
 
   return (
