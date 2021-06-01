@@ -43,7 +43,7 @@ const NestedExploreProducts = () => {
     history.push("/details/" + id);
   }
 
-  if(isLoading) return <LoadingPage />
+  if(isLoading || !products[0].User.username) return <LoadingPage />
 
   return (
     <Box minH="90vh" bg="mainColor.bg">
@@ -88,7 +88,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : {product.User.username}
+              Owner : {product?.User.username}
             </Text>
           </Box>
         ))}

@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import LoadingPage from "../LoadingPage/LoadingPage"
+import LandingPageBox from "./Components/Box"
 import { useHistory } from "react-router-dom";
 import { fetchProducts } from "../../Stores/action"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,6 +11,7 @@ const LandingPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
+  const isLoading = useSelector(state => state.isLoading);
   const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
   const responsive = {
     desktop: {
@@ -38,6 +41,10 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch])
+
+  console.log(products, 'dr landing page', "ini products")
+
+  if(!products) return <LoadingPage />
 
   return (
     <Box minH="100vh" bg="mainColor.bg">
@@ -155,37 +162,8 @@ const LandingPage = () => {
           Pick Your Style
         </Text>
         <Carousel responsive={responsive} showDots={true}>
-          {products.map((p) => (
-            <Box
-              d="flex"
-              flexDirection="column"
-              bg="mainColor.bg"
-              w="250px"
-              h="100%"
-              pb="5"
-              ml="8"
-              onClick={() => handleOnClickCard(p.id)}
-              cursor="pointer"
-              key={p.id}
-            >
-              <Image
-                src={p.frontImg}
-                h="90%"
-                w="250px"
-              />
-              <Text
-                textAlign="center"
-                color="mainColor.fontColor"
-                fontWeight="bold"
-                textTransform="uppercase"
-                mt="2"
-              >
-                {p.name}
-              </Text>
-              <Text textAlign="center" color="mainColor.fontColor" mt="2">
-                Author : {p.User.username}
-              </Text>
-            </Box>
+          {products && products.map((p) => (
+           <LandingPageBox p={p} key={p.id}/>
           ))}
         </Carousel>
       </Flex>
