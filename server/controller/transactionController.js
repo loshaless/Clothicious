@@ -148,6 +148,7 @@ class TransactionController {
       await Product.update({ availability: true }, { where: { id: ProductId, UserId } })
       await Transaction.update({
         status: false,
+        confirmationPeriod: null,
         msgForUser: "your deposit will be returned to you in 3 days",
         msgForSeller: "your money will be sent to you in 3 days"
       },

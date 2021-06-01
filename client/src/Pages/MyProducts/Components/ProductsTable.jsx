@@ -24,7 +24,7 @@ const ProductsTable = () => {
       dispatch(fetchProductsByLoggedUser())
       setRefresh(false)
     }
-  }, [refresh]);
+  }, [dispatch, refresh]);
 
   return (
     <Table variant="simple">

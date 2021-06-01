@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TransactionHistoryTable from "./Components/TransactionHistoryTable";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { fetchHistoryTransactions } from '../../Stores/action'
+import { useDispatch, useSelector } from 'react-redux'
+
 const TransactionHistory = () => {
+  const dispatch = useDispatch()
+  const transactions = useSelector(state => state.transactions)
+
+  useEffect(() => {
+    dispatch(fetchHistoryTransactions())
+  }, [dispatch]);
+
+  if (!transactions.currentlyRenting || !transactions.rentedProducts) {
+    return <Text>Loading</Text>
+  }
+
   return (
     <Box
       minH="90vh"
@@ -28,9 +42,20 @@ const TransactionHistory = () => {
           textAlign="center"
           mb="2"
         >
-          Transaction History
+          My Rent History
         </Text>
-        <TransactionHistoryTable />
+        <TransactionHistoryTable transactions={transactions.currentlyRenting} />
+        <Text
+          color="mainColor.fontColor"
+          fontSize="2xl"
+          fontWeight="bold"
+          letterSpacing="widest"
+          textAlign="center"
+          mb="2"
+        >
+          My Rented Product History
+        </Text>
+        <TransactionHistoryTable transactions={transactions.rentedProducts} />
       </Flex>
     </Box>
   );

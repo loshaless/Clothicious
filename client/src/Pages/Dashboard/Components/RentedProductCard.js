@@ -12,7 +12,7 @@ function RentedProductCard({ transaction }) {
   const history = useHistory();
 
   function handleOnClickDetails() {
-    history.push(`details-transaction/${transaction.Product.id}`);
+    history.push(`details-transaction/${transaction.id}`);
   }
 
   return (
@@ -34,9 +34,7 @@ function RentedProductCard({ transaction }) {
       <Badge colorScheme="twitter" textAlign="center">
         {transaction.user.username}
       </Badge>
-      <Button borderRadius={null} onClick={handleOnClickDetails}>
-        Details
-      </Button>
+      <Button borderRadius={null} onClick={handleOnClickDetails}>Details</Button>
     </SimpleGrid>
   )
 }

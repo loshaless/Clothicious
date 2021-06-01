@@ -5,10 +5,8 @@ import {
   Box,
   Text,
   Flex,
-  SimpleGrid,
   Grid,
   GridItem,
-  Image,
   Avatar,
   Table,
   Tr,
@@ -23,7 +21,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { EditIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserData, fetchTransactions } from '../../Stores/action'
+import { fetchUserData, fetchTransactions, fetchMessages } from '../../Stores/action'
 import RentedProductCard from './Components/RentedProductCard'
 import CurrentlyRentingCard from './Components/CurrentlyRentingCard'
 
@@ -39,22 +37,28 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const transactions = useSelector(state => state.transactions)
+  const messages = useSelector(state => state.messages)
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUserData())
     dispatch(fetchTransactions())
+    dispatch(fetchMessages())
   }, [dispatch]);
+
+  useEffect(() => {
+    if (refresh) {
+      dispatch(fetchUserData())
+      setRefresh(false)
+    }
+  }, [dispatch, refresh]);
 
   function handleOnClickTransHistory() {
     history.push("/history-transaction");
   }
 
-  if (!transactions.rentedProducts || !transactions.currentlyRenting) {
-    return (
-      <>
-        <Text>Loading</Text>
-      </>
-    )
+  if (!transactions.rentedProducts || !transactions.currentlyRenting || !messages.msgAsUser || !messages.msgAsSeller) {
+    return <Text>Loading</Text>
   }
 
   return (
@@ -81,20 +85,22 @@ const Dashboard = () => {
                 <EditIcon color="mainColor.fontColor" />
               </Flex>
             </Tooltip>
-            <Button
-              size="sm"
-              variant="outline"
-              alignSelf="end"
-              ml="4"
-              borderRadius="0"
-              colorScheme="blackAlpha"
-              onClick={onOpenNotif}
-            >
-              Notifications
-              <Badge colorScheme="purple" fontSize="xs" ml="1">
-                New
+            {(messages.msgAsUser.length !== 0 && messages.msgAsSeller.length !== 0) && (
+              <Button
+                size="sm"
+                variant="outline"
+                alignSelf="end"
+                ml="4"
+                borderRadius="0"
+                colorScheme="blackAlpha"
+                onClick={onOpenNotif}
+              >
+                Notifications
+                <Badge colorScheme="purple" fontSize="xs" ml="1">
+                  New
               </Badge>
-            </Button>
+              </Button>
+            )}
           </Flex>
           <Grid templateColumns="repeat(3, 1fr)" gap={6} mt="4">
             <GridItem d="flex" justifyContent="center">
@@ -179,7 +185,7 @@ const Dashboard = () => {
           </Grid>
         </Box>
       </Box>
-      <EditModal isOpen={isOpen} onClose={onClose} />
+      <EditModal isOpen={isOpen} onClose={onClose} user={user} setRefresh={setRefresh} />
       <NotificationModal isOpen={isNotifOpen} onClose={onCloseNotif} />
     </>
   );

@@ -26,8 +26,9 @@ const EditProductModal = ({ isOpen, onClose, product, setRefresh }) => {
   }
 
   function handleSave() {
-    setRefresh(true)
     dispatch(editProduct(Product))
+    setRefresh(true)
+    onClose()
   }
 
   return (
