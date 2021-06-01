@@ -191,6 +191,27 @@ export function fetchTransactions() {
   }
 }
 
+export function fetchHistoryTransactions() {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+
+      const { data } = await axios({
+        url: baseURL + '/historyTransactions/',
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'FETCH_TRANSACTIONS', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
 export function fetchTransactionDetail(id) {
   return async (dispatch) => {
     try {
