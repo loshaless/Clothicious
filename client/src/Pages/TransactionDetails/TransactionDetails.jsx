@@ -15,21 +15,61 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchTransactionDetail, rupiah, fetchUserData } from '../../Stores/action'
+import {
+  fetchTransactionDetail,
+  rupiah, fetchUserData,
+  buyerConfirmation,
+  sellerConfirmation,
+  deleteUserMessage,
+  deletesSellerMessage
+}
+  from '../../Stores/action'
 
 const TransactionDetails = () => {
   let { id } = useParams();
   const dispatch = useDispatch()
   const transactionDetail = useSelector(state => state.transactionDetail)
   const user = useSelector(state => state.user)
+  const [refresh, setRefresh] = useState(true);
+
+  let rentedProductPage = false
+  let message = transactionDetail.msgForUser
+  let period = transactionDetail.period
 
   useEffect(() => {
     dispatch(fetchTransactionDetail(id))
     dispatch(fetchUserData())
-  }, [dispatch]);
+  }, [dispatch, refresh]);
 
   if (!transactionDetail.Product) {
     return <Text> Loading</Text>
+  }
+
+  if (user.id === transactionDetail.seller.id) {
+    rentedProductPage = true
+    message = transactionDetail.msgForSeller
+    period = transactionDetail.confirmationPeriod
+  }
+
+  function handleReturnPackage() {
+    dispatch(buyerConfirmation(transactionDetail.id))
+    setRefresh(!refresh)
+  }
+
+  function handleConfirmAndDelete() {
+    if (message === "have you received back your package?") {
+      dispatch(sellerConfirmation(transactionDetail.id, transactionDetail.Product.id))
+      setRefresh(!refresh)
+    }
+    else if (message === "your deposit will be returned to you in 3 days") {
+      dispatch(deleteUserMessage(transactionDetail.id))
+      setRefresh(!refresh)
+    }
+    else if (message === "your money will be sent to you in 3 days") {
+      dispatch(deletesSellerMessage(transactionDetail.id))
+      setRefresh(!refresh)
+    }
+    setRefresh(!refresh)
   }
 
   return (
@@ -60,14 +100,9 @@ const TransactionDetails = () => {
                 <Text>{transactionDetail.Product.name}</Text>
               </HStack>
               <HStack p="1" w="45vh">
-                <Text fontWeight="bold">Notes</Text>
+                <Text fontWeight="bold">{rentedProductPage ? "Customer Name" : "Owner Name"}</Text>
                 <Spacer />
-                <Badge colorScheme="purple">1 Days</Badge>
-              </HStack>
-              <HStack p="1" w="45vh">
-                <Text fontWeight="bold">{user.id === transactionDetail.seller.id ? "Customer Name" : "Owner Name"}</Text>
-                <Spacer />
-                <Text>{user.id === transactionDetail.seller.id ? transactionDetail.user.username : transactionDetail.seller.username}</Text>
+                <Text>{rentedProductPage ? transactionDetail.user.username : transactionDetail.seller.username}</Text>
               </HStack>
               <HStack p="1" w="45vh">
                 <Text fontWeight="bold">Rent Price</Text>
@@ -79,17 +114,32 @@ const TransactionDetails = () => {
                 <Spacer />
                 <Text>{rupiah(transactionDetail.Product.guaranteePrice)}</Text>
               </HStack>
+              {period !== null && (
+                <HStack p="1" w="45vh">
+                  <Text fontWeight="bold">{rentedProductPage ? "You should confirm in" : "You should return package in"}</Text>
+                  <Spacer />
+                  <Text>{period} days</Text>
+                </HStack>
+              )}
+              {message !== null && <HStack p="1" w="45vh">
+                <Text fontWeight="bold">Notes</Text>
+                <Spacer />
+                <Badge colorScheme="purple">{message}</Badge>
+              </HStack>}
             </VStack>
             <Spacer />
-            <Button
-              borderRadius={null}
-              w="40vh"
-              bg="black"
-              color="white"
-              colorScheme="black"
-            >
-              Proceed Return
-            </Button>
+            {message !== null && (
+              <Button borderRadius={null} w="40vh" bg="black" color="white" colorScheme="black" onClick={handleConfirmAndDelete}>
+                {message === "have you received back your package?" && "Confirm Received My Package"}
+                {message === "your deposit will be returned to you in 3 days" && "Delete Message"}
+                {message === "your money will be sent to you in 3 days" && "Delete Message"}
+              </Button>
+            )}
+            {((message === null && !rentedProductPage && period !== null) || message === "please return the item you borrowed") && (
+              <Button borderRadius={null} w="40vh" bg="black" color="white" colorScheme="black" onClick={handleReturnPackage}>
+                Return Package to Owner
+              </Button>
+            )}
           </Flex>
         </SimpleGrid>
       </Flex>

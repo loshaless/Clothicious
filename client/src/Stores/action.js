@@ -254,6 +254,83 @@ export function fetchTransactionDetail(id) {
   }
 }
 
+export function buyerConfirmation(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      await axios({
+        url: baseURL + '/buyerTransactions/' + id,
+        method: "PATCH",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function sellerConfirmation(id, productId) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      await axios({
+        url: baseURL + '/sellerTransactions/' + id,
+        method: "PATCH",
+        data: { ProductId: productId },
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function deleteUserMessage(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      await axios({
+        url: baseURL + '/userMessages/' + id,
+        method: "DELETE",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function deletesSellerMessage(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      await axios({
+        url: baseURL + '/sellerMessages/' + id,
+        method: "DELETE",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
 export function fetchMessages() {
   return async (dispatch) => {
     try {
