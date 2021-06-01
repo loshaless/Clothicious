@@ -21,7 +21,7 @@ import {
   buyerConfirmation,
   sellerConfirmation,
   deleteUserMessage,
-  deletesSellerMessage
+  deleteSellerMessage
 }
   from '../../Stores/action'
 import LoadingPage from '../LoadingPage/LoadingPage'
@@ -31,7 +31,6 @@ const TransactionDetails = () => {
   const dispatch = useDispatch()
   const transactionDetail = useSelector(state => state.transactionDetail)
   const user = useSelector(state => state.user)
-  const [refresh, setRefresh] = useState(true);
 
   let rentedProductPage = false
   let message = transactionDetail.msgForUser
@@ -40,7 +39,7 @@ const TransactionDetails = () => {
   useEffect(() => {
     dispatch(fetchTransactionDetail(id))
     dispatch(fetchUserData())
-  }, [dispatch, refresh]);
+  }, [dispatch]);
 
   if (!transactionDetail.Product) {
     return <LoadingPage />
@@ -54,23 +53,18 @@ const TransactionDetails = () => {
 
   function handleReturnPackage() {
     dispatch(buyerConfirmation(transactionDetail.id))
-    setRefresh(!refresh)
   }
 
   function handleConfirmAndDelete() {
     if (message === "have you received back your package?") {
       dispatch(sellerConfirmation(transactionDetail.id, transactionDetail.Product.id))
-      setRefresh(!refresh)
     }
     else if (message === "your deposit will be returned to you in 3 days") {
       dispatch(deleteUserMessage(transactionDetail.id))
-      setRefresh(!refresh)
     }
     else if (message === "your money will be sent to you in 3 days") {
-      dispatch(deletesSellerMessage(transactionDetail.id))
-      setRefresh(!refresh)
+      dispatch(deleteSellerMessage(transactionDetail.id))
     }
-    setRefresh(!refresh)
   }
 
   return (
