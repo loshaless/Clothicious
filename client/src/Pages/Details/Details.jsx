@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
-import { fetchProductDetail } from "../../Stores/action";
+import { fetchProductDetail, fetchDataUser } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
+import LoadingPage from '../LoadingPage/LoadingPage'
 
 import {
   Box,
@@ -22,45 +23,48 @@ const Details = () => {
   let { id } = useParams();
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [address, setAddress] = useState('')
-  const [phone, setPhone] = useState('')
-  const [sellerId, setSellerId] = useState('')
-  const [productId, setProductId] = useState('')
+  const dataUserLogin = useSelector(state => state.dataUser)
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
+    dispatch(fetchDataUser());
   }, [id]);
 
 
-  if (loading) return <div>Loading</div>
+  if (loading) return <LoadingPage />
   else {
 
-    axios({
-      url: 'http://localhost:3000/loggedUsers',
-      method: 'get',
-      headers: {
-        access_token: localStorage.getItem('access_token')
+    const createNewChatHandler = () => {
+      const data = {
+        "usernames": [productDetail.User.username],
+        "is_direct_chat": true
       }
-    })
-      .then(({ data }) => {
-        console.log(data, 'ini data user login dan axios')
-        setName(data.username)
-        setEmail(data.email)
-        setAddress(data.address)
-        setPhone(data.phone)
+
+      axios({
+        method: 'PUT',
+        url: 'https://api.chatengine.io/chats/',
+        headers: {
+          'Project-ID': 'a698d02f-96a3-4a7d-a444-69b215a8c666',
+          'User-Name': dataUserLogin.username,
+          'User-Secret': dataUserLogin.password.substring(0, 5)
+        },
+        data: data
       })
-      .catch(error => {
-        console.log(error, 'ini error axios data user login')
-      })
+        .then(response => {
+          console.log(response.data, 'response create newChat');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      history.push('/chats')
+    }
 
     function handleOnClickCheckout() {
       const sellerId = productDetail.UserId
       const productId = productDetail.id
       const date = new Date()
       const miliseconds = date.getMilliseconds()
-      const order_id = `order-user${name}-${miliseconds}`
+      const order_id = `order-user${dataUserLogin.username}-${miliseconds}`
       let parameter = {
         "transaction_details": {
           "order_id": order_id,
@@ -76,17 +80,35 @@ const Details = () => {
           "merchant_name": "Try Clothes"
         }],
         "customer_details": {
-          "username": name,
-          "email": email,
-          "phone": phone,
+          "username": dataUserLogin.username,
+          "email": dataUserLogin.email,
+          "phone": dataUserLogin.phone,
           "shipping_address": {
-            "first_name": name,
-            "email": email,
-            "phone": phone,
-            "address": address,
+            "first_name": dataUserLogin.username,
+            "email": dataUserLogin.email,
+            "phone": dataUserLogin.phone,
+            "address": dataUserLogin.address,
             "city": "Jakarta",
             "country_code": "IDN"
           }
+        },
+        "credit_card": {
+          "secure": true,
+          "bank": "bca",
+          "installment": {
+            "required": false,
+            "terms": {
+              "bni": [3, 6, 12],
+              "mandiri": [3, 6, 12],
+              "cimb": [3],
+              "bca": [3, 6, 12],
+              "offline": [6, 12]
+            }
+          },
+          "whitelist_bins": [
+            "48111111",
+            "41111111"
+          ]
         },
       };
 
@@ -103,32 +125,48 @@ const Details = () => {
         }
       })
         .then(snapResponse => {
-          console.log("Retrieved snap token:", snapResponse.data);
-          axios({
-            url: "http://localhost:3000/transactions",
-            method: "post",
-            data: {
-              'SellerId': sellerId,
-              'ProductId': productId,
-              'period': 4
-            },
-            headers: {
-              access_token: localStorage.getItem('access_token')
-            }
-          })
-            .then(response => {
-              history.push("/success");
-              console.log("response dari transactions:", response);
-            })
-            .catch(error => {
-              console.log('error dari transactions response', error)
-            })
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
-
+              axios({
+                url: "http://localhost:3000/transactions",
+                method: "post",
+                data: {
+                  'SellerId': sellerId,
+                  'ProductId': productId,
+                  'period': 4
+                },
+                headers: {
+                  access_token: localStorage.getItem('access_token')
+                }
+              })
+                .then(response => {
+                  console.log("response dari transactions:", response);
+                })
+                .catch(error => {
+                  console.log('error dari transactions response', error)
+                })
+              history.push("/success");
               console.log('success')
             },
             onPending: function (result) {
+              axios({
+                url: "http://localhost:3000/transactions",
+                method: "post",
+                data: {
+                  'SellerId': sellerId,
+                  'ProductId': productId,
+                  'period': 4
+                },
+                headers: {
+                  access_token: localStorage.getItem('access_token')
+                }
+              })
+                .then(response => {
+                  console.log("response dari transactions:", response);
+                })
+                .catch(error => {
+                  console.log('error dari transactions response', error)
+                })
               history.push("/success");
               console.log('pending')
             },
@@ -178,7 +216,7 @@ const Details = () => {
                 transition="200ms"
                 _hover={{ opacity: 1 }}
               >
-                <Image src={productDetail.frontImg} h="100%" w="100px" />
+                <Image src={productDetail.sideImg} h="100%" w="100px" />
               </Box>
               <Box
                 h="20vh"
@@ -191,7 +229,7 @@ const Details = () => {
               </Box>
             </VStack>
             <Box h="70vh" w="300px">
-              <Image src={productDetail.sideImg} h="100%" w="300px" />
+              <Image src={productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
 
@@ -227,23 +265,25 @@ const Details = () => {
                     IDR {productDetail.rentPrice + productDetail.guaranteePrice}
                   </Text>
                 </HStack>
-                <HStack d="flex" justifyContent="space-between" w="90%">
-                  <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Owner
+                {productDetail.UserId !== dataUserLogin.id &&
+                  <HStack d="flex" justifyContent="space-between" w="90%">
+                    <Text color="gray.500" fontSize="sm" fontWeight="bold">
+                      Owner
                   </Text>
-                  <Text color="black" fontSize="sm" fontWeight="bold">
-                    <Button
-                      size="xs"
-                      mr="2"
-                      colorScheme="black"
-                      bg="blue.100"
-                      color="blue.600"
-                    >
-                      Chat Owner
+                    <Text color="black" fontSize="sm" fontWeight="bold">
+                      <Button
+                        size="xs"
+                        mr="2"
+                        colorScheme="black"
+                        bg="blue.100"
+                        color="blue.600"
+                        onClick={() => createNewChatHandler()}
+                      >
+                        Chat Owner
                     </Button>
-                    {productDetail.User.username}
-                  </Text>
-                </HStack>
+                      {productDetail.User.username}
+                    </Text>
+                  </HStack>}
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Status
@@ -254,18 +294,18 @@ const Details = () => {
                     {productDetail.availability ? "Available to Rent" : "Rented"}
                   </Badge>
                 </HStack>
-
-                <Button
-                  colorScheme="black"
-                  bg="black"
-                  color="white"
-                  borderRadius="0"
-                  w="90%"
-                  onClick={handleOnClickCheckout}
-                  disabled={!productDetail.availability}
-                >
-                  Rent Now
-                </Button>
+                {productDetail.UserId !== dataUserLogin.id &&
+                  <Button
+                    colorScheme="black"
+                    bg="black"
+                    color="white"
+                    borderRadius="0"
+                    w="90%"
+                    onClick={handleOnClickCheckout}
+                    disabled={!productDetail.availability}
+                  >
+                    Rent Now
+                </Button>}
               </VStack>
             </Flex>
             <Flex w="60%" h="50vh" border="1px" flexDirection="column" mt="8">

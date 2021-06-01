@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-    cb(null,  file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 })
 
@@ -44,12 +44,12 @@ router.get('/products/:id', ProductController.getOneProduct)
 router.use(authentication)
 
 // router.post('/products', ProductController.create)
-router.post('/products', authorization, upload.array('images', 3), ProductController.create)
+router.post('/products', upload.array('productImages', 3), ProductController.create)
 
 router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
 router.get('/loggedUsers', UserController.loggedUser)
-router.put('/profil/:id', UserController.updateProfil)
-router.patch('/profil/:id', UserController.changePassword)
+router.put('/profil/', UserController.updateProfil)
+router.patch('/profil/', UserController.changePassword)
 
 router.put('/products/:id', authorization, ProductController.update)
 router.delete('/products/:id', authorization, ProductController.delete)

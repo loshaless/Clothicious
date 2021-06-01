@@ -1,17 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
+import { useHistory } from "react-router-dom"
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { fetchProducts } from '../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
 
 const NestedExploreProducts = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const products = useSelector(state => state.products)
-
+  const [filtered, setFiltered] = useState([])
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch]);
+  
+  useEffect(() => {
+    setFiltered(products.filter(p => p.category === 'man'))
+  },[products])
+
+  function handleOnClickCard(id) {
+    history.push("/details/" + id);
+  }
 
   const responsive = {
     desktop: {
@@ -48,7 +58,7 @@ const NestedExploreProducts = () => {
         </Text>
       </Flex>
       <Carousel responsive={responsive} showDots={true}>
-        {products.map((product) => (
+        {filtered.map((product) => (
           <Box
             h="65vh"
             w="245px"
@@ -57,6 +67,7 @@ const NestedExploreProducts = () => {
             cursor="pointer"
             ml="12"
             key={product.id}
+            onClick={() => handleOnClickCard(product.id)}
           >
             <Image
               src={product.frontImg}

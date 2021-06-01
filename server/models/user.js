@@ -75,27 +75,28 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     hooks: {
       beforeCreate: (instance, options) => {
-        instance.password = hash(instance.password)
+        const password = hash(instance.password)
+        const secret = password.substring(0, 5)
+        instance.password = password
         const data = {
-          "username" : instance.username,
-          "secret" : instance.password
+          "username": instance.username,
+          "secret": secret
         }
 
         axios({
           method: 'post',
           url: 'https://api.chatengine.io/users/',
-          headers: { 
-            'PRIVATE-KEY': '93a6043a-5d0f-4587-bbd7-957fe1885986'
+          headers: {
+            'PRIVATE-KEY': '0cf963af-f223-46a4-b33b-f279bec65c17'
           },
-          data : data
+          data: data
         })
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error, 'error chatengine di model user');
-        });
-
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error, 'error chatengine di model user');
+          });
 
       },
     },

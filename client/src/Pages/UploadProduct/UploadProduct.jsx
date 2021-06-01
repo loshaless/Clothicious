@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FormControl,
   FormLabel,
@@ -13,10 +14,86 @@ import {
   Stack,
   RadioGroup,
   Select,
+  Button
 } from "@chakra-ui/react";
 const UploadProduct = () => {
   const [lining, setLining] = useState(true);
+  const [arrOfFiles, setArrOfFiles] = useState([null, null, null]);
+  let [counter, setCounter] = useState(0);
   const [sheerLevel, setSheerLevel] = useState(true);
+  const [category, setCategory] = useState("");
+  const [input, setInput] = useState({
+    name: "",
+    description: "",
+    rentPrice: 0,
+    guaranteePrice: 0,
+    lining: false,
+    thickness: 0,
+    stretchability: 0,
+    category: "",
+    fit: "",
+    waistSize: 0,
+    bustSize: 0,
+    hipsSize: 0,
+    length: 0,
+    sheerLevel: "",
+  });
+
+  function onChangeFrontImg(event) {
+    if(arrOfFiles[0] === null)
+    setCounter((counter += 1));
+
+    let val = [...arrOfFiles];
+    val[0] = event.target.files[0];
+    setArrOfFiles(val);
+  }
+  function onChangeBackImg(event) {
+    if(arrOfFiles[1] === null)
+    setCounter((counter += 1));
+
+    let val = [...arrOfFiles];
+    val[1] = event.target.files[0];
+    setArrOfFiles(val);
+  }
+  function onChangeSideImg(event) {
+    if(arrOfFiles[2] === null)
+    setCounter((counter += 1));
+
+    let val = [...arrOfFiles];
+    val[2] = event.target.files[0];
+    setArrOfFiles(val);
+  }
+
+  const fd = new FormData();
+  useEffect(() => {
+    for (const key in input) {
+      fd.append(key, input[key]);
+    }
+
+    if (counter >= 3) {
+      arrOfFiles.forEach((v, i) => fd.append("productImages", v, v.name));
+      console.log(fd.getAll("productImages"), "this is from fd getAll");
+    }
+  }, [arrOfFiles, input]);
+
+  useEffect(() => {
+    setInput({ ...input, lining, sheerLevel, category });
+  }, [sheerLevel, lining, category]);
+
+  async function uploadProduct() {
+    try {
+      const { data } = await axios.post('http://localhost:3000/products', fd, {
+        headers: {
+          "content-type": 'multipart/form-data',
+          access_token: localStorage.access_token,
+        }
+      })
+      console.log(data)
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="8">
       <Flex justifyContent="center">
@@ -37,6 +114,7 @@ const UploadProduct = () => {
               type="text"
               placeholder="Product Name..."
               borderColor="mainColor.fontColor"
+              onChange={(e) => setInput({ ...input, name: e.target.value })}
             />
           </FormControl>
           <FormControl>
@@ -45,6 +123,9 @@ const UploadProduct = () => {
               type="text"
               placeholder="Description..."
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, description: e.target.value })
+              }
             />
           </FormControl>
           <FormControl>
@@ -53,6 +134,9 @@ const UploadProduct = () => {
               type="number"
               placeholder="Rent Price..."
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, rentPrice: e.target.value })
+              }
             />
           </FormControl>
           <FormControl>
@@ -61,23 +145,33 @@ const UploadProduct = () => {
               type="number"
               placeholder="Guarantee Price..."
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, guaranteePrice: e.target.value })
+              }
             />
           </FormControl>
-          <RadioGroup onChange={setSheerLevel}>
-            <Stack direction="row">
-              <Text>Lining</Text>
-              <Radio value={true}>Yes</Radio>
-              <Radio value={true}>No</Radio>
-            </Stack>
-          </RadioGroup>
+         <FormControl>
+            <FormLabel textAlign="center">Lining</FormLabel>
+            <Select
+              border="1px"
+              borderColor="mainColor.fontColor"
+              onChange={(e) => setLining(e.target.value)}
+            >
+              <option value="" defaultValue disabled>
+                Select Lining Type
+              </option>
+              <option value="true">With Lining</option>
+              <option value="false">Without Lining</option>
+            </Select>
+          </FormControl>
         </VStack>
         <VStack spacing={5}>
           <FormControl>
             <FormLabel textAlign="center">Front Image</FormLabel>
             <Input
               type="file"
-              placeholder="Product Name..."
               borderColor="mainColor.fontColor"
+              onChange={(e) => onChangeFrontImg(e)}
             />
           </FormControl>
           <FormControl>
@@ -86,6 +180,7 @@ const UploadProduct = () => {
               type="file"
               placeholder="Product Name..."
               borderColor="mainColor.fontColor"
+              onChange={(e) => onChangeBackImg(e)}
             />
           </FormControl>
           <FormControl>
@@ -94,28 +189,43 @@ const UploadProduct = () => {
               type="file"
               placeholder="Product Name..."
               borderColor="mainColor.fontColor"
+              onChange={(e) => onChangeSideImg(e)}
             />
           </FormControl>
           <FormControl>
             <FormLabel textAlign="center">Thickness</FormLabel>
             <Input
+              min="1"
+              max="5"
               type="number"
-              placeholder="1 to 100"
+              placeholder="1 to 5"
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, thickness: e.target.value })
+              }
             />
           </FormControl>
           <FormControl>
             <FormLabel textAlign="center">Strechability</FormLabel>
             <Input
               type="number"
-              placeholder="1 to 100"
+              min="1"
+              max="5"
+              placeholder="1 to 5"
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, stretchability: e.target.value })
+              }
             />
           </FormControl>
           <FormControl>
             <FormLabel textAlign="center">Category</FormLabel>
-            <Select border="1px" borderColor="mainColor.fontColor">
-              <option value="" selected disabled>
+            <Select
+              border="1px"
+              borderColor="mainColor.fontColor"
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="" defaultValue disabled>
                 Select Category
               </option>
               <option value="man">Man</option>
@@ -130,6 +240,7 @@ const UploadProduct = () => {
               type="text"
               placeholder="Size"
               borderColor="mainColor.fontColor"
+              onChange={(e) => setInput({ ...input, fit: e.target.value })}
             />
           </FormControl>
           <FormControl>
@@ -138,6 +249,9 @@ const UploadProduct = () => {
               type="number"
               placeholder="Size of the Waist"
               borderColor="mainColor.fontColor"
+              onChange={(e) =>
+                setInput({ ...input, waistSize: e.target.value })
+              }
             />
           </FormControl>
           <FormControl>
@@ -146,6 +260,7 @@ const UploadProduct = () => {
               type="number"
               placeholder="Size of the Hips"
               borderColor="mainColor.fontColor"
+              onChange={(e) => setInput({ ...input, hipsSize: e.target.value })}
             />
           </FormControl>
           <FormControl>
@@ -154,6 +269,7 @@ const UploadProduct = () => {
               type="number"
               placeholder="Size of the Bust"
               borderColor="mainColor.fontColor"
+              onChange={(e) => setInput({ ...input, bustSize: e.target.value })}
             />
           </FormControl>
           <FormControl>
@@ -162,17 +278,28 @@ const UploadProduct = () => {
               type="number"
               placeholder="Product Length"
               borderColor="mainColor.fontColor"
+              onChange={(e) => setInput({ ...input, length: e.target.value })}
             />
           </FormControl>
-          <RadioGroup onChange={setSheerLevel}>
-            <Stack direction="row">
-              <Text>Sheer Level</Text>
-              <Radio value={true}>Yes</Radio>
-              <Radio value={true}>No</Radio>
-            </Stack>
-          </RadioGroup>
+          <FormControl>
+            <FormLabel textAlign="center">Sheer Level</FormLabel>
+            <Select
+              border="1px"
+              borderColor="mainColor.fontColor"
+              onChange={(e) => setSheerLevel(e.target.value)}
+            >
+              <option value="" defaultValue disabled>
+                Select Sheer Level Type
+              </option>
+              <option value="true">With Sheer Level</option>
+              <option value="false">Without Sheer Level</option>
+            </Select>
+          </FormControl>
         </VStack>
       </HStack>
+      <Flex justifyContent="center" mt="3">
+        <Button w="35%" colorScheme="green" onClick={uploadProduct}>Upload</Button>
+      </Flex>
     </Box>
   );
 };
