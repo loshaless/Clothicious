@@ -72,6 +72,27 @@ export function fetchUserData() {
   }
 }
 
+export function editUser(input) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      await axios({
+        url: baseURL + '/profil/',
+        method: "PUT",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        },
+        data: input
+      })
+      console.log("di edit profil action redux");
+      fetchUserData()
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
 export function fetchProducts() {
   return async (dispatch) => {
     try {

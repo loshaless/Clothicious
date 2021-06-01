@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -12,7 +12,24 @@ import {
   FormLabel,
   Button,
 } from "@chakra-ui/react";
-const EditModal = ({ isOpen, onClose }) => {
+import { editUser } from '../../../Stores/action'
+import { useDispatch } from 'react-redux'
+
+const EditModal = ({ isOpen, onClose, user, setRefresh }) => {
+  const dispatch = useDispatch()
+  const [User, setUser] = useState(user)
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setUser({ ...User, [name]: value })
+  }
+
+  function handleSave() {
+    dispatch(editUser(User))
+    setRefresh(true)
+    onClose()
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -22,43 +39,47 @@ const EditModal = ({ isOpen, onClose }) => {
         <ModalBody>
           <FormControl>
             <FormLabel>Name</FormLabel>
-            <Input type="text" placeholder="Name..." />
+            <Input
+              type="text"
+              placeholder="Name..."
+              name="username"
+              value={User.username}
+              onChange={handleInputChange}
+            />
           </FormControl>
           <FormControl>
             <FormLabel>Phone</FormLabel>
-            <Input type="number" placeholder="Phone..." />
+            <Input
+              type="number"
+              placeholder="Phone..."
+              name="phone"
+              value={User.phone}
+              onChange={handleInputChange}
+            />
           </FormControl>
           <FormControl>
             <FormLabel>Address</FormLabel>
-            <Input type="text" placeholder="Address..." />
+            <Input
+              type="text"
+              placeholder="Address..."
+              name="address"
+              value={User.address}
+              onChange={handleInputChange}
+            />
           </FormControl>
           <FormControl>
             <FormLabel>Account Number</FormLabel>
-            <Input type="text" placeholder="Account Number" />
-          </FormControl>
-          <FormControl>
-            <FormLabel textAlign="center">Thickness</FormLabel>
             <Input
               type="number"
-              placeholder="1 to 100"
-              borderColor="mainColor.fontColor"
+              placeholder="Account Number"
+              name="bankAccount"
+              value={User.bankAccount}
+              onChange={handleInputChange}
             />
-          </FormControl>
-          <FormControl>
-            <FormLabel textAlign="center">Strechability</FormLabel>
-            <Input
-              type="number"
-              placeholder="1 to 100"
-              borderColor="mainColor.fontColor"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <Input type="password" placeholder="******" />
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="black" bg="black" color="white">
+          <Button colorScheme="black" bg="black" color="white" onClick={handleSave}>
             Save
           </Button>
         </ModalFooter>
