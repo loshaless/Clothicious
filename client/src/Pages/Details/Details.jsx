@@ -26,8 +26,7 @@ const Details = () => {
   const [email, setEmail] = useState('')
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
-  const [sellerId, setSellerId] = useState('')
-  const [productId, setProductId] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
@@ -45,15 +44,40 @@ const Details = () => {
       }
     })
       .then(({ data }) => {
-        console.log(data, 'ini data user login dan axios')
         setName(data.username)
         setEmail(data.email)
         setAddress(data.address)
         setPhone(data.phone)
+        setPassword(data.password)
       })
       .catch(error => {
         console.log(error, 'ini error axios data user login')
       })
+
+    const createNewChatHandler = () => {
+      const data = {
+        "usernames": [productDetail.User.username],
+        "is_direct_chat": true
+      }
+
+      axios({
+        method: 'PUT',
+        url: 'https://api.chatengine.io/chats/',
+        headers: {
+          'Project-ID': 'a698d02f-96a3-4a7d-a444-69b215a8c666',
+          'User-Name': name,
+          'User-Secret': password.substring(0, 5)
+        },
+        data: data
+      })
+        .then(response => {
+          console.log(response.data, 'response create newChat');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        history.push('/chats')
+    }
 
     function handleOnClickCheckout() {
       const sellerId = productDetail.UserId
@@ -103,7 +127,6 @@ const Details = () => {
         }
       })
         .then(snapResponse => {
-          console.log("Retrieved snap token:", snapResponse.data);
           axios({
             url: "http://localhost:3000/transactions",
             method: "post",
@@ -117,7 +140,6 @@ const Details = () => {
             }
           })
             .then(response => {
-              history.push("/success");
               console.log("response dari transactions:", response);
             })
             .catch(error => {
@@ -125,7 +147,7 @@ const Details = () => {
             })
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
-
+              history.push("/success");
               console.log('success')
             },
             onPending: function (result) {
@@ -238,6 +260,7 @@ const Details = () => {
                       colorScheme="black"
                       bg="blue.100"
                       color="blue.600"
+                      onClick={() => createNewChatHandler()}
                     >
                       Chat Owner
                     </Button>
