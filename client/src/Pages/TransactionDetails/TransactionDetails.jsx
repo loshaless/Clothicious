@@ -39,7 +39,7 @@ const TransactionDetails = () => {
   useEffect(() => {
     dispatch(fetchTransactionDetail(id))
     dispatch(fetchUserData())
-  }, [dispatch, refresh]);
+  }, [dispatch]);
 
   if (!transactionDetail.Product) {
     return <LoadingPage />
