@@ -1,7 +1,7 @@
 const axios = require('axios');
 let baseURL = 'http://localhost:3000'
 
-export function register(data) {
+export function register(user) {
   return async (dispatch) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
@@ -9,10 +9,10 @@ export function register(data) {
         url: baseURL + '/register',
         method: "POST",
         data: {
-          username: data.name,
-          email: data.email,
-          password: data.password,
-          phone: data.phone,
+          username: user.name,
+          email: user.email,
+          password: user.password,
+          phone: user.phone,
         }
       })
       console.log(data, "ini register");
@@ -77,58 +77,9 @@ export function fetchProductDetail(id) {
         url: baseURL + '/products/' + id,
         method: "GET"
       })
-      dispatch({ type: 'FETCH_PRODUCT_DETAIL', payload: data })
-    }
-    catch (error) {
-      console.log(error.response);
-    }
-  }
-}
+      // dispatch({ type: 'SET_LOADING', payload: false })
 
-export function payMidtrans(parameter) {
-  return async (dispatch) => {
-    try {
-      const data = await axios({
-          url: "http://localhost:3000/getTokenMidtrans",
-          method: "POST",
-          data: {
-            parameter
-          }
-        })
-          .then(snapResponse => {
-            console.log("Retrieved snap token:", snapResponse.data);
-            window.snap.pay(snapResponse.data, {
-              onSuccess: function (result) {
-                console.log('success')
-                axios({
-                  url: "http://localhost:3000/transactions",
-                  method: "post",
-                  data: {
-                    'SellerId': 1,
-                    'ProductId': 2,
-                    'period': 3
-                  }
-                })
-                  .then(response => {
-                    // history.push("/success");
-                    console.log("response dari transactions:", response);
-                  })
-                  .catch(error => {
-                    console.log('error dari transactions response', error)
-                  })
-              },
-              onPending: function (result) {
-                // history.push("/success");
-                console.log('pending')
-              },
-              onError: function (result) {
-                console.log('error')
-              },
-              onClose: function () {
-                console.log('di close')
-              }
-            })
-          })
+      return dispatch({ type: 'FETCH_PRODUCT_DETAIL', payload: data })
     }
     catch (error) {
       console.log(error.response);

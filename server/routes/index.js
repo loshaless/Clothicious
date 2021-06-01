@@ -13,9 +13,10 @@ router.post('/login', UserController.login)
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
 
-router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
 
 router.use(authentication)
+router.post('/getTokenMidtrans', MidtransController.runDummy) // dummy midtrans
+router.get('/loggedUsers', UserController.loggedUser)
 router.put('/profil/:id', UserController.updateProfil)
 router.patch('/profil/:id', UserController.changePassword)
 router.post('/products', ProductController.create)
