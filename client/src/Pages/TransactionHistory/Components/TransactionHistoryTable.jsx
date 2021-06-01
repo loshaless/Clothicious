@@ -9,7 +9,6 @@ import {
 import TransactionHistoryTableData from './TransactionHistoryTableData'
 
 const TransactionHistoryTable = ({ transactions }) => {
-  console.log(transactions);
   return (
     <Table variant="simple">
       <Thead>

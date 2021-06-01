@@ -9,7 +9,6 @@ const LoadingPage = () => {
   }
   return (
     <>
-      <Navbar />
       <Flex
         minH="90vh"
         bg="mainColor.bg"
