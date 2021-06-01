@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
-import { fetchProductDetail } from "../../Stores/action";
+import { fetchProductDetail, fetchDataUser } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
@@ -23,45 +23,48 @@ const Details = () => {
   let { id } = useParams();
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [address, setAddress] = useState('')
-  const [phone, setPhone] = useState('')
-  const [sellerId, setSellerId] = useState('')
-  const [productId, setProductId] = useState('')
+  const dataUserLogin = useSelector(state => state.dataUser)
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
+    dispatch(fetchDataUser());
   }, [id]);
 
 
   if (loading) return <LoadingPage />
   else {
 
-    axios({
-      url: 'http://localhost:3000/loggedUsers',
-      method: 'get',
-      headers: {
-        access_token: localStorage.getItem('access_token')
+    const createNewChatHandler = () => {
+      const data = {
+        "usernames": [productDetail.User.username],
+        "is_direct_chat": true
       }
-    })
-      .then(({ data }) => {
-        console.log(data, 'ini data user login dan axios')
-        setName(data.username)
-        setEmail(data.email)
-        setAddress(data.address)
-        setPhone(data.phone)
+
+      axios({
+        method: 'PUT',
+        url: 'https://api.chatengine.io/chats/',
+        headers: {
+          'Project-ID': 'a698d02f-96a3-4a7d-a444-69b215a8c666',
+          'User-Name': dataUserLogin.username,
+          'User-Secret': dataUserLogin.password.substring(0, 5)
+        },
+        data: data
       })
-      .catch(error => {
-        console.log(error, 'ini error axios data user login')
-      })
+        .then(response => {
+          console.log(response.data, 'response create newChat');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        history.push('/chats')
+    }
 
     function handleOnClickCheckout() {
       const sellerId = productDetail.UserId
       const productId = productDetail.id
       const date = new Date()
       const miliseconds = date.getMilliseconds()
-      const order_id = `order-user${name}-${miliseconds}`
+      const order_id = `order-user${dataUserLogin.username}-${miliseconds}`
       let parameter = {
         "transaction_details": {
           "order_id": order_id,
@@ -77,14 +80,14 @@ const Details = () => {
           "merchant_name": "Try Clothes"
         }],
         "customer_details": {
-          "username": name,
-          "email": email,
-          "phone": phone,
+          "username": dataUserLogin.username,
+          "email": dataUserLogin.email,
+          "phone": dataUserLogin.phone,
           "shipping_address": {
-            "first_name": name,
-            "email": email,
-            "phone": phone,
-            "address": address,
+            "first_name": dataUserLogin.username,
+            "email": dataUserLogin.email,
+            "phone": dataUserLogin.phone,
+            "address": dataUserLogin.address,
             "city": "Jakarta",
             "country_code": "IDN"
           }
@@ -104,7 +107,6 @@ const Details = () => {
         }
       })
         .then(snapResponse => {
-          console.log("Retrieved snap token:", snapResponse.data);
           axios({
             url: "http://localhost:3000/transactions",
             method: "post",
@@ -126,7 +128,6 @@ const Details = () => {
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
               history.push("/success");
-
               console.log('success')
             },
             onPending: function (result) {
@@ -227,23 +228,25 @@ const Details = () => {
                     IDR {productDetail.rentPrice + productDetail.guaranteePrice}
                   </Text>
                 </HStack>
+                {productDetail.UserId !== dataUserLogin.id &&
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Owner
                   </Text>
-                  <Text color="black" fontSize="sm" fontWeight="bold">
+                   <Text color="black" fontSize="sm" fontWeight="bold">
                     <Button
                       size="xs"
                       mr="2"
                       colorScheme="black"
                       bg="blue.100"
                       color="blue.600"
+                      onClick={() => createNewChatHandler()}
                     >
                       Chat Owner
                     </Button>
                     {productDetail.User.username}
                   </Text>
-                </HStack>
+                </HStack>}
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Status
@@ -254,7 +257,7 @@ const Details = () => {
                     {productDetail.availability ? "Available to Rent" : "Rented"}
                   </Badge>
                 </HStack>
-
+                {productDetail.UserId !== dataUserLogin.id &&
                 <Button
                   colorScheme="black"
                   bg="black"
@@ -265,7 +268,7 @@ const Details = () => {
                   disabled={!productDetail.availability}
                 >
                   Rent Now
-                </Button>
+                </Button>}
               </VStack>
             </Flex>
             <Flex w="60%" h="50vh" border="1px" flexDirection="column" mt="8">

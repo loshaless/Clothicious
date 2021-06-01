@@ -7,6 +7,8 @@ const initialState = {
   user: {},
   isLoading: true,
   isLogin: false,
+  listUserChatEngine: [],
+  dataUser: {}
 }
 
 function reducer(state = initialState, action) {
@@ -19,6 +21,10 @@ function reducer(state = initialState, action) {
       return { ...state, transactions: action.payload }
     case 'FETCH_TRANSACTION_DETAIL':
       return { ...state, transactionDetail: action.payload }
+    case 'FETCH_USER_CHATENGINEIO':
+      return { ...state, listUserChatEngine: action.payload }
+    case 'FETCH_DATA_USER':
+      return { ...state, dataUser: action.payload }
     case 'FETCH_USER':
       return { ...state, user: action.payload }
     case 'FETCH_MESSAGES':
