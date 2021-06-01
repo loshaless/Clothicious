@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { fetchProducts } from "../../Stores/action"
+import { useDispatch, useSelector } from "react-redux"
 import { Box, Text, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 const LandingPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const products = useSelector(state => state.products);
   const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
   const responsive = {
     desktop: {
@@ -26,6 +30,15 @@ const LandingPage = () => {
   function handleOnClickCard(id) {
     history.push("/details/" + id);
   }
+
+  function handleOnClickCTA() {
+    history.push('/browse')
+  }
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+
   return (
     <Box minH="100vh" bg="mainColor.bg">
       <Flex alignItems="center" justifyContent="space-evenly">
@@ -53,6 +66,7 @@ const LandingPage = () => {
             borderRadius={null}
             color="black"
             mt="8"
+            onClick={handleOnClickCTA}
           >
             Get Started
           </Button>
@@ -141,7 +155,7 @@ const LandingPage = () => {
           Pick Your Style
         </Text>
         <Carousel responsive={responsive} showDots={true}>
-          {colIdx.map((i) => (
+          {products.map((p) => (
             <Box
               d="flex"
               flexDirection="column"
@@ -150,12 +164,12 @@ const LandingPage = () => {
               h="100%"
               pb="5"
               ml="8"
-              onClick={() => handleOnClickCard(i)}
+              onClick={() => handleOnClickCard(p.id)}
               cursor="pointer"
-              key={i}
+              key={p.id}
             >
               <Image
-                src="https://images.unsplash.com/photo-1593075979461-e0116242e814?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+                src={p.frontImg}
                 h="90%"
                 w="250px"
               />
@@ -166,10 +180,10 @@ const LandingPage = () => {
                 textTransform="uppercase"
                 mt="2"
               >
-                Clothes {i}
+                {p.name}
               </Text>
               <Text textAlign="center" color="mainColor.fontColor" mt="2">
-                Author : Someone
+                Author : {p.User.username}
               </Text>
             </Box>
           ))}

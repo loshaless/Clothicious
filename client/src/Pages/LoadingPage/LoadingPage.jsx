@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../../Components/Navbar";
 import { useHistory } from "react-router-dom";
 import { Flex, Text, Button, Stack } from "@chakra-ui/react";
 const LoadingPage = () => {
@@ -9,7 +8,6 @@ const LoadingPage = () => {
   }
   return (
     <>
-      <Navbar />
       <Flex
         minH="90vh"
         bg="mainColor.bg"

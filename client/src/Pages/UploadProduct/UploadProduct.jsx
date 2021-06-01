@@ -76,7 +76,6 @@ const UploadProduct = () => {
   }, [sheerLevel, lining, category]);
   return (
     <Box minH="90vh" bg="mainColor.bg" pb="8">
-      <Text>{JSON.stringify(arrOfFiles)}</Text>
       <Flex justifyContent="center">
         <Text
           fontWeight="bold"
