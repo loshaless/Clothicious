@@ -12,7 +12,7 @@ function CurrentlyRentingCard({ transaction }) {
   const history = useHistory();
 
   function handleOnClickDetails() {
-    history.push(`details-transaction/${transaction.Product.id}`);
+    history.push(`details-transaction/${transaction.id}`);
   }
 
   return (
@@ -34,7 +34,7 @@ function CurrentlyRentingCard({ transaction }) {
       <Badge colorScheme={transaction.period === null ? "green" : "purple"} textAlign="center">
         {transaction.period === null ? "Confirmation" : `${transaction.period} Days`}
       </Badge>
-      <Button borderRadius={null}>Details</Button>
+      <Button borderRadius={null} onClick={handleOnClickDetails}>Details</Button>
     </SimpleGrid>
   )
 }

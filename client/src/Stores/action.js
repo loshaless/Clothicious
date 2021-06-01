@@ -113,7 +113,7 @@ export function editProduct(input) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
-      const { data } = await axios({
+      await axios({
         url: baseURL + '/products/' + input.id,
         method: "PUT",
         headers: {
@@ -134,7 +134,7 @@ export function deleteProduct(id) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
-      const { data } = await axios({
+      await axios({
         url: baseURL + '/products/' + id,
         method: "DELETE",
         headers: {
@@ -169,7 +169,7 @@ export function fetchProductDetail(id) {
   }
 }
 
-export function fetchTransactions(id) {
+export function fetchTransactions() {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -189,4 +189,59 @@ export function fetchTransactions(id) {
       console.log(error.response);
     }
   }
+}
+
+export function fetchTransactionDetail(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+
+      const { data } = await axios({
+        url: baseURL + '/transactions/' + id,
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'FETCH_TRANSACTION_DETAIL', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function fetchMessages() {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/messages/',
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'FETCH_MESSAGES', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function rupiah(value) {
+  const sValue = String(value)
+  let result = ''
+  let jumlah = 0
+  for (let i = sValue.length - 1; i >= 0; i--) {
+    jumlah++
+    result = sValue[i] + result
+    if (jumlah % 3 === 0 && jumlah !== 0) {
+      result = '.' + result
+    }
+  }
+  return `Rp${result}`
 }
