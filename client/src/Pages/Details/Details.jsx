@@ -3,8 +3,7 @@ import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
 import { fetchProductDetail } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-
+import axios from 'axios'
 import {
   Box,
   Flex,
@@ -22,122 +21,72 @@ const Details = () => {
   let { id } = useParams();
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [sellerId, setSellerId] = useState("");
-  const [productId, setProductId] = useState("");
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
+  const [sellerId, setSellerId] = useState('')
+  const [productId, setProductId] = useState('')
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
   }, [id]);
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <div>Loading</div>
   else {
-    axios({
-      url: "http://localhost:3000/loggedUsers",
-      method: "get",
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
-    })
-      .then(({ data }) => {
-        console.log(data, "ini data user login dan axios");
-        setName(data.username);
-        setEmail(data.email);
-        setAddress(data.address);
-        setPhone(data.phone);
-      })
-      .catch((error) => {
-        console.log(error, "ini error axios data user login");
-      });
-
-    function handleOnClickCheckout() {
-      const sellerId = productDetail.UserId;
-      const productId = productDetail.id;
-      const date = new Date();
-      const miliseconds = date.getMilliseconds();
-      const order_id = `order-user${name}-${miliseconds}`;
-      let parameter = {
-        transaction_details: {
-          order_id: order_id,
-          gross_amount: productDetail.rentPrice + productDetail.guaranteePrice,
-        },
-        item_details: [
-          {
-            id: productDetail.id,
-            price: productDetail.rentPrice + productDetail.guaranteePrice,
-            quantity: 1,
-            name: productDetail.name,
-            brand: `Try Clothes - ${productDetail.User.username}`,
-            category: productDetail.category,
-            merchant_name: "Try Clothes",
-          },
-        ],
-        customer_details: {
-          username: name,
-          email: email,
-          phone: phone,
-          shipping_address: {
-            first_name: name,
-            email: email,
-            phone: phone,
-            address: address,
-            city: "Jakarta",
-            country_code: "IDN",
-          },
-        },
-      };
-
       axios({
         url: "http://localhost:3000/getTokenMidtrans",
         method: "POST",
         data: {
-          parameter,
+          parameter
         },
         headers: {
-          access_token: localStorage.getItem("access_token"),
-        },
-      }).then((snapResponse) => {
-        console.log("Retrieved snap token:", snapResponse.data);
-        axios({
-          url: "http://localhost:3000/transactions",
-          method: "post",
-          data: {
-            SellerId: sellerId,
-            ProductId: productId,
-            period: 4,
-          },
-          headers: {
-            access_token: localStorage.getItem("access_token"),
-          },
-        })
-          .then((response) => {
-            history.push("/success");
-            console.log("response dari transactions:", response);
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(snapResponse => {
+          console.log("Retrieved snap token:", snapResponse.data);
+          axios({
+            url: "http://localhost:3000/transactions",
+            method: "post",
+            data: {
+              'SellerId': sellerId,
+              'ProductId': productId,
+              'period': 4
+            },
+            headers: {
+              access_token: localStorage.getItem('access_token')
+            }
           })
-          .catch((error) => {
-            console.log("error dari transactions response", error);
-          });
-        window.snap.pay(snapResponse.data, {
-          onSuccess: function (result) {
-            console.log("success");
-          },
-          onPending: function (result) {
-            history.push("/success");
-            console.log("pending");
-          },
-          onError: function (result) {
-            console.log("error");
-          },
-          onClose: function () {
-            console.log("di close");
-          },
-        });
-      });
-    }
+            .then(response => {
+              history.push("/success");
+              console.log("response dari transactions:", response);
+            })
+            .catch(error => {
+              console.log('error dari transactions response', error)
+            })
+          window.snap.pay(snapResponse.data, {
+            onSuccess: function (result) {
 
+              console.log('success')
+            },
+            onPending: function (result) {
+              history.push("/success");
+              console.log('pending')
+            },
+            onError: function (result) {
+              console.log('error')
+            },
+            onClose: function () {
+              console.log('di close')
+            }
+          })
+        })
+
+
+    }
+  
     return (
       <Box minH="90vh" bg="mainColor.bg" pb="16">
         <Flex>
@@ -245,9 +194,8 @@ const Details = () => {
                   <Badge
                     colorScheme={productDetail.availability ? "green" : "red"}
                   >
-                    {productDetail.availability
-                      ? "Available to Rent"
-                      : "Rented"}
+
+                    {productDetail.availability ? "Available to Rent" : "Rented"}
                   </Badge>
                 </HStack>
 
@@ -334,11 +282,16 @@ const Details = () => {
           <Text fontWeight="bold" color="gray.500">
             Notes & Description
           </Text>
-          <Text>{productDetail.description}</Text>
+
+          <Text>
+            {productDetail.description}
+          </Text>
+
         </Box>
       </Box>
     );
   }
+
 };
 
 export default Details;

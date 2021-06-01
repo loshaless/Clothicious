@@ -52,6 +52,26 @@ export function login(data) {
   }
 }
 
+export function fetchUserData() {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/loggedUsers',
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'FETCH_USER', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
 export function fetchProducts() {
   return async (dispatch) => {
     try {
@@ -61,6 +81,67 @@ export function fetchProducts() {
         method: "GET"
       })
       dispatch({ type: 'FETCH_PRODUCTS', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function fetchProductsByLoggedUser() {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/loggedUsers',
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      dispatch({ type: 'FETCH_PRODUCTS', payload: data.Products })
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function editProduct(input) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/products/' + input.id,
+        method: "PUT",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        },
+        data: input
+      })
+      fetchProductsByLoggedUser()
+      dispatch({ type: 'SET_LOADING', payload: false })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function deleteProduct(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+      const { data } = await axios({
+        url: baseURL + '/products/' + id,
+        method: "DELETE",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      fetchProductsByLoggedUser()
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -80,6 +161,28 @@ export function fetchProductDetail(id) {
       // dispatch({ type: 'SET_LOADING', payload: false })
 
       return dispatch({ type: 'FETCH_PRODUCT_DETAIL', payload: data })
+    }
+    catch (error) {
+      console.log(error.response);
+    }
+  }
+}
+
+export function fetchTransactions(id) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true })
+
+      const { data } = await axios({
+        url: baseURL + '/transactions/',
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+      console.log(data);
+      dispatch({ type: 'FETCH_TRANSACTIONS', payload: data })
+      dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
       console.log(error.response);
