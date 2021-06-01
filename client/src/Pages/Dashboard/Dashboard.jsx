@@ -79,7 +79,7 @@ const Dashboard = () => {
               fontWeight="bold"
               letterSpacing="widest"
             >
-              User Dashboard
+              My Profile
             </Text>
             <Tooltip label="Settings">
               <Flex alignSelf="end" cursor="pointer" ml="2" onClick={onOpen}>
@@ -156,7 +156,7 @@ const Dashboard = () => {
               flexDirection="column"
             >
               <Text fontWeight="bold" letterSpacing="widest" fontSize="lg">
-                My Rented Products
+                My Products
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
                 {transactions.rentedProducts.map(transaction => {
@@ -173,7 +173,7 @@ const Dashboard = () => {
               flexDirection="column"
             >
               <Text fontWeight="bold" letterSpacing="widest" fontSize="lg">
-                Currently Renting
+                What I Rent
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
                 {transactions.currentlyRenting.map(transaction => {

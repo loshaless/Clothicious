@@ -29,7 +29,7 @@ const SuccessPage = () => {
         >
           Transaction Success
         </Text>
-        <Text>Kata kata here</Text>
+        <Text>We are processing you order...</Text>
         <Button
           w="100%"
           borderRadius="0"

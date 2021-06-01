@@ -56,7 +56,7 @@ const Details = () => {
         .catch(error => {
           console.log(error);
         });
-        history.push('/chats')
+      history.push('/chats')
     }
 
     function handleOnClickCheckout() {
@@ -92,6 +92,24 @@ const Details = () => {
             "country_code": "IDN"
           }
         },
+        "credit_card": {
+          "secure": true,
+          "bank": "bca",
+          "installment": {
+            "required": false,
+            "terms": {
+              "bni": [3, 6, 12],
+              "mandiri": [3, 6, 12],
+              "cimb": [3],
+              "bca": [3, 6, 12],
+              "offline": [6, 12]
+            }
+          },
+          "whitelist_bins": [
+            "48111111",
+            "41111111"
+          ]
+        },
       };
 
 
@@ -107,30 +125,49 @@ const Details = () => {
         }
       })
         .then(snapResponse => {
-          axios({
-            url: "http://localhost:3000/transactions",
-            method: "post",
-            data: {
-              'SellerId': sellerId,
-              'ProductId': productId,
-              'period': 4
-            },
-            headers: {
-              access_token: localStorage.getItem('access_token')
-            }
-          })
-            .then(response => {
-              console.log("response dari transactions:", response);
-            })
-            .catch(error => {
-              console.log('error dari transactions response', error)
-            })
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
+              axios({
+                url: "http://localhost:3000/transactions",
+                method: "post",
+                data: {
+                  'SellerId': sellerId,
+                  'ProductId': productId,
+                  'period': 4
+                },
+                headers: {
+                  access_token: localStorage.getItem('access_token')
+                }
+              })
+                .then(response => {
+                  console.log("response dari transactions:", response);
+                })
+                .catch(error => {
+                  console.log('error dari transactions response', error)
+                })
               history.push("/success");
               console.log('success')
             },
             onPending: function (result) {
+              axios({
+                url: "http://localhost:3000/transactions",
+                method: "post",
+                data: {
+                  'SellerId': sellerId,
+                  'ProductId': productId,
+                  'period': 4
+                },
+                headers: {
+                  access_token: localStorage.getItem('access_token')
+                }
+              })
+                .then(response => {
+                  console.log("response dari transactions:", response);
+                })
+                .catch(error => {
+                  console.log('error dari transactions response', error)
+                })
+              history.push("/success");
               console.log('pending')
             },
             onError: function (result) {
@@ -214,7 +251,7 @@ const Details = () => {
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Deposit Price
+                    Deposit
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
                     IDR {productDetail.guaranteePrice}
@@ -229,24 +266,24 @@ const Details = () => {
                   </Text>
                 </HStack>
                 {productDetail.UserId !== dataUserLogin.id &&
-                <HStack d="flex" justifyContent="space-between" w="90%">
-                  <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Owner
+                  <HStack d="flex" justifyContent="space-between" w="90%">
+                    <Text color="gray.500" fontSize="sm" fontWeight="bold">
+                      Owner
                   </Text>
-                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    <Button
-                      size="xs"
-                      mr="2"
-                      colorScheme="black"
-                      bg="blue.100"
-                      color="blue.600"
-                      onClick={() => createNewChatHandler()}
-                    >
-                      Chat Owner
+                    <Text color="black" fontSize="sm" fontWeight="bold">
+                      <Button
+                        size="xs"
+                        mr="2"
+                        colorScheme="black"
+                        bg="blue.100"
+                        color="blue.600"
+                        onClick={() => createNewChatHandler()}
+                      >
+                        Chat Owner
                     </Button>
-                    {productDetail.User.username}
-                  </Text>
-                </HStack>}
+                      {productDetail.User.username}
+                    </Text>
+                  </HStack>}
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Status
@@ -258,16 +295,16 @@ const Details = () => {
                   </Badge>
                 </HStack>
                 {productDetail.UserId !== dataUserLogin.id &&
-                <Button
-                  colorScheme="black"
-                  bg="black"
-                  color="white"
-                  borderRadius="0"
-                  w="90%"
-                  onClick={handleOnClickCheckout}
-                  disabled={!productDetail.availability}
-                >
-                  Rent Now
+                  <Button
+                    colorScheme="black"
+                    bg="black"
+                    color="white"
+                    borderRadius="0"
+                    w="90%"
+                    onClick={handleOnClickCheckout}
+                    disabled={!productDetail.availability}
+                  >
+                    Rent Now
                 </Button>}
               </VStack>
             </Flex>
