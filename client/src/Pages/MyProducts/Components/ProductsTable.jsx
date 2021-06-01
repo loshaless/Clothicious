@@ -28,7 +28,7 @@ const ProductsTable = () => {
     }
   }, [dispatch, refresh]);
 
-  if (!product) {
+  if (!products) {
     return (
       <Stack spacing="5" w="100%">
         <Skeleton h="33vh" w="100%" />
