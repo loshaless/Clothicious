@@ -1,5 +1,5 @@
 'use strict';
-const Productsa = require('./dummydata/productscopy.json')
+const Productsa = require('./dummydata/products.json')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
