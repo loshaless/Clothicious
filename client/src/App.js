@@ -14,64 +14,80 @@ import TransactionHistory from "./Pages/TransactionHistory/TransactionHistory.js
 import UploadProduct from "./Pages/UploadProduct/UploadProduct.jsx"
 import NoMatch from "./Pages/NoMatch/NoMatch.jsx"
 import Navbar from "./Components/Navbar.jsx"
+import LoadingPage from './Pages/LoadingPage/LoadingPage'
 import {
   BrowserRouter as Router,
   Switch,
   Link,
   Route
 } from "react-router-dom"
+import { GuardProvider, GuardedRoute } from 'react-router-guards';
+
+const requireLogin = (to, from, next) => {
+  if (to.meta.auth) {
+    if (localStorage.getItem('access_token')) {
+      next();
+    }
+    next.redirect('/login');
+  } else {
+    next();
+  }
+};
+
 function App() {
   return (
     <>
       <Router>
-        <Navbar Link={Link} />
-        <Switch>
-          <Route exact path="/">
-            <LandingPage />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/chats">
-            <Chat />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/products">
-            <MyProducts />
-          </Route>
-          <Route path="/details-transaction/:id">
-            <TransactionDetails />
-          </Route>
-          <Route exact path="/browse">
-            <ExploreProducts />
-          </Route>
-          <Route path="/browse/woman">
-            <WomanProducts />
-          </Route>
-          <Route path="/browse/man">
-            <ManProducts />
-          </Route>
-          <Route path="/details/:id">
-            <Details />
-          </Route>
-          <Route path="/success">
-            <SuccessPage />
-          </Route>
-          <Route path="/history-transaction">
-            <TransactionHistory />
-          </Route>
-          <Route path="/upload">
-            <UploadProduct />
-          </Route>
-          <Route path="*">
-            <NoMatch />
-          </Route>
-        </Switch>
+        <GuardProvider guards={[requireLogin]} loading={LoadingPage} error={NoMatch}>
+          <Navbar Link={Link} />
+          <Switch>
+            <Route exact path="/">
+              <LandingPage />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <GuardedRoute path="/chats" meta={{ auth: true }}>
+              <Chat />
+            </GuardedRoute>
+            <GuardedRoute path="/dashboard" meta={{ auth: true }}>
+              <Dashboard />
+            </GuardedRoute>
+            <GuardedRoute path="/products" meta={{ auth: true }}>
+              <MyProducts />
+            </GuardedRoute>
+            <GuardedRoute path="/details-transaction/:id" meta={{ auth: true }}>
+              <TransactionDetails />
+            </GuardedRoute>
+            <Route exact path="/browse">
+              <ExploreProducts />
+            </Route>
+            <Route path="/browse/woman">
+              <WomanProducts />
+            </Route>
+            <Route path="/browse/man">
+              <ManProducts />
+            </Route>
+            <GuardedRoute path="/details/:id" meta={{ auth: true }}>
+              <Details />
+            </GuardedRoute>
+            <GuardedRoute path="/success" meta={{ auth: true }}>
+              <SuccessPage />
+            </GuardedRoute>
+            <GuardedRoute path="/history-transaction" meta={{ auth: true }}>
+              <TransactionHistory />
+            </GuardedRoute>
+            <GuardedRoute path="/upload" meta={{ auth: true }}>
+              <UploadProduct />
+            </GuardedRoute>
+            <Route path="*">
+              <NoMatch />
+            </Route>
+          </Switch>
+        </GuardProvider>
       </Router>
     </>
   );
