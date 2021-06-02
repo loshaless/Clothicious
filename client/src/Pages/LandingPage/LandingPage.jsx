@@ -46,6 +46,7 @@ const LandingPage = () => {
   if(isLoading) return <LoadingPage />
 
   return (
+    <>
     <Box minH="100vh" bg="mainColor.bg">
       <Flex alignItems="center" justifyContent="space-evenly">
         <Flex flexDirection="column">
@@ -269,6 +270,7 @@ const LandingPage = () => {
         </SimpleGrid>
       </Flex>
     </Box>
+    </>
   );
 };
 

@@ -307,7 +307,7 @@ const UploadProduct = () => {
         </VStack>
       </HStack>
       <Flex justifyContent="center" mt="3">
-        <Button w="35%" colorScheme="green" onClick={uploadProduct}>Upload</Button>
+        <Button w="35%" colorScheme="black" bg="green.200" color="green500" onClick={uploadProduct}>Upload</Button>
       </Flex>
     </Box>
     <ProgressModal isOpen={isOpen} onClose={onClose} percentage={percentage} />

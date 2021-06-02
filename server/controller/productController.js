@@ -50,7 +50,6 @@ class ProductController {
         })
       }
       let UserId = req.loggedUser.id
-      console.log(UserId)
       let availability = true
       let { name, rentPrice, guaranteePrice, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, category, description } = req.body
       let frontImg = ''
@@ -68,7 +67,6 @@ class ProductController {
         images.push(newPath.res)
       }
 
-      console.log(images)
         frontImg = images[0]
         backImg = images[1]
         sideImg = images[2]

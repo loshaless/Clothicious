@@ -1,6 +1,5 @@
 const axios = require('axios');
 let baseURL = 'http://localhost:3000'
-
 export function register(user) {
   return async (dispatch) => {
     dispatch({ type: 'SET_LOADING', payload: true })
@@ -15,7 +14,6 @@ export function register(user) {
           phone: user.phone,
         }
       })
-      console.log(data, "ini register");
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -24,7 +22,7 @@ export function register(user) {
   }
 }
 
-export function login(data) {
+export function login(data, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -40,6 +38,13 @@ export function login(data) {
         localStorage.setItem('access_token', user.data.access_token)
         dispatch({ type: 'SET_LOADING', payload: false })
         dispatch({ type: 'SET_LOGIN', payload: true })
+        toast({
+          title: "Login Success.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          variant: "left-accent"
+        })
       }
       else {
         console.log("login gagal di action login");
@@ -152,7 +157,7 @@ export function editProduct(input) {
   }
 }
 
-export function deleteProduct(id) {
+export function deleteProduct(id, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -165,6 +170,13 @@ export function deleteProduct(id) {
       })
       dispatch(fetchProductsByLoggedUser())
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Delete Success.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+    })
     }
     catch (error) {
       console.log(error.response);
