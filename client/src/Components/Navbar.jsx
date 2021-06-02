@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { useHistory } from "react-router-dom";
+import LogoutAlert from "./LogoutAlert"
 import { Flex, Spacer, Button, Text, useDisclosure } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from 'react-redux'
-
-
 const Navbar = ({ Link }) => {
-  const history = useHistory();
   const dispatch = useDispatch()
   const sideBarRef = React.useRef();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { 
+    isOpen : isOpenLogoutAlert,
+    onClose : onCloseLogoutAlert,
+    onOpen : onOpenLogoutAlert
+   } = useDisclosure();
   const isLogin = useSelector(state => state.isLogin)
 
   useEffect(() => {
@@ -20,9 +22,7 @@ const Navbar = ({ Link }) => {
   }, [dispatch]);
 
   function handleLogout() {
-    dispatch({ type: 'SET_LOGIN', payload: false })
-    localStorage.removeItem('access_token')
-    history.push("/");
+    onOpenLogoutAlert()
   }
 
   return (
@@ -78,6 +78,7 @@ const Navbar = ({ Link }) => {
         sideBarRef={sideBarRef}
         Link={Link}
       />
+      <LogoutAlert isOpen={isOpenLogoutAlert}  onClose={onCloseLogoutAlert}/>
     </>
   );
 };

@@ -6,7 +6,6 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     CircularProgress,
-    CircularProgressLabel,
     Text,
     Flex,
   } from "@chakra-ui/react"

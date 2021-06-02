@@ -9,14 +9,16 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  useToast,
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 import { login } from '../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
-
 const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch()
+  const toast = useToast()
+  const isLoading = useSelector(state => state.isLoading)
   const initialFormState = { email: '', password: '' }
   const [data, setData] = useState(initialFormState)
   const isLogin = useSelector(state => state.isLogin)
@@ -28,7 +30,14 @@ const Login = () => {
 
   function handleSubmit(event) {
     event.preventDefault()
-    dispatch(login(data))
+    dispatch(login(data, toast))
+    toast({
+      title: "Attempting Login.",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+      variant: "left-accent"
+    })
   }
 
   function handleOnClickRegister() {
