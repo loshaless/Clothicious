@@ -6,8 +6,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
-
+import { useHistory } from "react-router-dom"
 const BreadcrumbTransactions = () => {
+  const history = useHistory();
   return (
     <Breadcrumb
       spacing="8px"
@@ -16,13 +17,13 @@ const BreadcrumbTransactions = () => {
       mt="4"
     >
       <BreadcrumbItem>
-        <BreadcrumbLink href="/">
+        <BreadcrumbLink onClick={() => history.push('/')}>
           <Text color="mainColor.fontColor">Home</Text>
         </BreadcrumbLink>
       </BreadcrumbItem>
 
       <BreadcrumbItem>
-        <BreadcrumbLink href="/dashboard">
+        <BreadcrumbLink onClick={() => history.push('/dashboard')}>
           <Text color="mainColor.fontColor">Dashboard</Text>
         </BreadcrumbLink>
       </BreadcrumbItem>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ProgressModal from "./Components/ProgessModal"
+import { useHistory } from "react-router-dom"
 import {
   FormControl,
   FormLabel,
@@ -10,18 +12,19 @@ import {
   VStack,
   HStack,
   Textarea,
-  Radio,
-  Stack,
-  RadioGroup,
   Select,
-  Button
+  Button,
+  useDisclosure
 } from "@chakra-ui/react";
 const UploadProduct = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const history = useHistory();
+  const [percentage, setPercentage] = useState(0)
   const [lining, setLining] = useState(true);
   const [arrOfFiles, setArrOfFiles] = useState([null, null, null]);
   let [counter, setCounter] = useState(0);
   const [sheerLevel, setSheerLevel] = useState(true);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("man");
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -72,7 +75,6 @@ const UploadProduct = () => {
 
     if (counter >= 3) {
       arrOfFiles.forEach((v, i) => fd.append("productImages", v, v.name));
-      console.log(fd.getAll("productImages"), "this is from fd getAll");
     }
   }, [arrOfFiles, input]);
 
@@ -86,15 +88,22 @@ const UploadProduct = () => {
         headers: {
           "content-type": 'multipart/form-data',
           access_token: localStorage.access_token,
+        },
+        onUploadProgress: progressEvent => {
+          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          setPercentage(percentCompleted)
+          onOpen()
         }
       })
-      console.log(data)
+      onClose()
+      history.push('/products')
     } catch (error) {
       console.log(error.response)
     }
   }
 
   return (
+    <>
     <Box minH="90vh" bg="mainColor.bg" pb="8">
       <Flex justifyContent="center">
         <Text
@@ -301,6 +310,8 @@ const UploadProduct = () => {
         <Button w="35%" colorScheme="green" onClick={uploadProduct}>Upload</Button>
       </Flex>
     </Box>
+    <ProgressModal isOpen={isOpen} onClose={onClose} percentage={percentage} />
+    </>
   );
 };
 

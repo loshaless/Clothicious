@@ -86,7 +86,7 @@ const Dashboard = () => {
                 <EditIcon color="mainColor.fontColor" />
               </Flex>
             </Tooltip>
-            {(messages.msgAsUser.length !== 0 && messages.msgAsSeller.length !== 0) && (
+            {(messages.msgAsUser.length !== 0 || messages.msgAsSeller.length !== 0) && (
               <Button
                 size="sm"
                 variant="outline"
@@ -98,7 +98,7 @@ const Dashboard = () => {
               >
                 Notifications
                 <Badge colorScheme="purple" fontSize="xs" ml="1">
-                  New
+                  { messages.msgAsUser.length + messages.msgAsSeller.length }
               </Badge>
               </Button>
             )}
@@ -107,7 +107,8 @@ const Dashboard = () => {
             <GridItem d="flex" justifyContent="center">
               <Avatar
                 size="2xl"
-                src="https://images.unsplash.com/photo-1554229897-d34a3f03ed4c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+                src="https://image.flaticon.com/icons/png/512/482/482636.png"
+                bg="white"
               />
             </GridItem>
             <GridItem colSpan={2}>

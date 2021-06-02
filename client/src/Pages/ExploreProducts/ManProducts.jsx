@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import LoadingPage from "../LoadingPage/LoadingPage"
 import ExploreBreadcrumbs from "./Components/ExploreBreadcrumbs";
 import Carousel from "react-multi-carousel";
 import { useHistory } from "react-router-dom"
@@ -10,6 +11,7 @@ const NestedExploreProducts = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const products = useSelector(state => state.products)
+  const isLoading = useSelector(state => state.isLoading)
   const [filtered, setFiltered] = useState([])
   useEffect(() => {
     dispatch(fetchProducts())
@@ -41,6 +43,8 @@ const NestedExploreProducts = () => {
     },
   };
 
+  if(isLoading) return <LoadingPage />
+
   return (
     <Box minH="90vh" bg="mainColor.bg">
       <Flex>
@@ -60,7 +64,7 @@ const NestedExploreProducts = () => {
       <Carousel responsive={responsive} showDots={true}>
         {filtered.map((product) => (
           <Box
-            h="65vh"
+            h="450px"
             w="245px"
             pb="14"
             bg="mainColor.lightGreen"
@@ -88,7 +92,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : {product.User.username}
+              Owner : {product.User && product.User.username}
             </Text>
           </Box>
         ))}
