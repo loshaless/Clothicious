@@ -28,7 +28,6 @@ const ProgessModal = ({ isOpen, onClose, percentage }) => {
           <AlertDialogBody>
               <Flex justifyContent="center" alignItems="center" flexDirection="column">
               <CircularProgress isIndeterminate color="green.300">
-                  <CircularProgressLabel>{percentage}%</CircularProgressLabel>
               </CircularProgress>
               <Text>
                 Your Images are being uploaded, please wait...
