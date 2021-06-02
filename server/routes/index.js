@@ -40,6 +40,7 @@ router.get('/users', UserController.getUserChatEngine)
 
 router.get('/products', ProductController.getProducts)
 router.get('/products/:id', ProductController.getOneProduct)
+router.post('/afterpayments', MidtransController.handlingAfterPayment) // handling after payment midtrans
 
 router.use(authentication)
 
