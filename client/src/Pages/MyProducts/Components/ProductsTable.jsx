@@ -15,18 +15,10 @@ import ProductTableData from './ProductTableData'
 const ProductsTable = () => {
   const dispatch = useDispatch()
   const products = useSelector(state => state.products)
-  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     dispatch(fetchProductsByLoggedUser())
   }, [dispatch]);
-
-  useEffect(() => {
-    if (refresh) {
-      dispatch(fetchProductsByLoggedUser())
-      setRefresh(false)
-    }
-  }, [dispatch, refresh]);
 
   if (!products) {
     return (
@@ -51,7 +43,7 @@ const ProductsTable = () => {
       <Tbody>
         {products.map(product => {
           return (
-            <ProductTableData key={product.id} product={product} setRefresh={setRefresh} />
+            <ProductTableData key={product.id} product={product} />
           )
         })}
       </Tbody>

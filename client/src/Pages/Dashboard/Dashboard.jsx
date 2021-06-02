@@ -39,20 +39,12 @@ const Dashboard = () => {
   const user = useSelector(state => state.user)
   const transactions = useSelector(state => state.transactions)
   const messages = useSelector(state => state.messages)
-  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUserData())
     dispatch(fetchTransactions())
     dispatch(fetchMessages())
   }, [dispatch]);
-
-  useEffect(() => {
-    if (refresh) {
-      dispatch(fetchUserData())
-      setRefresh(false)
-    }
-  }, [dispatch, refresh]);
 
   function handleOnClickTransHistory() {
     history.push("/history-transaction");
@@ -98,8 +90,8 @@ const Dashboard = () => {
               >
                 Notifications
                 <Badge colorScheme="purple" fontSize="xs" ml="1">
-                  { messages.msgAsUser.length + messages.msgAsSeller.length }
-              </Badge>
+                  {messages.msgAsUser.length + messages.msgAsSeller.length}
+                </Badge>
               </Button>
             )}
           </Flex>
@@ -187,7 +179,7 @@ const Dashboard = () => {
           </Grid>
         </Box>
       </Box>
-      <EditModal isOpen={isOpen} onClose={onClose} user={user} setRefresh={setRefresh} />
+      <EditModal isOpen={isOpen} onClose={onClose} user={user} />
       <NotificationModal isOpen={isNotifOpen} onClose={onCloseNotif} />
     </>
   );

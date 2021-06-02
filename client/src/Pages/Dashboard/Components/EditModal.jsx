@@ -11,11 +11,13 @@ import {
   Input,
   FormLabel,
   Button,
+  useToast
 } from "@chakra-ui/react";
 import { editUser } from '../../../Stores/action'
 import { useDispatch } from 'react-redux'
 
-const EditModal = ({ isOpen, onClose, user, setRefresh }) => {
+const EditModal = ({ isOpen, onClose, user }) => {
+  const toast = useToast()
   const dispatch = useDispatch()
   const [User, setUser] = useState(user)
 
@@ -25,8 +27,7 @@ const EditModal = ({ isOpen, onClose, user, setRefresh }) => {
   }
 
   function handleSave() {
-    dispatch(editUser(User))
-    setRefresh(true)
+    dispatch(editUser(User, toast))
     onClose()
   }
 
