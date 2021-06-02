@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DetailsBreadcrumb from "./Components/DetailsBreadcrumb";
-import { fetchProductDetail, fetchDataUser } from "../../Stores/action";
+import { fetchProductDetail, fetchDataUser, rupiah } from "../../Stores/action";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
@@ -63,11 +63,11 @@ const Details = () => {
       const productId = productDetail.id
       const date = new Date()
       const miliseconds = date.getMilliseconds()
-      const order_id = `order-user${dataUserLogin.username}-${miliseconds}`
+      const order_id = `MID-${dataUserLogin.username}-${miliseconds}`
       let parameter = {
         "transaction_details": {
           "order_id": order_id,
-          "gross_amount": productDetail.rentPrice + productDetail.guaranteePrice
+          "gross_amount": productDetail.rentPrice + productDetail.guaranteePrice + 50000
         },
         "item_details": [{
           "id": productDetail.id,
@@ -76,6 +76,13 @@ const Details = () => {
           "name": productDetail.name,
           "brand": `Try Clothes - ${productDetail.User.username}`,
           "category": productDetail.category,
+          "merchant_name": "Try Clothes"
+        },
+        {
+          "price": 50000,
+          "quantity": 1,
+          "name": "Admin Fee",
+          "brand": `Try Clothes - ${productDetail.User.username}`,
           "merchant_name": "Try Clothes"
         }],
         "customer_details": {
@@ -245,7 +252,7 @@ const Details = () => {
                     Rent Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    IDR {productDetail.rentPrice}
+                    {rupiah(productDetail.rentPrice)}
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -253,7 +260,7 @@ const Details = () => {
                     Guarantee Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    IDR {productDetail.guaranteePrice}
+                    {rupiah(productDetail.guaranteePrice)}
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -261,7 +268,7 @@ const Details = () => {
                     Total Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    IDR {productDetail.rentPrice + productDetail.guaranteePrice}
+                    {rupiah(productDetail.rentPrice + productDetail.guaranteePrice)}
                   </Text>
                 </HStack>
                 {productDetail.UserId !== dataUserLogin.id &&
@@ -321,20 +328,20 @@ const Details = () => {
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Lining
                   </Text>
-                  <Badge colorScheme="purple">Yes</Badge>
+                  <Badge colorScheme="purple">{productDetail.lining ? 'YES' : 'NO'}</Badge>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Sheer Level
                   </Text>
-                  <Badge colorScheme="purple">Yes</Badge>
+                  <Badge colorScheme="purple">{productDetail.sheerLevel ? 'SHEER' : 'NOT SHEER'}</Badge>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
                     Bust Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.bustSize}
+                    {productDetail.bustSize} CM
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -342,7 +349,7 @@ const Details = () => {
                     Waist Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.waistSize}
+                    {productDetail.waistSize} CM
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -350,7 +357,7 @@ const Details = () => {
                     Hips Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.hipsSize}
+                    {productDetail.hipsSize} CM
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
