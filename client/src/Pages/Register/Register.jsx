@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputLeftElement,
   Icon,
+  useToast,
 } from "@chakra-ui/react";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 import { FiUsers, FiPhone } from "react-icons/fi";
@@ -17,6 +18,7 @@ import { useHistory } from "react-router-dom";
 const Register = () => {
   let history = useHistory();
   const dispatch = useDispatch()
+  const toast = useToast()
   const initialFormState = { name: '', email: '', password: '', phone: '' }
   const [data, setData] = useState(initialFormState)
 
@@ -29,7 +31,7 @@ const Register = () => {
   function handleSubmit(event) {
     event.preventDefault()
     // console.log(data);
-    dispatch(register(data))
+    dispatch(register(data, toast))
     history.push("/login")
   }
 

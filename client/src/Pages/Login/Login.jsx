@@ -36,7 +36,8 @@ const Login = () => {
       status: "info",
       duration: 3000,
       isClosable: true,
-      variant: "left-accent"
+      variant: "left-accent",
+      position: "top"
     })
   }
 

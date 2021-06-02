@@ -12,6 +12,7 @@ import {
   VStack,
   StackDivider,
   Badge,
+  useToast,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,8 +29,10 @@ import LoadingPage from '../LoadingPage/LoadingPage'
 
 const TransactionDetails = () => {
   let { id } = useParams();
+  const toast = useToast()
   const dispatch = useDispatch()
   const transactionDetail = useSelector(state => state.transactionDetail)
+  const isLoading = useSelector(state => state.isLoading)
   const user = useSelector(state => state.user)
 
   let rentedProductPage = false
@@ -39,11 +42,13 @@ const TransactionDetails = () => {
   useEffect(() => {
     dispatch(fetchTransactionDetail(id))
     dispatch(fetchUserData())
-  }, [dispatch]);
+  }, [id]);
 
-  if (!transactionDetail.Product) {
-    return <LoadingPage />
-  }
+  if(isLoading) return <LoadingPage />
+
+  // if (!transactionDetail.Product) {
+  //   return <LoadingPage />
+  // }
 
   if (user.id === transactionDetail.seller.id) {
     rentedProductPage = true
@@ -52,18 +57,18 @@ const TransactionDetails = () => {
   }
 
   function handleReturnPackage() {
-    dispatch(buyerConfirmation(transactionDetail.id))
+    dispatch(buyerConfirmation(transactionDetail.id, toast))
   }
 
   function handleConfirmAndDelete() {
     if (message === "have you received back your package?") {
-      dispatch(sellerConfirmation(transactionDetail.id, transactionDetail.Product.id))
+      dispatch(sellerConfirmation(transactionDetail.id, transactionDetail.Product.id, toast))
     }
     else if (message === "your deposit will be returned to you in 3 days") {
-      dispatch(deleteUserMessage(transactionDetail.id))
+      dispatch(deleteUserMessage(transactionDetail.id, toast))
     }
     else if (message === "your money will be sent to you in 3 days") {
-      dispatch(deleteSellerMessage(transactionDetail.id))
+      dispatch(deleteSellerMessage(transactionDetail.id, toast))
     }
   }
 
@@ -74,7 +79,7 @@ const TransactionDetails = () => {
         <SimpleGrid columns={2} spacing={10} bg="white">
           <Box h="450px" w="350px" p="8" ml="16">
             <Image
-              src={transactionDetail.Product.frontImg}
+              src={transactionDetail.Product && transactionDetail.Product.frontImg}
               alt="tr details img"
               h="100%"
             />
@@ -92,7 +97,7 @@ const TransactionDetails = () => {
               <HStack p="1" w="375px">
                 <Text fontWeight="bold">Product Name</Text>
                 <Spacer />
-                <Text>{transactionDetail.Product.name}</Text>
+                <Text>{transactionDetail.Product && transactionDetail.Product.name}</Text>
               </HStack>
               <HStack p="1" w="375px">
                 <Text fontWeight="bold">{rentedProductPage ? "Customer Name" : "Owner Name"}</Text>

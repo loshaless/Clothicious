@@ -121,16 +121,18 @@ const UploadProduct = () => {
           status: "success",
           duration: 3000,
           isClosable: true,
-          variant: "left-accent"
+          variant: "left-accent",
+          position: "top"
         })
     } catch (error) {
-      toast({
-        title: error.response,
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-        variant: "left-accent"
-      })
+        toast({
+          title: error.response,
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+          variant: "left-accent",
+          position: "top",
+        })
       console.log(error.response)
     }
   }
