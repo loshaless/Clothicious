@@ -8,7 +8,7 @@ const initialState = {
   isLoading: true,
   isLogin: false,
   listUserChatEngine: [],
-  dataUser: {}
+  dataUser: {},
 }
 
 function reducer(state = initialState, action) {
