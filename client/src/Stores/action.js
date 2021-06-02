@@ -91,6 +91,13 @@ export function editUser(input, toast) {
         data: input
       })
       dispatch(fetchUserData())
+      toast({
+        title: "Edit Profile Success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+      })
     }
     catch (error) {
       toast({
@@ -156,6 +163,13 @@ export function editProduct(input, toast) {
       })
       dispatch(fetchProductsByLoggedUser())
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Edit Product Success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+      })
     }
     catch (error) {
       toast({
@@ -189,7 +203,7 @@ export function deleteProduct(id, toast) {
         duration: 3000,
         isClosable: true,
         variant: "left-accent"
-    })
+      })
     }
     catch (error) {
       console.log(error.response);
