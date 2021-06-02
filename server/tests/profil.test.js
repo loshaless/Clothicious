@@ -70,7 +70,7 @@ console.log('token', token);
 describe('Update success case PUT /profil/:id', () => {
     it('Success test should return json with id, username, email, phone, address, bankAccount value', (done) => {
         request(app)
-        .put(`/profil/${userId}`)
+        .put(`/profil`)
         .send(profil)
         .set('access_token', token)
         .set('Accept', 'application/json')
@@ -95,7 +95,7 @@ describe('Update success case PUT /profil/:id', () => {
     // no token
     it('it should return error message "jwt must be provided"', (done) => {
         request(app)
-        .put(`/profil/${userId}`)
+        .put(`/profil`)
         .set('Accept', 'application/json')
         .send(profil)
         .expect('Content-Type', /json/)
@@ -142,7 +142,7 @@ describe('Update success case PUT /profil/:id', () => {
 describe('Update success case PATCH /profil/:id', () => {
     it('Success test should return json with message: Password has been successfully updated ', (done) => {
         request(app)
-        .patch(`/profil/${userId}`)
+        .patch(`/profil`)
         .send({password: 'password'})
         .set('access_token', token)
         .set('Accept', 'application/json')
@@ -161,7 +161,7 @@ describe('Update success case PATCH /profil/:id', () => {
 
     it('it should return error message "jwt must be provided"', (done) => {
         request(app)
-        .patch(`/profil/${userId}`)
+        .patch(`/profil`)
         .set('Accept', 'application/json')
         .send({password: 'password'})
         .expect('Content-Type', /json/)
