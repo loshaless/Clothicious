@@ -7,12 +7,6 @@ const LandingPageBox = ({ p }) => {
         history.push("/details/" + id);
       }
 
-    //   if(!p.User.username) return (
-    //     <Skeleton
-    //     w="250px"
-    //     h="100%"/>
-    //   )
-
     return (
         <Box
         d="flex"
@@ -41,7 +35,7 @@ const LandingPageBox = ({ p }) => {
           {p.name}
         </Text>
         <Text textAlign="center" color="mainColor.fontColor" mt="2">
-          {/* Owner : {p.User.username ? p.User.username : "owner name"} */}
+          Owner : {p.User && p.User.username}
         </Text>
       </Box>
     )

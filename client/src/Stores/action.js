@@ -273,7 +273,6 @@ export function fetchTransactionDetail(id) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
-
       const { data } = await axios({
         url: baseURL + '/transactions/' + id,
         method: "GET",

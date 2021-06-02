@@ -16,7 +16,6 @@ const LandingPage = () => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
   const isLoading = useSelector(state => state.isLoading);
-  const colIdx = [0, 1, 2, 3, 4, 5, 6, 7];
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -34,9 +33,7 @@ const LandingPage = () => {
       slidesToSlide: 1, // optional, default to 1.
     },
   };
-  function handleOnClickCard(id) {
-    history.push("/details/" + id);
-  }
+
 
   function handleOnClickCTA() {
     history.push('/browse')
@@ -44,11 +41,9 @@ const LandingPage = () => {
 
   useEffect(() => {
     dispatch(fetchProducts())
-  }, [dispatch])
+  }, [])
 
-  console.log(products, 'dr landing page', "ini products")
-
-  if(!products) return <LoadingPage />
+  if(isLoading) return <LoadingPage />
 
   return (
     <Box minH="100vh" bg="mainColor.bg">
@@ -82,10 +77,10 @@ const LandingPage = () => {
             Get Started
           </Button>
         </Flex>
-        <Box bg="mainColor.lightGreen" mt="16" h="50vh">
+        <Box bg="mainColor.lightGreen" mt="16" h="330px">
           <Image
             src="https://cdn.shopify.com/s/files/1/0426/7006/3781/files/Banner_1200x.jpg?v=1601389314"
-            h="50vh"
+            h="330px"
             mt="-8"
             ml="-8"
           />
@@ -123,7 +118,7 @@ const LandingPage = () => {
           <Image
             src="https://image.freepik.com/free-photo/close-up-clothes-hanging-rack_171337-7196.jpg"
             w="80%"
-            h="35vh"
+            h="230px"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
             Browse Your Perfect Clothes
@@ -137,7 +132,7 @@ const LandingPage = () => {
           <Image
             src="https://image.freepik.com/free-photo/beautiful-young-smiling-asian-woman-working-laptop-while-home-office-work-space_7861-914.jpg"
             w="80%"
-            h="35vh"
+            h="230px"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
             Get In Touch With The Owner
@@ -151,7 +146,7 @@ const LandingPage = () => {
           <Image
             src="https://image.freepik.com/free-photo/happy-smiling-couple-isolated-active-jumping-white-studio_285396-4960.jpg"
             w="80%"
-            h="35vh"
+            h="230px"
           ></Image>
           <Text fontWeight="bold" color="mainColor.fontColor" my="4">
             Upgrade Your Style
@@ -185,10 +180,10 @@ const LandingPage = () => {
           What They Said About Try Clothes
         </Text>
         <Flex justifyContent="space-around" w="100%" alignItems="center">
-          <Box w="20%" bg="mainColor.lightGreen" h="55vh">
+          <Box w="20%" bg="mainColor.lightGreen" h="360px">
             <Image
               src="https://images.unsplash.com/photo-1608571857076-a52fe7c3321a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=978&q=80"
-              h="55vh"
+              h="360px"
               ml="10"
               mt="8"
             />

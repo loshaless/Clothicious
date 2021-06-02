@@ -21,7 +21,7 @@ const ExploreProducts = () => {
         mt="4"
       >
         <Box
-          h="65vh"
+          h="425px"
           w="245px"
           pb="12"
           bg="mainColor.lightGreen"
@@ -48,7 +48,7 @@ const ExploreProducts = () => {
           </Text>
         </Box>
         <Box
-          h="65vh"
+          h="425px"
           w="245px"
           pb="12"
           bg="mainColor.lightGreen"

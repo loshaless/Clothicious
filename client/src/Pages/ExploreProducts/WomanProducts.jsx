@@ -43,7 +43,7 @@ const NestedExploreProducts = () => {
     history.push("/details/" + id);
   }
 
-  if(isLoading || !products[0].User.username) return <LoadingPage />
+  if(isLoading) return <LoadingPage />
 
   return (
     <Box minH="90vh" bg="mainColor.bg">
@@ -64,7 +64,7 @@ const NestedExploreProducts = () => {
       <Carousel responsive={responsive} showDots={true}>
         {filtered.map((product) => (
           <Box
-            h="65vh"
+            h="450px"
             w="245px"
             pb="14"
             bg="mainColor.lightGreen"
@@ -88,7 +88,7 @@ const NestedExploreProducts = () => {
               mt="1"
               fontSize="sm"
             >
-              Owner : {product?.User.username}
+              Owner : {product.User && product.User.username}
             </Text>
           </Box>
         ))}

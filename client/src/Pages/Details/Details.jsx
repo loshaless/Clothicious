@@ -5,7 +5,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios'
 import LoadingPage from '../LoadingPage/LoadingPage'
-
 import {
   Box,
   Flex,
@@ -201,7 +200,7 @@ const Details = () => {
           <Box d="flex" justifyContent="flex-end">
             <VStack mr="12" spacing="5">
               <Box
-                h="20vh"
+                h="125px"
                 w="100px"
                 opacity="0.7"
                 transition="200ms"
@@ -210,7 +209,7 @@ const Details = () => {
                 <Image src={productDetail.frontImg} h="100%" w="100px" />
               </Box>
               <Box
-                h="20vh"
+                h="125px"
                 w="100px"
                 opacity="0.7"
                 transition="200ms"
@@ -219,7 +218,7 @@ const Details = () => {
                 <Image src={productDetail.sideImg} h="100%" w="100px" />
               </Box>
               <Box
-                h="20vh"
+                h="125px"
                 w="100px"
                 opacity="0.7"
                 transition="200ms"
@@ -228,13 +227,13 @@ const Details = () => {
                 <Image src={productDetail.backImg} h="100%" w="100px" />
               </Box>
             </VStack>
-            <Box h="70vh" w="300px">
+            <Box h="425px" w="300px">
               <Image src={productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
 
           <Box>
-            <Flex w="60%" h="48vh" border="1px" flexDirection="column">
+            <Flex w="380px" h="350px" border="1px" flexDirection="column">
               <VStack mt="2" px="4" spacing="5">
                 <HStack w="90%">
                   <Text fontWeight="bold" color="mainColor.fontColor">
@@ -308,7 +307,7 @@ const Details = () => {
                 </Button>}
               </VStack>
             </Flex>
-            <Flex w="60%" h="50vh" border="1px" flexDirection="column" mt="8">
+            <Flex w="380px" h="370px" border="1px" flexDirection="column" mt="8">
               <VStack mt="2" px="4" spacing="5">
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
@@ -359,7 +358,7 @@ const Details = () => {
                     Thickness
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.thickness} / 100
+                    {productDetail.thickness} / 5
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -367,7 +366,7 @@ const Details = () => {
                     Strechability
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.stretchability} / 100
+                    {productDetail.stretchability} / 5
                   </Text>
                 </HStack>
               </VStack>
