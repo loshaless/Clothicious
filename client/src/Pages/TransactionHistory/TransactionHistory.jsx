@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionHistoryTable from "./Components/TransactionHistoryTable";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack, StackDivider } from "@chakra-ui/react";
 import { fetchHistoryTransactions } from '../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingPage from '../LoadingPage/LoadingPage'
@@ -25,16 +25,23 @@ const TransactionHistory = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Flex
+      <Stack
         justifyContent="center"
+        spacing={5}
         bg="white"
         h="80vh"
         w="90%"
         p="8"
-        flexDirection="column"
+        direction="row"
+        divider={<StackDivider />}
+      >
+        <Stack
+        direction="column"
         overflow="auto"
         overflowX="hidden"
-      >
+        h="460px"
+        w="100%"
+        >
         <Text
           color="mainColor.fontColor"
           fontSize="2xl"
@@ -46,6 +53,14 @@ const TransactionHistory = () => {
           My Rent History
         </Text>
         <TransactionHistoryTable transactions={transactions.currentlyRenting} />
+        </Stack>
+        <Stack
+          direction="column"
+          overflow="auto"
+          overflowX="hidden"
+          h="460px"
+          w="100%"
+        >
         <Text
           color="mainColor.fontColor"
           fontSize="2xl"
@@ -54,10 +69,11 @@ const TransactionHistory = () => {
           textAlign="center"
           mb="2"
         >
-          My Rented Product History
+          Accepted Rent History
         </Text>
         <TransactionHistoryTable transactions={transactions.rentedProducts} />
-      </Flex>
+        </Stack>
+      </Stack>
     </Box>
   );
 };
