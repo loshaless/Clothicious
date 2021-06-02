@@ -1,5 +1,5 @@
 const axios = require('axios');
-let baseURL = 'http://localhost:3000'
+let baseURL = 'http://18.234.129.205:3000'
 
 export function register(user) {
   return async (dispatch) => {
@@ -15,7 +15,6 @@ export function register(user) {
           phone: user.phone,
         }
       })
-      console.log(data, "ini register");
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
@@ -71,7 +70,7 @@ export function fetchUserData() {
   }
 }
 
-export function editUser(input) {
+export function editUser(input, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -83,11 +82,17 @@ export function editUser(input) {
         },
         data: input
       })
-      console.log("di edit profil action redux");
-      fetchUserData()
+      dispatch(fetchUserData())
     }
     catch (error) {
-      console.log(error.response);
+      toast({
+        title: error.response.data.message,
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+      })
+      console.log(error.response.data.message, "di action edit");
     }
   }
 }
@@ -95,13 +100,11 @@ export function editUser(input) {
 export function fetchProducts() {
   return async (dispatch) => {
     try {
-      console.log('here')
       dispatch({ type: 'SET_LOADING', payload: true })
       const { data } = await axios({
         url: baseURL + '/products',
         method: "GET"
       })
-      console.log(data, 'actions')
       dispatch({ type: 'FETCH_PRODUCTS', payload: data })
       dispatch({ type: 'SET_LOADING', payload: false })
     }
@@ -131,7 +134,7 @@ export function fetchProductsByLoggedUser() {
   }
 }
 
-export function editProduct(input) {
+export function editProduct(input, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -143,11 +146,18 @@ export function editProduct(input) {
         },
         data: input
       })
-      fetchProductsByLoggedUser()
+      dispatch(fetchProductsByLoggedUser())
       dispatch({ type: 'SET_LOADING', payload: false })
     }
     catch (error) {
-      console.log(error.response);
+      toast({
+        title: error.response.data.message,
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+      })
+      console.log(error.response.data.message, "di action edit Product");
     }
   }
 }

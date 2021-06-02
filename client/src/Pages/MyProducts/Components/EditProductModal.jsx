@@ -12,11 +12,13 @@ import {
   FormLabel,
   Button,
   Textarea,
+  useToast
 } from "@chakra-ui/react";
 import { editProduct } from '../../../Stores/action'
 import { useDispatch, useSelector } from 'react-redux'
 
-const EditProductModal = ({ isOpen, onClose, product, setRefresh }) => {
+const EditProductModal = ({ isOpen, onClose, product }) => {
+  const toast = useToast()
   const dispatch = useDispatch()
   const [Product, setProduct] = useState(product)
 
@@ -26,8 +28,7 @@ const EditProductModal = ({ isOpen, onClose, product, setRefresh }) => {
   }
 
   function handleSave() {
-    dispatch(editProduct(Product))
-    setRefresh(true)
+    dispatch(editProduct(Product, toast))
     onClose()
   }
 
