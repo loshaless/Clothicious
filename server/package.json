@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit --runInBand",
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "keywords": [],
   "author": "",
@@ -32,8 +32,19 @@
     "supertest": "^6.1.3"
   },
   "jest": {
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/cron.js/"
+    "collectCoverageFrom": [
+      "controller/userController.js",
+      "controller/productController.js",
+      "controller/transactionController.js",
+      "app.js",
+      "helper/bcrypt.js",
+      "helper/jwt.js",
+      "middleware/errorHandler.js",
+      "middleware/auth.js",
+      "routes/index.js",
+      "models/product.js",
+      "models/transaction.js",
+      "models/user.js"
     ]
   }
 }

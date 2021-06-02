@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'test') {
+  require('dotenv').config()
+  
 // AWAL CRON
 const { Transaction } = require('../models')
 var CronJob = require('cron').CronJob;
@@ -27,3 +30,5 @@ var job = new CronJob('0 0 0 * * *', async () => {
 // AKHIR CRON
 
 module.export = job
+
+}
