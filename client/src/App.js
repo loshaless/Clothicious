@@ -71,9 +71,9 @@ function App() {
             <Route path="/browse/man">
               <ManProducts />
             </Route>
-            <Route path="/details/:id">
+            <GuardedRoute path="/details/:id" meta={{ auth: true }}>
               <Details />
-            </Route>
+            </GuardedRoute>
             <GuardedRoute path="/success" meta={{ auth: true }}>
               <SuccessPage />
             </GuardedRoute>
