@@ -114,7 +114,7 @@ const Details = () => {
 
 
       axios({
-        url: "http://localhost:3000/getTokenMidtrans",
+        url: "http://18.234.129.205:3000/getTokenMidtrans",
         method: "POST",
         data: {
           parameter
@@ -127,7 +127,7 @@ const Details = () => {
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
               axios({
-                url: "http://localhost:3000/transactions",
+                url: "http://18.234.129.205:3000/transactions",
                 method: "post",
                 data: {
                   'SellerId': sellerId,
@@ -149,7 +149,7 @@ const Details = () => {
             },
             onPending: function (result) {
               axios({
-                url: "http://localhost:3000/transactions",
+                url: "http://18.234.129.205:3000/transactions",
                 method: "post",
                 data: {
                   'SellerId': sellerId,
@@ -250,7 +250,7 @@ const Details = () => {
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Deposit
+                    Guarantee Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
                     IDR {productDetail.guaranteePrice}

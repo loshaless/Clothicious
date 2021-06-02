@@ -14,11 +14,13 @@ import {
   Textarea,
   Select,
   Button,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 const UploadProduct = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const history = useHistory();
+  const toast = useToast()
   const [percentage, setPercentage] = useState(0)
   const [lining, setLining] = useState(true);
   const [arrOfFiles, setArrOfFiles] = useState([null, null, null]);
@@ -33,13 +35,13 @@ const UploadProduct = () => {
     lining: false,
     thickness: 0,
     stretchability: 0,
-    category: "",
+    category: "man",
     fit: "",
     waistSize: 0,
     bustSize: 0,
     hipsSize: 0,
     length: 0,
-    sheerLevel: "",
+    sheerLevel: false,
   });
 
   function onChangeFrontImg(event) {
@@ -84,20 +86,51 @@ const UploadProduct = () => {
 
   async function uploadProduct() {
     try {
-      const { data } = await axios.post('http://localhost:3000/products', fd, {
-        headers: {
-          "content-type": 'multipart/form-data',
-          access_token: localStorage.access_token,
-        },
-        onUploadProgress: progressEvent => {
-          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          setPercentage(percentCompleted)
-          onOpen()
+
+      let flag = true
+      let moreThanFive = false
+      for (const key in input) {
+        const keys = ['lining', 'sheerLevel']
+        const fiveQtyLimit = ['stretchability', 'thickness']
+        if(!keys.includes(key)) {
+          if(!input[key])
+          flag = false
         }
-      })
-      onClose()
-      history.push('/products')
+        if(fiveQtyLimit.includes(key)) {
+          if(input[key] > 5)
+          moreThanFive = true
+        }
+      }
+        if(!flag) throw { response : "please fill the blank form" }
+        if(moreThanFive) throw { response : "Maximum Thickness and Strechability is 5"}
+        const { data } = await axios.post('http://18.234.129.205:3000/products', fd, {
+          headers: {
+            "content-type": 'multipart/form-data',
+            access_token: localStorage.access_token,
+          },
+          onUploadProgress: progressEvent => {
+            var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            setPercentage(percentCompleted)
+            onOpen()
+          }
+        })
+        onClose()
+        history.push('/products')
+        toast({
+          title: "Upload product: " + input.name + " success",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          variant: "left-accent"
+        })
     } catch (error) {
+      toast({
+        title: error.response,
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent"
+      })
       console.log(error.response)
     }
   }
