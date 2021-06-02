@@ -3,13 +3,17 @@ const app = require('../app')
 const {sequelize} = require('../models')
 const {queryInterface} = sequelize
 const { User } = require('../models')
-
+const { generateToken } = require('../helper/jwt')
 
 const existingUser = {
     username: 'dummy',
     password: 'dummy',
-    email: 'dummy@mail.com'
+    email: 'dummy@mail.com',
+    phone: '123'
 }
+
+let UserId = 0
+let token = ''
 
 afterAll((done) => {
     queryInterface.bulkDelete('Users')
@@ -34,7 +38,7 @@ beforeAll((done) => {
 
 //register
 describe('Register success case POST /register', () => {
-    it('Success test should return json with id, username, email, phone, address, bankAccount value', (done) => {
+    it('Success test should return json with id, username, email, phone, value', (done) => {
         request(app)
         .post('/register')
         .send(
@@ -42,12 +46,15 @@ describe('Register success case POST /register', () => {
                 username: 'budi',
                 email: 'budi@mail.com',
                 password: 'budi',
+                phone: '009'
             })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
-            console.log({body, status});
+            console.log('====>', {body, status});
+            UserId = body.id
+            token = generateToken(body)
             expect(status).toBe(201)
             expect(body).toHaveProperty('id', expect.any(Number))
             expect(body).toHaveProperty('username', body.username)
@@ -67,6 +74,7 @@ describe('Register success case POST /register', () => {
             username: '',
             email: 'budi@mail.com',
             password: 'budi',
+            phone: '123'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -88,7 +96,8 @@ describe('Register success case POST /register', () => {
         .send({
             username: 'budi00',
             password: 'budi',
-            email: ''
+            email: '',
+            phone: '123'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -112,11 +121,13 @@ describe('Register success case POST /register', () => {
             username: 'budi',
             email: 'budi123@mail.com',
             password: 'budi123',
+            phone: '555'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .then(response => {
             let {body, status} = response
+            console.log('INI', {body, status});
             expect(status).toBe(400)
             expect(body).toHaveProperty('message', "username must be unique")
             done()
@@ -134,6 +145,7 @@ describe('Register success case POST /register', () => {
             username: 'budi000',
             email: 'budi@mail.com',
             password: 'budi123',
+            phone:'777'
         })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -259,4 +271,23 @@ describe('Login success case POST /login', () => {
     })
 })
 
-
+// logged user
+// GET BY ID
+describe('Read User case GET /loggedUsers', () => {
+    it('Success test should return json of user', (done) => {
+      request(app)
+      .get(`/loggedUsers`)
+      .set('access_token', token)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .then(response => {
+        let {body, status} = response
+        console.log('=====>', body);
+        expect(status).toBe(200)
+        done()      
+      })
+      .catch(err => {
+        done(err)
+      })
+    })
+  })

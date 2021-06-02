@@ -56,7 +56,7 @@ class ProductController {
       let backImg = ''
       let sideImg = ''
 
-      const images = [];
+      const productImages = [];
       let files = req.files;
       for (const file of files) {
         let { path } = file;
@@ -64,12 +64,13 @@ class ProductController {
         console.log(path)
         const newPath = await cloudinaryImageUploadMethod(path)
         console.log(newPath.res)
-        images.push(newPath.res)
+        productImages.push(newPath.res)
       }
 
-        frontImg = images[0]
-        backImg = images[1]
-        sideImg = images[2]
+        frontImg = productImages[0]
+        backImg = productImages[1]
+        sideImg = productImages[2]
+        
       // Adding to Database
       const newData = await Product.create({ name, UserId, rentPrice, guaranteePrice, frontImg, backImg, sideImg, fit, lining, sheerLevel, bustSize, waistSize, hipsSize, length, stretchability, thickness, category, description, availability })
         res.status(201).json({
