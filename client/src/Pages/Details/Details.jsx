@@ -23,11 +23,16 @@ const Details = () => {
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
   const dataUserLogin = useSelector(state => state.dataUser)
-
+  const [currentImg, setCurrentImg] = useState(productDetail.frontImg)
   useEffect(() => {
     dispatch(fetchProductDetail(id));
     dispatch(fetchDataUser());
   }, [id]);
+
+  useEffect(() => {
+    setCurrentImg(productDetail.frontImg)
+  },[productDetail])
+  
 
 
   if (loading) return <LoadingPage />
@@ -212,6 +217,8 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.frontImg)}
               >
                 <Image src={productDetail.frontImg} h="100%" w="100px" />
               </Box>
@@ -221,6 +228,8 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.sideImg)}
               >
                 <Image src={productDetail.sideImg} h="100%" w="100px" />
               </Box>
@@ -230,12 +239,14 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.backImg)}
               >
                 <Image src={productDetail.backImg} h="100%" w="100px" />
               </Box>
             </VStack>
             <Box h="425px" w="300px">
-              <Image src={productDetail.frontImg} h="100%" w="300px" />
+              <Image src={currentImg || productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
 
