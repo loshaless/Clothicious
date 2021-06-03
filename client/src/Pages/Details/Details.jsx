@@ -364,7 +364,7 @@ const Details = () => {
                     Bust Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.bustSize} CM
+                    {productDetail.bustSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
