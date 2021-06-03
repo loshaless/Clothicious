@@ -335,8 +335,8 @@ const UploadProduct = () => {
                 <option value="" defaultValue disabled>
                   Select Sheer Level Type
               </option>
-              <option value="true">With Sheer</option>
-              <option value="false">Without Sheer</option>
+              <option value="true">Sheer</option>
+              <option value="false">Not Sheer</option>
             </Select>
           </FormControl>
         </VStack>

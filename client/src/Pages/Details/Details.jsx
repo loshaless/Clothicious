@@ -138,8 +138,6 @@ const Details = () => {
         },
       };
 
-
-
       axios({
         url: "http://18.234.129.205:3000/getTokenMidtrans",
         method: "POST",
@@ -264,7 +262,6 @@ const Details = () => {
               <Image src={currentImg || productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
-
           <Box>
             <Flex w="380px" h="350px" border="1px" flexDirection="column">
               <VStack mt="2" px="4" spacing="5">
@@ -375,7 +372,7 @@ const Details = () => {
                     Waist Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.waistSize} CM
+                    {productDetail.waistSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -383,7 +380,7 @@ const Details = () => {
                     Hips Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.hipsSize} CM
+                    {productDetail.hipsSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
