@@ -268,7 +268,7 @@ const Details = () => {
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Guarantee Price
+                    Deposit Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
                     {rupiah(productDetail.guaranteePrice)}

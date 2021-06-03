@@ -184,10 +184,10 @@ const UploadProduct = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel textAlign="center">Guarantee Price</FormLabel>
+              <FormLabel textAlign="center">Deposit Price</FormLabel>
               <Input
                 type="number"
-                placeholder="Guarantee Price..."
+                placeholder="Deposit Price..."
                 borderColor="mainColor.fontColor"
                 onChange={(e) =>
                   setInput({ ...input, guaranteePrice: e.target.value })
@@ -335,8 +335,8 @@ const UploadProduct = () => {
                 <option value="" defaultValue disabled>
                   Select Sheer Level Type
               </option>
-              <option value="true">With Sheer Level</option>
-              <option value="false">Without Sheer Level</option>
+              <option value="true">With Sheer</option>
+              <option value="false">Without Sheer</option>
             </Select>
           </FormControl>
         </VStack>

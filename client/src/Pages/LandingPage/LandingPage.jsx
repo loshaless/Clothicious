@@ -51,7 +51,7 @@ const LandingPage = () => {
       <Flex alignItems="center" justifyContent="space-evenly">
         <Flex flexDirection="column">
           <Text fontSize="3xl" fontWeight="bold" color="black">
-            Efortless Trendy Fashion With
+            Effortless Trendy Fashion With
           </Text>
           <Text fontSize="3xl" fontWeight="bold" color="black">
             TRY CLOTHES
@@ -89,16 +89,16 @@ const LandingPage = () => {
       </Flex>
       <SimpleGrid columns={3} spacing={10} bg="white" h="20vh" mt="8">
         <Flex alignItems="center" justifyContent="center" flexDirection="column">
-          <Icon as={FaRecycle} w={8} h={8} />
-          <Text>Support Sustainable Fashion</Text>
+          <Icon as={FaRecycle} w={14} h={14} />
+          <Text mt="4">Support Sustainable Fashion</Text>
         </Flex>
         <Flex alignItems="center" justifyContent="center" flexDirection="column">
-          <Icon as={GiClothes} w={8} h={8} />
-          <Text>1.000+ Clothes</Text>
+          <Icon as={GiClothes} w={14} h={14} />
+          <Text  mt="4">1.000+ Clothes</Text>
         </Flex>
         <Flex alignItems="center" justifyContent="center" flexDirection="column">
-          <Icon as={FaShippingFast} w={8} h={8} />
-          <Text>Free Delivery Within Jakarta Area</Text>
+          <Icon as={FaShippingFast} w={14} h={14} />
+          <Text mt="4">Free Delivery Within Jakarta Area</Text>
         </Flex>
       </SimpleGrid>
       <Text

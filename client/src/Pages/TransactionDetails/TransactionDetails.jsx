@@ -42,13 +42,13 @@ const TransactionDetails = () => {
   useEffect(() => {
     dispatch(fetchTransactionDetail(id))
     dispatch(fetchUserData())
-  }, [id]);
+  }, [dispatch]);
 
   if(isLoading) return <LoadingPage />
 
-  // if (!transactionDetail.Product) {
-  //   return <LoadingPage />
-  // }
+  if (!transactionDetail.Product) {
+    return <LoadingPage />
+  }
 
   if (user.id === transactionDetail.seller.id) {
     rentedProductPage = true
