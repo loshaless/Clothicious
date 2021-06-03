@@ -44,6 +44,10 @@ const Details = () => {
         "is_direct_chat": true
       }
 
+      const newChat = {
+        "text": productDetail.availability ? `halo apakah barang yang tertera di link bisa saya pesan ? ${window.location.href}` : `Saya sudah pesan barang yang di link ini yaa ${window.location.href}`
+      };
+
       axios({
         method: 'PUT',
         url: 'https://api.chatengine.io/chats/',
@@ -55,7 +59,18 @@ const Details = () => {
         data: data
       })
         .then(response => {
-          console.log(response.data, 'response create newChat');
+          axios({
+            method: 'post',
+            url: `https://api.chatengine.io/chats/${response.data.id}/messages/`,
+            headers: { 
+              'Project-ID': 'a698d02f-96a3-4a7d-a444-69b215a8c666', 
+              'User-Name': dataUserLogin.username, 
+              'User-Secret': dataUserLogin.password.substring(0, 5)
+            },
+            data : newChat
+          }).then(response => {
+            console.log(response)
+          })
         })
         .catch(error => {
           console.log(error);

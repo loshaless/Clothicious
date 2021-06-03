@@ -149,7 +149,7 @@ const Dashboard = () => {
               flexDirection="column"
             >
               <Text fontWeight="bold" letterSpacing="widest" fontSize="lg">
-                My Products
+                Products I Lend
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
                 {transactions.rentedProducts.map(transaction => {
@@ -166,7 +166,7 @@ const Dashboard = () => {
               flexDirection="column"
             >
               <Text fontWeight="bold" letterSpacing="widest" fontSize="lg">
-                What I Rent
+                Products I Rent
               </Text>
               <Box w="100%" h="45vh" p="4" overflow="auto" overflowX="hidden">
                 {transactions.currentlyRenting.map(transaction => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ChatEngine, getOrCreateChat } from 'react-chat-engine';
 import { fetchUserChatEngine, fetchDataUser } from "../../Stores/action";
 import { useDispatch, useSelector } from "react-redux";
-import { Input } from "@chakra-ui/react"
+import { Input, Button, Box } from "@chakra-ui/react"
 
 
 function Chat() {
@@ -26,11 +26,11 @@ function Chat() {
 	}
 
 	function renderChatForm(creds) {
+		console.log(listUser)
 		return (
-			<div>
-				<Input type="text" list="data" placeholder="New Chat" w="100" name="list"
+			<Box my="4" ml="4">
+				<Input type="text" list="data" placeholder="New Chat" name="list" w="60%"
 					onChange={(e) => setUsername(e.target.value)} />
-
 				<datalist id="data">
 
 					{listUser.map((item, key) =>
@@ -39,10 +39,10 @@ function Chat() {
 
 				</datalist>
 
-				<button onClick={() => createDirectChat(creds)}>
+				<Button ml="4" bg="blue.100" color="blue.500" onClick={() => createDirectChat(creds)}>
 					Chat
-				</button>
-			</div>
+				</Button>
+			</Box>
 		)
 	}
 

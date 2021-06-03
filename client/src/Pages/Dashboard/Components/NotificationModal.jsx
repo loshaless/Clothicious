@@ -66,13 +66,11 @@ const NotificationModal = ({ isOpen, onClose }) => {
             </Stack>
             {messages.msgAsSeller.map(message => {
               return (
-                <ModalData key={message.transactionId} message={message} />
+                <ModalData key={message.transactionId} message={message}/>
               )
             })}
           </ModalBody>
         )}
-
-        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );
