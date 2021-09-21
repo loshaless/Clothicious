@@ -121,16 +121,18 @@ const UploadProduct = () => {
           status: "success",
           duration: 3000,
           isClosable: true,
-          variant: "left-accent"
+          variant: "left-accent",
+          position: "top"
         })
     } catch (error) {
-      toast({
-        title: error.response,
-        status: "warning",
-        duration: 3000,
-        isClosable: true,
-        variant: "left-accent"
-      })
+        toast({
+          title: error.response,
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+          variant: "left-accent",
+          position: "top",
+        })
       console.log(error.response)
     }
   }
@@ -182,10 +184,10 @@ const UploadProduct = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel textAlign="center">Guarantee Price</FormLabel>
+              <FormLabel textAlign="center">Deposit Price</FormLabel>
               <Input
                 type="number"
-                placeholder="Guarantee Price..."
+                placeholder="Deposit Price..."
                 borderColor="mainColor.fontColor"
                 onChange={(e) =>
                   setInput({ ...input, guaranteePrice: e.target.value })
@@ -333,8 +335,8 @@ const UploadProduct = () => {
                 <option value="" defaultValue disabled>
                   Select Sheer Level Type
               </option>
-              <option value="true">With Sheer Level</option>
-              <option value="false">Without Sheer Level</option>
+              <option value="true">Sheer</option>
+              <option value="false">Not Sheer</option>
             </Select>
           </FormControl>
         </VStack>

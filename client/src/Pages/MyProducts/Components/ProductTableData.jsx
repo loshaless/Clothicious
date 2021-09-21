@@ -14,8 +14,6 @@ import {
 import { DeleteIcon, InfoIcon, EditIcon } from "@chakra-ui/icons";
 import { useDispatch } from 'react-redux'
 
-
-
 function ProductTableData({ product }) {
   const dispatch = useDispatch()
   const history = useHistory();

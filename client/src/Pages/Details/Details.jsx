@@ -23,11 +23,16 @@ const Details = () => {
   const productDetail = useSelector((state) => state.productDetail);
   const loading = useSelector((state) => state.isLoading);
   const dataUserLogin = useSelector(state => state.dataUser)
-
+  const [currentImg, setCurrentImg] = useState(productDetail.frontImg)
   useEffect(() => {
     dispatch(fetchProductDetail(id));
     dispatch(fetchDataUser());
   }, [id]);
+
+  useEffect(() => {
+    setCurrentImg(productDetail.frontImg)
+  },[productDetail])
+  
 
 
   if (loading) return <LoadingPage />
@@ -38,6 +43,10 @@ const Details = () => {
         "usernames": [productDetail.User.username],
         "is_direct_chat": true
       }
+
+      const newChat = {
+        "text": productDetail.availability ? `halo apakah barang yang tertera di link bisa saya pesan ? ${window.location.href}` : `Saya sudah pesan barang yang di link ini yaa ${window.location.href}`
+      };
 
       axios({
         method: 'PUT',
@@ -50,7 +59,18 @@ const Details = () => {
         data: data
       })
         .then(response => {
-          console.log(response.data, 'response create newChat');
+          axios({
+            method: 'post',
+            url: `https://api.chatengine.io/chats/${response.data.id}/messages/`,
+            headers: { 
+              'Project-ID': 'a698d02f-96a3-4a7d-a444-69b215a8c666', 
+              'User-Name': dataUserLogin.username, 
+              'User-Secret': dataUserLogin.password.substring(0, 5)
+            },
+            data : newChat
+          }).then(response => {
+            console.log(response)
+          })
         })
         .catch(error => {
           console.log(error);
@@ -117,8 +137,6 @@ const Details = () => {
           ]
         },
       };
-
-
 
       axios({
         url: "http://18.234.129.205:3000/getTokenMidtrans",
@@ -212,6 +230,8 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.frontImg)}
               >
                 <Image src={productDetail.frontImg} h="100%" w="100px" />
               </Box>
@@ -221,6 +241,8 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.sideImg)}
               >
                 <Image src={productDetail.sideImg} h="100%" w="100px" />
               </Box>
@@ -230,15 +252,16 @@ const Details = () => {
                 opacity="0.7"
                 transition="200ms"
                 _hover={{ opacity: 1 }}
+                cursor="pointer"
+                onClick={() => setCurrentImg(productDetail.backImg)}
               >
                 <Image src={productDetail.backImg} h="100%" w="100px" />
               </Box>
             </VStack>
             <Box h="425px" w="300px">
-              <Image src={productDetail.frontImg} h="100%" w="300px" />
+              <Image src={currentImg || productDetail.frontImg} h="100%" w="300px" />
             </Box>
           </Box>
-
           <Box>
             <Flex w="380px" h="350px" border="1px" flexDirection="column">
               <VStack mt="2" px="4" spacing="5">
@@ -257,7 +280,7 @@ const Details = () => {
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">
-                    Guarantee Price
+                    Deposit Price
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
                     {rupiah(productDetail.guaranteePrice)}
@@ -341,7 +364,7 @@ const Details = () => {
                     Bust Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.bustSize} CM
+                    {productDetail.bustSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -349,7 +372,7 @@ const Details = () => {
                     Waist Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.waistSize} CM
+                    {productDetail.waistSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">
@@ -357,7 +380,7 @@ const Details = () => {
                     Hips Size
                   </Text>
                   <Text color="black" fontSize="sm" fontWeight="bold">
-                    {productDetail.hipsSize} CM
+                    {productDetail.hipsSize} cm
                   </Text>
                 </HStack>
                 <HStack d="flex" justifyContent="space-between" w="90%">

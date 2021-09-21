@@ -22,19 +22,29 @@ import {
   Route
 } from "react-router-dom"
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
-
-const requireLogin = (to, from, next) => {
-  if (to.meta.auth) {
-    if (localStorage.getItem('access_token')) {
-      next();
-    }
-    next.redirect('/login');
-  } else {
-    next();
-  }
-};
+import { useToast } from "@chakra-ui/react"
 
 function App() {
+  const toast = useToast()
+  const requireLogin = (to, from, next) => {
+    if (to.meta.auth) {
+      if (localStorage.getItem('access_token')) {
+        next();
+      } else {
+        next.redirect('/login');
+        toast({
+          title: "Please Login First to Continue",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+          variant: "left-accent",
+          position: "top"
+        })
+      }
+    } else {
+      next();
+    }
+  };
   return (
     <>
       <Router>

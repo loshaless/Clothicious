@@ -2,10 +2,19 @@ const axios = require('axios');
 
 let baseURL = 'http://18.234.129.205:3000'
 
-export function register(user) {
+export function register(user, toast) {
   return async (dispatch) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
+      toast({
+        title: "Attempting Register",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top"
+      })
+
       const { data } = await axios({
         url: baseURL + '/register',
         method: "POST",
@@ -17,8 +26,17 @@ export function register(user) {
         }
       })
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Register success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top"
+      })
     }
     catch (error) {
+
       console.log(error.response);
     }
   }
@@ -45,7 +63,8 @@ export function login(data, toast) {
           status: "success",
           duration: 3000,
           isClosable: true,
-          variant: "left-accent"
+          variant: "left-accent",
+          position: "top"
         })
       }
       else {
@@ -53,6 +72,14 @@ export function login(data, toast) {
       }
     }
     catch (error) {
+      toast({
+        title: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top"
+      })
       console.log(error.response);
     }
   }
@@ -96,7 +123,8 @@ export function editUser(input, toast) {
         status: "success",
         duration: 3000,
         isClosable: true,
-        variant: "left-accent"
+        variant: "left-accent",
+        position: "top"
       })
     }
     catch (error) {
@@ -105,7 +133,8 @@ export function editUser(input, toast) {
         status: "warning",
         duration: 3000,
         isClosable: true,
-        variant: "left-accent"
+        variant: "left-accent",
+        position: "top"
       })
       console.log(error.response.data.message, "di action edit");
     }
@@ -168,7 +197,8 @@ export function editProduct(input, toast) {
         status: "success",
         duration: 3000,
         isClosable: true,
-        variant: "left-accent"
+        variant: "left-accent",
+        position: "top"
       })
     }
     catch (error) {
@@ -177,7 +207,8 @@ export function editProduct(input, toast) {
         status: "warning",
         duration: 3000,
         isClosable: true,
-        variant: "left-accent"
+        variant: "left-accent",
+        position: "top"
       })
       console.log(error.response.data.message, "di action edit Product");
     }
@@ -202,7 +233,8 @@ export function deleteProduct(id, toast) {
         status: "success",
         duration: 3000,
         isClosable: true,
-        variant: "left-accent"
+        variant: "left-accent",
+        position: "top"
       })
     }
     catch (error) {
@@ -328,7 +360,7 @@ export function fetchTransactionDetail(id) {
   }
 }
 
-export function buyerConfirmation(id) {
+export function buyerConfirmation(id, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -341,6 +373,14 @@ export function buyerConfirmation(id) {
       })
       dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Confirmation Success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top",
+      })
     }
     catch (error) {
       console.log(error.response);
@@ -348,7 +388,7 @@ export function buyerConfirmation(id) {
   }
 }
 
-export function sellerConfirmation(id, productId) {
+export function sellerConfirmation(id, productId, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -362,6 +402,14 @@ export function sellerConfirmation(id, productId) {
       })
       dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Confirmation Success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top",
+      })
     }
     catch (error) {
       console.log(error.response);
@@ -369,7 +417,7 @@ export function sellerConfirmation(id, productId) {
   }
 }
 
-export function deleteUserMessage(id) {
+export function deleteUserMessage(id, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -382,6 +430,14 @@ export function deleteUserMessage(id) {
       })
       dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Delete success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top",
+      })
     }
     catch (error) {
       console.log(error.response);
@@ -389,7 +445,7 @@ export function deleteUserMessage(id) {
   }
 }
 
-export function deleteSellerMessage(id) {
+export function deleteSellerMessage(id, toast) {
   return async (dispatch) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true })
@@ -402,6 +458,14 @@ export function deleteSellerMessage(id) {
       })
       dispatch(fetchTransactionDetail(id))
       dispatch({ type: 'SET_LOADING', payload: false })
+      toast({
+        title: "Delete success",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        variant: "left-accent",
+        position: "top",
+      })
     }
     catch (error) {
       console.log(error.response);

@@ -27,7 +27,8 @@ const LogoutAlert = ({ onClose, isOpen }) => {
           status: "success",
           duration: 3000,
           isClosable: true,
-          variant: "left-accent"
+          variant: "left-accent",
+          position: "top"
       })
   }
     return (
