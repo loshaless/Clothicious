@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit --runInBand",
-    "start": "nodemon ./bin/www"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-let baseURL = 'http://18.234.129.205:3000'
+let baseURL = 'https://try-clothes-remote-10.herokuapp.com'
 
 export function register(user, toast) {
   return async (dispatch) => {

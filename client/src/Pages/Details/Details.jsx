@@ -139,7 +139,7 @@ const Details = () => {
       };
 
       axios({
-        url: "http://18.234.129.205:3000/getTokenMidtrans",
+        url: "https://try-clothes-remote-10.herokuapp.com/getTokenMidtrans",
         method: "POST",
         data: {
           parameter
@@ -152,7 +152,7 @@ const Details = () => {
           window.snap.pay(snapResponse.data, {
             onSuccess: function (result) {
               axios({
-                url: "http://18.234.129.205:3000/transactions",
+                url: "https://try-clothes-remote-10.herokuapp.com/transactions",
                 method: "post",
                 data: {
                   'SellerId': sellerId,
@@ -174,7 +174,7 @@ const Details = () => {
             },
             onPending: function (result) {
               axios({
-                url: "http://18.234.129.205:3000/transactions",
+                url: "https://try-clothes-remote-10.herokuapp.com/transactions",
                 method: "post",
                 data: {
                   'SellerId': sellerId,
